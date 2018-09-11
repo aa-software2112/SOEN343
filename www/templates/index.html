@@ -46,9 +46,11 @@
          </div>
       </nav>
       <main role="main" class="container">
-         <div class="starter-template">
-            <h1> Starter template for {{ title }} </h1>
-         </div>
+         {% block content %}
+            <div class="starter-template">
+               <h1> Starter template for {{ title }} </h1>
+            </div>
+         {% endblock %}
       </main>
       <!-- /.container -->
       <!-- Bootstrap core JavaScript
