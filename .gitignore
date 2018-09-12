@@ -1,6 +1,7 @@
 ./www/app.pyc
 www/__pycache__/
 venv/*
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
