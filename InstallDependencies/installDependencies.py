@@ -12,7 +12,6 @@ OSX = "darwin"
 WINDOWS_PYTHON = "python"
 OSX_PYTHON = "python3"
 GENERIC_PYTHON = ""
-GENERIC_PYTHON = ""
 
 # Size of the following arrays must match
 listOfLibraries = ["Flask", "numpy", "SQLAlchemy"]
