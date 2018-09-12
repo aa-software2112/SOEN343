@@ -14,8 +14,8 @@ OSX_PYTHON = "python3"
 GENERIC_PYTHON = ""
 
 # Size of the following arrays must match
-listOfLibraries = ["Flask", "numpy", "SQLAlchemy"]
-versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11"]
+listOfLibraries = ["Flask", "numpy", "SQLAlchemy", "flask-migrate"]
+versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11", "2.2.1"]
 
 # Make sure python3.X is running
 if not (VERSION_ARRAY[MAJOR_VERSION_INDEX] == PYTHON_VERSION):
