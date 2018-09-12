@@ -12,10 +12,11 @@ OSX = "darwin"
 WINDOWS_PYTHON = "python"
 OSX_PYTHON = "python3"
 GENERIC_PYTHON = ""
+GENERIC_PYTHON = ""
 
 # Size of the following arrays must match
-listOfLibraries = ["Flask", "numpy"]
-versionsOfLibraries = ["1.0.2", "1.15.1"]
+listOfLibraries = ["Flask", "numpy", "SQLAlchemy"]
+versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11"]
 
 # Make sure python3.X is running
 if not (VERSION_ARRAY[MAJOR_VERSION_INDEX] == PYTHON_VERSION):
@@ -35,10 +36,6 @@ else:
 	
 # Upgrade pip
 SYS_CALL(GENERIC_PYTHON + " -m pip install --upgrade pip")
-
-# Uninstall libraries
-for library in listOfLibraries:
-	SYS_CALL(GENERIC_PYTHON + " -m pip uninstall -y " + library)
 
 # Install libraries with correct version
 for library, version in zip(listOfLibraries, versionsOfLibraries):
