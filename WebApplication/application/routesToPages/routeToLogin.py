@@ -1,24 +1,13 @@
-from flask import render_template
+from flask import Flask,render_template, redirect
 from application import app
-import random 
+from application.classes.forms import LoginForm, RegistrationForm
 
-@app.route('/login')
-def something():
-	course = 'SOEN343'
-	books = [
-		{
-			'author':'randomly generated author ' + str(random.randint(0,100)) + '',
-			'title': 'randomly generated book title ' + str(random.randint(0,100)) + ''
+app.config['SECRET_KEY'] = 'SOEN_343'
 
-		},
-		{
-			'author':'randomly generated author ' + str(random.randint(0,100)) + '',
-			'title': 'randomly generated book title ' + str(random.randint(0,100)) + ''
-		},
-		{
-			'author':'randomly generated author ' + str(random.randint(0,100)) + '',
-			'title': 'randomly generated book title ' + str(random.randint(0,100)) + ''
-		}
-	]
-
-	return render_template('index.html', course='SOEN12344321', books=books)
+# Login Template
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	form = LoginForm()	
+	if form.validate_on_submit():
+		return redirect('/index')
+	return render_template('login.html', form=form)

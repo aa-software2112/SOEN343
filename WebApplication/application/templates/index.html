@@ -43,11 +43,19 @@
                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
+            <div class="navbar-nav ml-4">
+                <a class="nav-item nav-link" href="/login"> Login</a>
+                <a class="nav-item nav-link" href="#"> Sign Up</a>
+            </div>
          </div>
       </nav>
       <main role="main" class="container">
          <div class="starter-template">
-            <h1> Starter template for {{ course }} </h1>
+            <h1> Starter template for {{ course }} 
+                {% if userEmail %} 
+                    Welcome {{ userEmail }} 
+                {% endif %}
+            </h1>
          </div>
          {% block content %}
             {% for book in books %}
