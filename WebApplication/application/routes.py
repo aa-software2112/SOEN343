@@ -6,3 +6,4 @@ import random
 from application.routesToPages import routeToExample
 from application.routesToPages import routeToIndex
 from application.routesToPages import routeToLogin
+from application.routesToPages import routeToSetCookies
