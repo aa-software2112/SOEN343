@@ -35,8 +35,8 @@ def create_table(conn, sql_create_x_table):
 #function takes database connection object 'conn' and a book
 #creates a new book into the book table
 def create_book(conn, book):
-    sql = ''' INSERT INTO book(title,author,format,pages,publisher,language,isbn_10,isbn_13)
-              VALUES(?,?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO book(title,author,format,pages,publisher,language,isbn_10,isbn_13,isLoaned)
+              VALUES(?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, book)
 
@@ -52,23 +52,23 @@ def create_magazine(conn, magazine):
 #creates a new movie into the movie  table
 def create_movie(conn, movie):
    
-    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,release_date,run_time)
-              VALUES(?,?,?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,releaseDate,runTime,isLoaned)
+              VALUES(?,?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, movie)
 
 #function takes database connection object 'conn' and a music 
 #creates a new music into the music table
 def create_music(conn, music):
-    sql = ''' INSERT INTO music(type,title,artist,label,release_date,ASIN)
-              VALUES(?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO music(type,title,artist,label,releaseDate,asin,isLoaned)
+              VALUES(?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, music)
 
 #function takes database connection object 'conn' and a client 
 #creates a new client into the client table
 def create_client(conn, client):
-    sql = ''' INSERT INTO client(id,first_name,last_name,address,email,phone,administrator)
+    sql = ''' INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,isAdmin,lastLogged)
               VALUES(?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, client)
@@ -92,59 +92,65 @@ def main():
  
     #initialized variable with query that creates book table with columns/attributes
     sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
-                                    title text NOT NULL,
-                                    author text NOT NULL,
-                                    format text NOT NULL,
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    title TEXT NOT NULL,
+                                    author TEXT NOT NULL,
+                                    format TEXT NOT NULL,
                                     pages INTEGER NOT NULL,
-                                    publisher text NOT NULL,
-                                    language text NOT NULL,
-                                    isbn_10 text NOT NULL,
-                                    isbn_13 text NOT NULL,
-                                    PRIMARY KEY (isbn_10, isbn_13)
+                                    publisher TEXT NOT NULL,
+                                    language TEXT NOT NULL,
+                                    isbn_10 TEXT NOT NULL,
+                                    isbn_13 TEXT NOT NULL,
+                                    isLoaned INTEGER NOT NULL
                                 );"""
  
     #initialized variable with query that creates magazine table with columns/attributes
     sql_create_magazine_table = """CREATE TABLE IF NOT EXISTS magazine (
-                                    title text NOT NULL,
-                                    publisher text NOT NULL,
-                                    language text NOT NULL,
-                                    isbn_10 text NOT NULL,
-                                    isbn_13 text NOT NULL,
-                                    PRIMARY KEY (isbn_10, isbn_13)
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    title TEXT NOT NULL,
+                                    publisher TEXT NOT NULL,
+                                    language TEXT NOT NULL,
+                                    isbn_10 TEXT NOT NULL,
+                                    isbn_13 TEXT NOT NULL
                                 );"""
  
     #initialized variable with query that creates movie table with columns/attributes
     sql_create_movie_table = """CREATE TABLE IF NOT EXISTS movie (
-                                    title text NOT NULL,
-                                    director text NOT NULL,
-                                    producers text NOT NULL,
-                                    actors text NOT NULL,
-                                    language text NOT NULL,
-                                    subtitles text NOT NULL,
-                                    dubbed text NOT NULL,
-                                    release_date text NOT NULL,
-                                    run_time text NOT NULL
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    title TEXT NOT NULL,
+                                    director TEXT NOT NULL,
+                                    producers TEXT NOT NULL,
+                                    actors TEXT NOT NULL,
+                                    language TEXT NOT NULL,
+                                    subtitles TEXT NOT NULL,
+                                    dubbed TEXT NOT NULL,
+                                    releaseDate TEXT NOT NULL,
+                                    runTime INTEGER NOT NULL,
+                                    isLoaned INTEGER NOT NULL
                                 );"""
 
     #initialized variable with query that creates music table with columns/attributes
     sql_create_music_table = """CREATE TABLE IF NOT EXISTS music (
-                                    type text NOT NULL,
-                                    title text NOT NULL,
-                                    artist text NOT NULL,
-                                    label text NOT NULL,
-                                    release_date text NOT NULL,
-                                    ASIN text NOT NULL
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    type TEXT NOT NULL,
+                                    title TEXT NOT NULL,
+                                    artist TEXT NOT NULL,
+                                    label TEXT NOT NULL,
+                                    releaseDate TEXT NOT NULL,
+                                    asin TEXT NOT NULL,
+                                    isLoaned INTEGER NOT NULL
                                 );"""
 
     #initialized variable with query that creates client table with columns/attributes
     sql_create_client_table = """CREATE TABLE IF NOT EXISTS client (
-                                    id INTEGER PRIMARY KEY,
-                                    first_name text NOT NULL,
-                                    last_name text NOT NULL,
-                                    address text NOT NULL,
-                                    email text NOT NULL,
-                                    phone text NOT NULL,
-                                    administrator text NOT NULL
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    firstName TEXT NOT NULL,
+                                    lastName TEXT NOT NULL,
+                                    physicalAddress TEXT NOT NULL,
+                                    email TEXT NOT NULL,
+                                    phoneNumber TEXT NOT NULL,
+                                    isAdmin INTEGER NOT NULL,
+                                    lastLogged INTEGER NOT NULL
                                 );"""
         
     if conn is not None:
@@ -160,31 +166,32 @@ def main():
         create_table(conn, sql_create_client_table)
     else:
         print("Error! cannot create the database connection.")
-
+    '''
     with conn:
         #create a new book inside book table
-        book = ('Do Androids Dream of Electric Sheep?', 'Philip K. Dick', 'Paperback', 240, 'Del Rey; Reprint edition (Sept. 26 2017)', 'English', '1524796972', '978-1524796976')
+        book = ('Do Androids Dream of Electric Sheep?', 'Philip K. Dick', 'Paperback', 240, 'Del Rey; Reprint edition (Sept. 26 2017)', 'English', '1524796972', '978-1524796976', 1)
         create_book(conn, book)
 
         #create a new magazine inside magazine table
         magazine = ('TIME', 'Time (May 13 2008)', 'English', '1603200185', '978-1603200189')
         create_magazine(conn, magazine)
 
-        #create a new magazine inside magazine table
-        movie = ('Until the End of the World', 'Wim Wenders','Anatole Dauman, Ingrid Windisch, Joachim von Mengershausen, Pascale Daum.','Bruno Ganz, Solveig Dommartin, Otto Sander,Curt Bois, Peter Falk.','German','English','English, French','Oct. 20 2009','127 minutes')
+        #create a new movie inside movie table
+        movie = ('Until the End of the World', 'Wim Wenders','Anatole Dauman, Ingrid Windisch, Joachim von Mengershausen, Pascale Daum.','Bruno Ganz, Solveig Dommartin, Otto Sander,Curt Bois, Peter Falk.','German','English','English, French','Oct. 20 2009', 127, 1)
         create_movie(conn, movie)
 
-        #create a new magazine inside magazine table
-        music = ('CD','Anastasis','Dead Can Dance', 'Sony Music', 'Aug. 14 2012','B008FOB124')
+        #create a new music inside music table
+        music = ('CD','Anastasis','Dead Can Dance', 'Sony Music', 'Aug. 14 2012','B008FOB124',0)
         create_music(conn, music)
 
         #create a new client inside client table
-        client = (1,'John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com', '514-555-5555', 'yes')
+        client = ('John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com', '514-555-5555', 0, 1537207200)
         create_client(conn, client)
-
+    '''
     #closes database
     close_connection(conn)
 
 #run main function
 if __name__ == '__main__':
     main()
+
