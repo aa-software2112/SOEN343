@@ -5,7 +5,6 @@ genRoutePy()
 
 # Sets up the application for running
 from flask import Flask
-from config import Config
 
 app = Flask(__name__)
 
