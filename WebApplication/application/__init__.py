@@ -1,4 +1,4 @@
-from application.automationFiles.generateRoutesDotPy import generateRoutesFile as genRoutePy 
+from application.AutomationFiles.generateRoutesDotPy import generateRoutesFile as genRoutePy 
 
 # Generates the routes.py file
 genRoutePy()

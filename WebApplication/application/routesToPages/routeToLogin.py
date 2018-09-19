@@ -1,6 +1,6 @@
 from flask import Flask,render_template, redirect
 from application import app
-from application.classes.forms import LoginForm, RegistrationForm
+from application.Classes.forms import LoginForm, RegistrationForm
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 

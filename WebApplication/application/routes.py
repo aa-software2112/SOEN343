@@ -3,7 +3,7 @@ from application import app
 import random
 
 # All routes from route folder are imported here...
-from application.routesToPages import routeToExample
-from application.routesToPages import routeToIndex
-from application.routesToPages import routeToLogin
-from application.routesToPages import routeToSetCookies
+from application.RoutesToPages import routeToExample
+from application.RoutesToPages import routeToIndex
+from application.RoutesToPages import routeToLogin
+from application.RoutesToPages import routeToSetCookies
