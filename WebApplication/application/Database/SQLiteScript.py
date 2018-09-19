@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+import glob
 
 #function takes 'database_file_path' (exact path of database in your directory or path + name of database you wish to create. Please write it down in main method) 
 #and creates database connecton to SQLite database specified inside the database_file_path. Returns connection object 'conn'
@@ -84,113 +85,115 @@ def close_connection(conn):
 #main where we implement most methods above (create connection, create table, insert data, close connection.)
 def initializeAndFillDatabase(pathToDB):
     
-    #IMPORTANT: Insert your path of database below. If there's no current database, write the path + name of database you wish to create.
-    #create a database connection
-    conn = create_connection(pathToDB)
- 
-    #initialized variable with query that creates book table with columns/attributes
-    sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
-                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    title TEXT NOT NULL,
-                                    author TEXT NOT NULL,
-                                    format TEXT NOT NULL,
-                                    pages INTEGER NOT NULL,
-                                    publisher TEXT NOT NULL,
-                                    language TEXT NOT NULL,
-                                    isbn_10 TEXT NOT NULL,
-                                    isbn_13 TEXT NOT NULL,
-                                    isLoaned INTEGER NOT NULL
-                                );"""
- 
-    #initialized variable with query that creates magazine table with columns/attributes
-    sql_create_magazine_table = """CREATE TABLE IF NOT EXISTS magazine (
-                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    title TEXT NOT NULL,
-                                    publisher TEXT NOT NULL,
-                                    language TEXT NOT NULL,
-                                    isbn_10 TEXT NOT NULL,
-                                    isbn_13 TEXT NOT NULL
-                                );"""
- 
-    #initialized variable with query that creates movie table with columns/attributes
-    sql_create_movie_table = """CREATE TABLE IF NOT EXISTS movie (
-                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    title TEXT NOT NULL,
-                                    director TEXT NOT NULL,
-                                    producers TEXT NOT NULL,
-                                    actors TEXT NOT NULL,
-                                    language TEXT NOT NULL,
-                                    subtitles TEXT NOT NULL,
-                                    dubbed TEXT NOT NULL,
-                                    releaseDate TEXT NOT NULL,
-                                    runTime INTEGER NOT NULL,
-                                    isLoaned INTEGER NOT NULL
-                                );"""
+	# Database already exists; do nothing
+	if len(glob.glob(pathToDB)) == 1:
+		return
 
-    #initialized variable with query that creates music table with columns/attributes
-    sql_create_music_table = """CREATE TABLE IF NOT EXISTS music (
-                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    type TEXT NOT NULL,
-                                    title TEXT NOT NULL,
-                                    artist TEXT NOT NULL,
-                                    label TEXT NOT NULL,
-                                    releaseDate TEXT NOT NULL,
-                                    asin TEXT NOT NULL,
-                                    isLoaned INTEGER NOT NULL
-                                );"""
+	conn = create_connection(pathToDB)
 
-    #initialized variable with query that creates client table with columns/attributes
-    sql_create_client_table = """CREATE TABLE IF NOT EXISTS client (
-                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    firstName TEXT NOT NULL,
-                                    lastName TEXT NOT NULL,
-                                    physicalAddress TEXT NOT NULL,
-                                    email TEXT NOT NULL,
-                                    phoneNumber TEXT NOT NULL,
-                                    username TEXT NOT NULL,
-                                    password TEXT NOT NULL,
-                                    isAdmin INTEGER NOT NULL,
-                                    isLogged INTEGER NOT NULL,
-                                    lastLogged INTEGER NOT NULL
-                                );"""
-        
-    if conn is not None:
-        #creates book table inside database
-        create_table(conn, sql_create_book_table)
-        #create magazine table inside database
-        create_table(conn, sql_create_magazine_table)
-        #create movie table inside database
-        create_table(conn, sql_create_movie_table)
-        #create music table inside database
-        create_table(conn, sql_create_music_table)
-        #create client table inside database
-        create_table(conn, sql_create_client_table)
-    else:
-        print("Error! cannot create the database connection.")
-    
-    with conn:
-        #create a new book inside book table
-        book = ('Do Androids Dream of Electric Sheep?', 'Philip K. Dick', 'Paperback', 240, 'Del Rey; Reprint edition (Sept. 26 2017)', 'English', '1524796972', '978-1524796976', 1)
-        create_book(conn, book)
+	#initialized variable with query that creates book table with columns/attributes
+	sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
+									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+									title TEXT NOT NULL,
+									author TEXT NOT NULL,
+									format TEXT NOT NULL,
+									pages INTEGER NOT NULL,
+									publisher TEXT NOT NULL,
+									language TEXT NOT NULL,
+									isbn_10 TEXT NOT NULL,
+									isbn_13 TEXT NOT NULL,
+									isLoaned INTEGER NOT NULL
+								);"""
 
-        #create a new magazine inside magazine table
-        magazine = ('TIME', 'Time (May 13 2008)', 'English', '1603200185', '978-1603200189')
-        create_magazine(conn, magazine)
+	#initialized variable with query that creates magazine table with columns/attributes
+	sql_create_magazine_table = """CREATE TABLE IF NOT EXISTS magazine (
+									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+									title TEXT NOT NULL,
+									publisher TEXT NOT NULL,
+									language TEXT NOT NULL,
+									isbn_10 TEXT NOT NULL,
+									isbn_13 TEXT NOT NULL
+								);"""
 
-        #create a new movie inside movie table
-        movie = ('Until the End of the World', 'Wim Wenders','Anatole Dauman, Ingrid Windisch, Joachim von Mengershausen, Pascale Daum.','Bruno Ganz, Solveig Dommartin, Otto Sander,Curt Bois, Peter Falk.','German','English','English, French','Oct. 20 2009', 127, 1)
-        create_movie(conn, movie)
+	#initialized variable with query that creates movie table with columns/attributes
+	sql_create_movie_table = """CREATE TABLE IF NOT EXISTS movie (
+									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+									title TEXT NOT NULL,
+									director TEXT NOT NULL,
+									producers TEXT NOT NULL,
+									actors TEXT NOT NULL,
+									language TEXT NOT NULL,
+									subtitles TEXT NOT NULL,
+									dubbed TEXT NOT NULL,
+									releaseDate TEXT NOT NULL,
+									runTime INTEGER NOT NULL,
+									isLoaned INTEGER NOT NULL
+								);"""
 
-        #create a new music inside music table
-        music = ('CD','Anastasis','Dead Can Dance', 'Sony Music', 'Aug. 14 2012','B008FOB124',0)
-        create_music(conn, music)
+	#initialized variable with query that creates music table with columns/attributes
+	sql_create_music_table = """CREATE TABLE IF NOT EXISTS music (
+									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+									type TEXT NOT NULL,
+									title TEXT NOT NULL,
+									artist TEXT NOT NULL,
+									label TEXT NOT NULL,
+									releaseDate TEXT NOT NULL,
+									asin TEXT NOT NULL,
+									isLoaned INTEGER NOT NULL
+								);"""
 
-        #create a new client inside client table
-        client = ('John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com','514-555-5555', 'batman', 'pasword123', 0, 1, 1537207200)
-        create_client(conn, client)
-    
-    #closes database
-    close_connection(conn)
+	#initialized variable with query that creates client table with columns/attributes
+	sql_create_client_table = """CREATE TABLE IF NOT EXISTS client (
+									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+									firstName TEXT NOT NULL,
+									lastName TEXT NOT NULL,
+									physicalAddress TEXT NOT NULL,
+									email TEXT NOT NULL,
+									phoneNumber TEXT NOT NULL,
+									username TEXT NOT NULL,
+									password TEXT NOT NULL,
+									isAdmin INTEGER NOT NULL,
+									isLogged INTEGER NOT NULL,
+									lastLogged INTEGER NOT NULL
+								);"""
+		
+	if conn is not None:
+		#creates book table inside database
+		create_table(conn, sql_create_book_table)
+		#create magazine table inside database
+		create_table(conn, sql_create_magazine_table)
+		#create movie table inside database
+		create_table(conn, sql_create_movie_table)
+		#create music table inside database
+		create_table(conn, sql_create_music_table)
+		#create client table inside database
+		create_table(conn, sql_create_client_table)
+	else:
+		print("Error! cannot create the database connection.")
+
+	with conn:
+		#create a new book inside book table
+		book = ('Do Androids Dream of Electric Sheep?', 'Philip K. Dick', 'Paperback', 240, 'Del Rey; Reprint edition (Sept. 26 2017)', 'English', '1524796972', '978-1524796976', 1)
+		create_book(conn, book)
+
+		#create a new magazine inside magazine table
+		magazine = ('TIME', 'Time (May 13 2008)', 'English', '1603200185', '978-1603200189')
+		create_magazine(conn, magazine)
+
+		#create a new movie inside movie table
+		movie = ('Until the End of the World', 'Wim Wenders','Anatole Dauman, Ingrid Windisch, Joachim von Mengershausen, Pascale Daum.','Bruno Ganz, Solveig Dommartin, Otto Sander,Curt Bois, Peter Falk.','German','English','English, French','Oct. 20 2009', 127, 1)
+		create_movie(conn, movie)
+
+		#create a new music inside music table
+		music = ('CD','Anastasis','Dead Can Dance', 'Sony Music', 'Aug. 14 2012','B008FOB124',0)
+		create_music(conn, music)
+
+		#create a new client inside client table
+		client = ('John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com','514-555-5555', 'batman', 'pasword123', 0, 1, 1537207200)
+		create_client(conn, client)
+
+	#closes database
+	close_connection(conn)
     
 #run main function
 if __name__ == '__main__':

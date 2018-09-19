@@ -1,11 +1,6 @@
 import sqlite3
-import sys
+import sys	
 
-print("In DatabaseContainer.py")
-
-"""
-Use dbVariableName.connection to create the cursor necessary for queries
-"""
 class DatabaseContainer(object):
 
 	def __init__(self, pathToDatabase):
