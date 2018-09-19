@@ -1,4 +1,5 @@
 from flask import render_template
+from application.Manipulators import UserManipulator
 from application import app
 import random 
 

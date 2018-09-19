@@ -82,13 +82,11 @@ def close_connection(conn):
         print(e)
 
 #main where we implement most methods above (create connection, create table, insert data, close connection.)
-def main():
+def initializeAndFillDatabase(pathToDB):
     
     #IMPORTANT: Insert your path of database below. If there's no current database, write the path + name of database you wish to create.
-    database = "C:\\Users\\Anon\\Documents\\GitHub\\SOEN343\\Database\\catalog.db"
-
     #create a database connection
-    conn = create_connection(database)
+    conn = create_connection(pathToDB)
  
     #initialized variable with query that creates book table with columns/attributes
     sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
@@ -169,7 +167,7 @@ def main():
         create_table(conn, sql_create_client_table)
     else:
         print("Error! cannot create the database connection.")
-    '''
+    
     with conn:
         #create a new book inside book table
         book = ('Do Androids Dream of Electric Sheep?', 'Philip K. Dick', 'Paperback', 240, 'Del Rey; Reprint edition (Sept. 26 2017)', 'English', '1524796972', '978-1524796976', 1)
@@ -193,7 +191,7 @@ def main():
     
     #closes database
     close_connection(conn)
-    '''
+    
 #run main function
 if __name__ == '__main__':
     main()
