@@ -68,8 +68,8 @@ def create_music(conn, music):
 #function takes database connection object 'conn' and a client 
 #creates a new client into the client table
 def create_client(conn, client):
-    sql = ''' INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,isAdmin,lastLogged)
-              VALUES(?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
+              VALUES(?,?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, client)
 
@@ -149,7 +149,10 @@ def main():
                                     physicalAddress TEXT NOT NULL,
                                     email TEXT NOT NULL,
                                     phoneNumber TEXT NOT NULL,
+                                    username TEXT NOT NULL,
+                                    password TEXT NOT NULL,
                                     isAdmin INTEGER NOT NULL,
+                                    isLogged INTEGER NOT NULL,
                                     lastLogged INTEGER NOT NULL
                                 );"""
         
@@ -185,12 +188,12 @@ def main():
         create_music(conn, music)
 
         #create a new client inside client table
-        client = ('John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com', '514-555-5555', 0, 1537207200)
+        client = ('John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com','514-555-5555', 'batman', 'pasword123', 0, 1, 1537207200)
         create_client(conn, client)
-    '''
+    
     #closes database
     close_connection(conn)
-
+    '''
 #run main function
 if __name__ == '__main__':
     main()

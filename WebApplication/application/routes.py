@@ -8,5 +8,5 @@ from application.routesToPages import routeToDBInsertRecord
 from application.routesToPages import routeToDBQuerryRecord
 from application.routesToPages import routeToExample
 from application.routesToPages import routeToIndex
-from application.routesToPages import routeToLogin
+from application.routesToPages import routeToLogin 
 from application.routesToPages import routeToSetCookies
