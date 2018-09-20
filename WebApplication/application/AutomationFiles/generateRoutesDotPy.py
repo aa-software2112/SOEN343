@@ -9,17 +9,17 @@ def generateRoutesFile():
 	previousPath = os.getcwd()
 
 	# Move directory to this file's location - assumes generateRoutesDotPy was executed from somewhere in /WebApplication/...
-	os.chdir(os.getcwd().split("WebApplication")[0] + "WebApplication/application/routesToPages")
+	os.chdir(os.getcwd().split("WebApplication")[0] + "WebApplication/application/RoutesToPages")
 
 	# File System Definitions
 	PATH_TO_ROUTES_DOT_PY = "../routes.py"
-	ROUTES_TO_PAGES_DIR = "routesToPages"
+	ROUTES_TO_PAGES_DIR = "RoutesToPages"
 	PATH_TO_ROUTES_TO_PAGES_DIRECTORY = "../" + ROUTES_TO_PAGES_DIR
 	ROUTE_FILENAME_PREFIX = "routeTo"
 	APPLICATION_PACKAGE_NAME = "application"
 
 	# routes.py import string
-	routesImportString = "from flask import render_template\nfrom application import app\nimport random\n\n# All routes from route folder are imported here...\n"
+	routesImportString = "from flask import render_template\nimport random\n\n# All routes from route folder are imported here...\n"
 
 	# Get all the route filenames 
 	routes = [os.path.basename(filePath).replace(".py","") for filePath in glob.glob(PATH_TO_ROUTES_TO_PAGES_DIRECTORY + "/" + ROUTE_FILENAME_PREFIX + "*.py")]
