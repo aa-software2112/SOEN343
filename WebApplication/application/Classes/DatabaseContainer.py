@@ -10,7 +10,8 @@ class DatabaseContainer(object):
 		self.dbPath = pathToDatabase
 		
 		try:
-			self.connection = sqlite3.connect(pathToDatabase)
+			# Make database useable in all threads
+			self.connection = sqlite3.connect(pathToDatabase, check_same_thread=False)
 			print ("Made connection!")
 		except Error as e:
 			print(e)
