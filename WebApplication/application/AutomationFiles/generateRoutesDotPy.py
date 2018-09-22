@@ -9,7 +9,7 @@ def generateRoutesFile():
 	previousPath = os.getcwd()
 
 	# Move directory to this file's location - assumes generateRoutesDotPy was executed from somewhere in /WebApplication/...
-	os.chdir(os.getcwd().split("WebApplication")[0] + "WebApplication/application/RoutesToPages")
+	os.chdir(os.getcwd().split("WebApplication")[0] + "/WebApplication/application/RoutesToPages")
 
 	# File System Definitions
 	PATH_TO_ROUTES_DOT_PY = "../routes.py"
