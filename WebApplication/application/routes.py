@@ -3,6 +3,7 @@ import random
 
 # All routes from route folder are imported here...
 from application.RoutesToPages import routeToAdminView
+from application.RoutesToPages import routeToClientSignup
 from application.RoutesToPages import routeToExample
 from application.RoutesToPages import routeToIndex
 from application.RoutesToPages import routeToLogin
