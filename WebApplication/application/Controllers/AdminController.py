@@ -50,9 +50,7 @@ class AdminController(UserController):
 		#instead loggedClients[0] returns a DICTIONARY of all the attributes it found on the first ROW in the table
 		for row in loggedClients:
 
-			#This is how I found how to append into a list, we are appending a Client object with the all the attributes as required input parameters (as defined in the Client Class)
-			#the loop iterates through all the loggedClients obtained from the query, where i is the ith client found by the query
-			#the [numbers] indicates the field type in the table, i.e: [0] is id, [1] is firstName, all the way to [10] lastLogged
+			#Appending a Client object from the rows obtained by the SQL query
 			allLoggedClientList.append(Client(row))
 
 		#Printing the obtained list of all logged clients obtained on the list
