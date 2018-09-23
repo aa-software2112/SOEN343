@@ -40,7 +40,7 @@ class AdminController(UserController):
 	#Function to get a list of all logged clients to send to UserResgitryViewer
 	def getAllLoggedClient(self):
 
-		#instanciating the returning list
+		#instantiating the returning list
 		allLoggedClientList = []
 		getAllLoggedClientQ = '''SELECT * FROM client WHERE isLogged=1 '''
 		getClientCursor = self.db.executeQuery(getAllLoggedClientQ)
@@ -54,8 +54,8 @@ class AdminController(UserController):
 			allLoggedClientList.append(Client(row))
 
 		#Printing the obtained list of all logged clients obtained on the list
-		for clients in allLoggedClientList:
-			print(clients)
+		for client in allLoggedClientList:
+			print(client)
 			print()
 
 		return allLoggedClientList
