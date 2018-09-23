@@ -48,13 +48,12 @@ class AdminController(UserController):
 
 		#loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so soemthing like loggedClients[0].id does not work
 		#instead loggedClients[0] returns a DICTIONARY of all the attributes it found on the first ROW in the table
-		for i in range(0,len(loggedClients)):
+		for row in loggedClients:
 
 			#This is how I found how to append into a list, we are appending a Client object with the all the attributes as required input parameters (as defined in the Client Class)
 			#the loop iterates through all the loggedClients obtained from the query, where i is the ith client found by the query
 			#the [numbers] indicates the field type in the table, i.e: [0] is id, [1] is firstName, all the way to [10] lastLogged
-			allLoggedClientList.append(Client(loggedClients[i][0],loggedClients[i][1],loggedClients[i][2],loggedClients[i][3],loggedClients[i][4]
-									   ,loggedClients[i][5],loggedClients[i][6],loggedClients[i][7],loggedClients[i][8],loggedClients[i][9],loggedClients[i][10]))
+			allLoggedClientList.append(Client(row))
 
 		#Printing the obtained list of all logged clients obtained on the list
 		for clients in allLoggedClientList:
