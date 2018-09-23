@@ -41,18 +41,22 @@
             </ul>
             <div class="navbar-nav ml-4">
                 <a class="nav-item nav-link" href="/login"> Login</a>
-                <a class="nav-item nav-link" href="#"> Sign Up</a>
+                <a class="nav-item nav-link" href="/clientSignup"> Sign Up</a>
             </div>
          </div>
       </nav>
       <main role="main" class="container">
          <div class="starter-template">
-            <h1> Starter template for {{ course }} 
+            <h1> {% block pageTitle %} 
+			Starter template for {{ course }} 
                 {% if userEmail %} 
                     Welcome {{ userEmail }} 
                 {% endif %}
+				{% endblock %}
             </h1>
          </div>
+		 
+		<div id="main-content-area" class="container" >
          {% block content %}
             {% for book in books %}
             <div class="card mb-3">
@@ -68,6 +72,7 @@
             </div>
             {% endfor %}
          {% endblock %}
+		</div>
       </main>
       <!-- /.container -->
       <!-- Bootstrap core JavaScript
