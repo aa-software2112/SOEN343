@@ -49,3 +49,13 @@ code {
     table-layout: fixed;
     overflow: hidden;
 }
+
+/* ADMINISTRATOR VIEW */
+
+.admin-view-link {
+	
+	font-size: 1.5em;
+	
+	
+}
+
