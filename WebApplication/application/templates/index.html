@@ -57,6 +57,9 @@
                 {% endif %}
             </h1>
          </div>
+
+         {% include '/includes/messages.html' %}
+
          {% block content %}
             {% for book in books %}
             <div class="card mb-3">

@@ -1,4 +1,4 @@
-from flask import Flask,render_template, redirect
+from flask import Flask,render_template, redirect, session, flash
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm, RegistrationForm
@@ -23,11 +23,20 @@ user_mock = {
 def login():
 	form = LoginForm()	
 	clients_login_info = userController.loginHandler()
+	session.pop('user', None)
 	if form.validate_on_submit():
 		# return '<h1>' +  form.username.data + ' ' + form.password.data + '</h1>'
 		user = user_mock
 		if user: 
 			if user["password"] == form.password.data:
+				session['logged_in'] = True
+				session['user'] = user["username"]
+				flash('You are now logged in!', 'success')
 				return redirect('/index')
-		return '<h1> Invalid username or password </h1>'
+			else:
+				error = "Invalid login"
+				return render_template('login.html', form=form, error=error)
+		else: 
+			error = "Username not found"
+			return render_template('login.html', form=form, error=error)
 	return render_template('login.html', form=form, clients_login_info=clients_login_info)
