@@ -9,5 +9,6 @@ def logout():
         resp.set_cookie('username', expires=0 )
         flash('Logged out!', 'success')
         return resp
+    return redirect('/index')
         
 
