@@ -188,9 +188,19 @@ def initializeAndFillDatabase(pathToDB):
 		music = ('CD','Anastasis','Dead Can Dance', 'Sony Music', 'Aug. 14 2012','B008FOB124',0)
 		create_music(conn, music)
 
-		#create a new client inside client table
-		client = ('John','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student@hotmail.com','514-555-5555', 'batman', 'pasword123', 0, 1, 1537207200)
-		create_client(conn, client)
+		#store clients info inside variable so that we can insert them in client table
+		client1 = ('Aaron','Doe', '1451 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student1@hotmail.com','514-555-0001', 'antman', 'password1', 0, 1, 1537207100)
+		client2 = ('Burns','Doe', '1452 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student2@hotmail.com','514-555-0002', 'batman', 'password2', 0, 1, 1537207200)
+		client3 = ('Chloe','Doe', '1453 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student3@hotmail.com','514-555-0003', 'catwoman', 'password3', 1, 1, 1537207300)
+		client4 = ('Donovan','Doe', '1454 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student4@hotmail.com','514-555-0004', 'datman', 'password4', 0, 0, 1537207400)
+		client5 = ('Eric','Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student5@hotmail.com','514-555-0005', 'eagleman', 'password5', 1, 1, 1537207500)
+
+		#create a new clients inside client table
+		create_client(conn, client1)
+		create_client(conn, client2)
+		create_client(conn, client3)
+		create_client(conn, client4)
+		create_client(conn, client5)
 
 	#closes database
 	close_connection(conn)
