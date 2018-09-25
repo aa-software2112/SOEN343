@@ -1,4 +1,5 @@
 from application.Controllers.Controller import Controller
+from application.Classes.ClientContainer import Client
 
 class UserController(Controller):
 	
@@ -9,46 +10,62 @@ class UserController(Controller):
 		print("User Controller")
 
 	#function takes self and a string "username" to get the user from the client table.
-	#returns none with message or displays client information and returns client row.
+	#returns list with client information or None if client doesn't exist in database
 	def getClientByUsername(self, username):
-		#to delete: sqlGetClientByUsername = ''' Select * From client Where username = ? , ('''username''',)'''
-		getClientCursor = self.db.executeQuery("Select * From client Where username = ?", (username,))
-		foundClient = getClientCursor.fetchone()
-
-		if foundClient == None:
-			print("There are no client with given Username")
-		else:
-			print(foundClient)
+		get_client_cursor = self.db.executeQuery("Select * From client Where username = ?", (username,))
 		
-		return foundClient
-
-	#function takes self and a string "email" to get the user from the client table.
-	#returns none with message or displays client information and returns client row.
-	def getClientByEmail(self, email):
-		getClientCursor = self.db.executeQuery("Select * From client Where username = ?", (email,))
-		foundClient = getClientCursor.fetchone()
-		
-		if foundClient == None:
-			print("There are no client with given Username")
-		else:
-			print(foundClient)
-		
-		return foundClient
-
-	#function takes self and a string "email" to get the user from the client table.
-	#returns none with message or displays client information and returns client row.
-	def getClientByPassword(self, username, password):
-		get_client_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
-		found_client = get_client_cursor.fetchone()
+		#using fectchmany(1) because there is only one record with this username & password.
+		found_client = get_client_cursor.fetchmany(1)
 		found_client_list = []
-		found_client_list.append(found_client)
+
+		for row in found_client:
+			found_client_list.append(Client(row))
+		
 		if found_client == None:
-			print("There are no client with given Username and password")
+			print("There are no client with given username")
+			return None
 		else:
 			print(found_client_list)
-		
-		return found_client_list
+			return found_client_list
 
+	#function takes self and a string "email" to get the user from the client table.
+	#returns list with client information or None if client doesn't exist in database
+	def getClientByEmail(self, email):
+		get_client_cursor = self.db.executeQuery("Select * From client Where username = ?", (email,))
+		
+		#using fectchmany(1) because there is only one record with this username & password.
+		found_client = get_client_cursor.fetchmany(1)
+		found_client_list = []
+
+		for row in found_client:
+			found_client_list.append(Client(row))
+		
+		if found_client == None:
+			print("There are no client with given email")
+			return None
+		else:
+			print(found_client_list)
+			return found_client_list
+
+	#function takes self and a string "username" & "password" to get the client from the client table.
+	#returns list with client information or None if client doesn't exist in database
+	def getClientByPassword(self, username, password):
+		get_client_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
+		
+		#using fectchmany(1) because there is only one record with this username & password.
+		found_client = get_client_cursor.fetchmany(1)
+		found_client_list = []
+
+		for row in found_client:
+			found_client_list.append(Client(row))
+		
+		if found_client == None:
+			print("There are no client with given username and password")
+			return None
+		else:
+			print(found_client_list)
+			return found_client_list
+		
 	#function takes self and a values to create
 	#creates a new client into the client table
 	def createClient(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged):
@@ -56,12 +73,13 @@ class UserController(Controller):
 		getClientByEmail = self.getClientByEmail(username)
 		
 		if getClientByUsername == None & getClientByEmail == None:
-			sqlInsertClient = ''' INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
+			sql_insert_client = '''INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
 					VALUES(?,?,?,?,?,?,?,?,?,?) '''
-		
 			client = (firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
-			self.db.executeQuery(sqlInsertClient, client)
+			self.db.executeQuery(sql_insert_client, client)
+			print("New user has been successfully created in database")
+
 		else:
-			getClientByUsername
+			print("User already exist in database")
 
 
