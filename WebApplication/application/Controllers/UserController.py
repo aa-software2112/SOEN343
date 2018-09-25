@@ -1,4 +1,5 @@
 from application.Controllers.Controller import Controller
+from application.Classes.ClientContainer import Client
 
 class UserController(Controller):
 	
@@ -9,13 +10,19 @@ class UserController(Controller):
 		print("User Controller")
 
 	def loginHandler(self):
-		get_clients_login_info = ''' SELECT username, password, isAdmin from client '''
 
-		get_clients_cursor = self.db.executeQuery(get_clients_login_info, inputParameters=None)
+		clients_data_list = []
+		get_clients_data = ''' SELECT * from client'''
 
-		clients_login_info = get_clients_cursor.fetchall()
+		get_clients_cursor = self.db.executeQuery(get_clients_data, inputParameters=None)
 
-		for clients in clients_login_info:
+		clients_data = get_clients_cursor.fetchall()
+
+		for row in clients_data:
+			clients_data_list.append(Client(row))
+
+		for clients in clients_data:
 			print(clients)
+			print()
 
-		return clients_login_info
+		return clients_data_list

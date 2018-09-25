@@ -5,8 +5,8 @@
       <form method="POST" action="/login">
             {{ form.hidden_tag() }}
 
-            {% for login_info in clients_login_info %}
-			<p>{{login_info}} + {{login_info[password]}} </p>
+            {% for login_info in clients_login %}
+			<p>{{login_info.username}} + {{login_info.password}} </p>
 		    {% endfor %}
             <fieldset class="form-group">
                 <legend class="text-center pb-4"> Login Now </legend>

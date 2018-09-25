@@ -22,11 +22,19 @@ user_mock = {
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()	
-	clients_login_info = userController.loginHandler()
+	clients_login = userController.loginHandler()
 	session.pop('user', None)
 	if form.validate_on_submit():
 		# return '<h1>' +  form.username.data + ' ' + form.password.data + '</h1>'
-		user = user_mock
+		
+		for x in clients_login:
+			user = {
+				"username": x.username,
+				"password": x.password
+			}
+
+		print(user["password"])
+
 		if user: 
 			if user["password"] == form.password.data:
 				session['logged_in'] = True
@@ -39,4 +47,5 @@ def login():
 		else: 
 			error = "Username not found"
 			return render_template('login.html', form=form, error=error)
-	return render_template('login.html', form=form, clients_login_info=clients_login_info)
+
+	return render_template('login.html', form=form, clients_login=clients_login)
