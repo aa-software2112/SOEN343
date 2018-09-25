@@ -32,7 +32,7 @@ def adminViewCatalog():
 	return render_template('administratorViewCatalog.html')
 
 @app.route('/registerUser', methods=['POST'])
-def registerAdmin():
+def registerUser():
 	print(request.method)
 	for k, v in request.form.items():
 		print(k)
