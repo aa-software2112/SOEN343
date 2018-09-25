@@ -40,8 +40,13 @@
                </li>
             </ul>
             <div class="navbar-nav ml-4">
-                <a class="nav-item nav-link" href="/login"> Login</a>
-                <a class="nav-item nav-link" href="/clientSignup"> Sign Up</a>
+                {% if username %}
+                    <a class="nav-item nav-link" href="#"> {{ username }}</a>
+                {% else %}
+                    <a class="nav-item nav-link" href="/login"> Login</a>
+                    <a class="nav-item nav-link" href="/clientSignup"> Sign Up</a>
+                {% endif %}
+                
             </div>
          </div>
       </nav>
@@ -49,8 +54,8 @@
          <div class="starter-template">
             <h1> {% block pageTitle %} 
 			Starter template for {{ course }} 
-                {% if userEmail %} 
-                    Welcome {{ userEmail }} 
+                {% if username %} 
+                    Welcome {{ username }} 
                 {% endif %}
 				{% endblock %}
             </h1>

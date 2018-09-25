@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, g, session, redirect
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
@@ -6,10 +6,10 @@ import random
 
 @app.route('/adminView')
 def adminView():
+	if g.user:
+		return render_template('administratorView.html')
+	return redirect('/index')
 
-	return render_template('administratorView.html')
-
-	
 @app.route('/adminView/adminCreator')
 def adminCreator():
 
@@ -30,5 +30,10 @@ def adminViewCatalog():
 	
 	return render_template('administratorViewCatalog.html')
 	
-	
+@app.before_request
+def before_request():
+	g.user = None
+	if 'user' in session:
+		g.user = session['user']
+
 	

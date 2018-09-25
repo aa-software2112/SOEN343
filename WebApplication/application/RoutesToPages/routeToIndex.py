@@ -6,7 +6,7 @@ import random
 @app.route('/index')
 def index():
 	course = 'SOEN343'
-	userEmail = request.cookies.get('userEmail')
+	username = request.cookies.get('username')
 	books = [
 		{
 			'author':'randomly generated author ' + str(random.randint(0,100)) + '',
@@ -23,4 +23,4 @@ def index():
 		}
 	]
 
-	return render_template('index.html', course='SOEN343', books=books, userEmail=userEmail)
+	return render_template('index.html', course='SOEN343', books=books, username=username)

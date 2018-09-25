@@ -1,22 +1,9 @@
-from flask import Flask,render_template, redirect, session, flash
+from flask import Flask,render_template, redirect, session, flash, make_response
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm, RegistrationForm
 
 app.config['SECRET_KEY'] = 'SOEN_343'
-
-user_mock = {
-	"id": 2,
-	"firstName": "Jasonn",
-	"lastName": "Jasonnnn",
-	"physicalAddress": "4305 Somewhere",
-	"email": "jason@email.com",
-	"phoneNumber": "514-555-5555",
-	"username": "secretname",
-	"password": "superpassword",
-	"isAdmin": 1,
-	"isLogged": 1
-}
 
 # Login Template
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,7 +27,10 @@ def login():
 				session['logged_in'] = True
 				session['user'] = user["username"]
 				flash('You are now logged in!', 'success')
-				return redirect('/index')
+
+				resp =  make_response(redirect('/index'))
+				resp.set_cookie('username', form.username.data)
+				return resp
 			else:
 				error = "Invalid login"
 				return render_template('login.html', form=form, error=error)
@@ -49,3 +39,5 @@ def login():
 			return render_template('login.html', form=form, error=error)
 
 	return render_template('login.html', form=form, clients_login=clients_login)
+
+
