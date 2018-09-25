@@ -1,4 +1,4 @@
-from flask import Flask,render_template, redirect, session, flash, make_response
+from flask import Flask,render_template, redirect, session, flash, make_response, g, request
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm, RegistrationForm
@@ -40,4 +40,10 @@ def login():
 
 	return render_template('login.html', form=form, clients_login=clients_login)
 
-
+@app.before_request
+def before_request():
+	g.user = None
+	g.username = None
+	if 'user' in session:
+		g.user = session['user']
+		g.username = request.cookies.get('username')

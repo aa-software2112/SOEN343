@@ -15,14 +15,14 @@
    </head>
    <body>
       <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-         <a class="navbar-brand" href="#">SOEN343 Library</a>
+         <a class="navbar-brand" href="/index">SOEN343 Library</a>
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
          </button>
          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
                <li class="nav-item active">
-                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="/index">Home <span class="sr-only">(current)</span></a>
                </li>
                <li class="nav-item">
                   <a class="nav-link" href="#">Link</a>
@@ -40,8 +40,9 @@
                </li>
             </ul>
             <div class="navbar-nav ml-4">
-                {% if username %}
-                    <a class="nav-item nav-link" href="#"> {{ username }}</a>
+                {% if g.username %}
+                    <a class="nav-item nav-link" href="#"> {{ g.username }}</a>
+                    <a class="nav-item nav-link" href="/logout"> Logout </a>
                 {% else %}
                     <a class="nav-item nav-link" href="/login"> Login</a>
                     <a class="nav-item nav-link" href="/clientSignup"> Sign Up</a>
@@ -53,11 +54,7 @@
       <main role="main" class="container">
          <div class="starter-template">
             <h1> {% block pageTitle %} 
-			Starter template for {{ course }} 
-                {% if username %} 
-                    Welcome {{ username }} 
-                {% endif %}
-				{% endblock %}
+			    Starter template for {{ course }} 
             </h1>
          </div>
 
