@@ -8,4 +8,3 @@ from application.RoutesToPages import routeToExample
 from application.RoutesToPages import routeToIndex
 from application.RoutesToPages import routeToLogin
 from application.RoutesToPages import routeToLogout
-from application.RoutesToPages import routeToSetCookies
