@@ -11,10 +11,10 @@ def adminView():
 	return render_template('administratorView.html')
 
 	
-@app.route('/adminView/adminCreator')
-def adminCreator():
+@app.route('/adminView/userCreator')
+def userCreator():
 
-	return render_template('administratorCreator.html')
+	return render_template('userCreator.html')
 	
 @app.route('/adminView/adminViewUserRegistry')
 def adminViewUserRegistry():
@@ -31,13 +31,13 @@ def adminViewCatalog():
 	
 	return render_template('administratorViewCatalog.html')
 
-@app.route('/registerAdmin', methods=['POST'])
+@app.route('/registerUser', methods=['POST'])
 def registerAdmin():
 	print(request.method)
 	for k, v in request.form.items():
 		print(k)
 		print(v)
-	return render_template('administratorCreator.html')
+	return render_template('userCreator.html')
 	
 	
 	
