@@ -1,4 +1,4 @@
-from flask import render_template, request, session, g, request
+from flask import render_template
 from application import app
 import random 
 

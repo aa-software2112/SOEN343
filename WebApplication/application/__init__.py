@@ -5,12 +5,8 @@ genRoutePy()
 
 # Sets up the application for running
 from flask import Flask
-from flask_login import LoginManager
 
 app = Flask(__name__)
-
-# Contains the code that lets the application and Flask work together 
-login_manager = LoginManager(app)
 
 """
  Order of imports with description:
