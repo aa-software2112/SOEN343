@@ -1,4 +1,5 @@
 from application.Controllers.UserController import UserController
+from application.Classes.ClientContainer import Client
 
 class AdminController(UserController):
 	
@@ -29,9 +30,32 @@ class AdminController(UserController):
 		yourResults = yourCursor.fetchall()
 			
 		# At this point, iterate over results and store them in some object (User, Book, Music, etc...) before returning
-		for result in yourResults:
-			print (result)
+		#print("Results from exampleAdminSQLCall: ")
+		#for result in yourResults:
+		#	print(result)
 			
 		# Here you would return a list of objects
-		return 
-			
+		return
+
+	#Function to get a list of all logged clients to send to UserResgitryViewer
+	def getAllLoggedClient(self):
+
+		#instantiating the returning list
+		allLoggedClientList = []
+		getAllLoggedClientQ = '''SELECT * FROM client WHERE isLogged=1 '''
+		getClientCursor = self.db.executeQuery(getAllLoggedClientQ)
+		loggedClients = getClientCursor.fetchall()
+
+		#loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so soemthing like loggedClients[0].id does not work
+		#instead loggedClients[0] returns a DICTIONARY of all the attributes it found on the first ROW in the table
+		for row in loggedClients:
+
+			#Appending a Client object from the rows obtained by the SQL query
+			allLoggedClientList.append(Client(row))
+
+		#Printing the obtained list of all logged clients obtained on the list
+		for client in allLoggedClientList:
+			print(client)
+			print()
+
+		return allLoggedClientList

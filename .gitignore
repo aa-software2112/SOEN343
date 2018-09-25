@@ -3,6 +3,7 @@ venv/*
 # IDE-based folders, extensions, files
 .idea/
 .vscode/
+.DS_Store
 
 # Do not push database files - can get large and slowdown develop push/pull/fetch/merge
 *.db

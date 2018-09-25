@@ -39,27 +39,26 @@
                   </div>
                </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-               <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
             <div class="navbar-nav ml-4">
                 <a class="nav-item nav-link" href="/login"> Login</a>
-                <a class="nav-item nav-link" href="#"> Sign Up</a>
+                <a class="nav-item nav-link" href="/clientSignup"> Sign Up</a>
             </div>
          </div>
       </nav>
       <main role="main" class="container">
          <div class="starter-template">
-            <h1> Starter template for {{ course }} 
+            <h1> {% block pageTitle %} 
+			Starter template for {{ course }} 
                 {% if userEmail %} 
                     Welcome {{ userEmail }} 
                 {% endif %}
+				{% endblock %}
             </h1>
          </div>
 
-         {% include '/includes/messages.html' %}
+        {% include '/includes/messages.html' %}
 
+		<div id="main-content-area" class="container" >
          {% block content %}
             {% for book in books %}
             <div class="card mb-3">
@@ -75,6 +74,7 @@
             </div>
             {% endfor %}
          {% endblock %}
+		</div>
       </main>
       <!-- /.container -->
       <!-- Bootstrap core JavaScript
