@@ -5,33 +5,48 @@ from application.Classes.forms import LoginForm, RegistrationForm
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 
+# Declaring variable
+clients_login = ""
+
 # Login Template
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()	
-	clients_login = userController.loginHandler()
+
+	# The user will not have access to the login page while logged, but the session will be reset just in case
 	session.pop('user', None)
+	
 	if form.validate_on_submit():
-		# return '<h1>' +  form.username.data + ' ' + form.password.data + '</h1>'
-		
+		global clients_login
+
+		get_username = form.username.data
+		get_password = form.password.data
+		# Return query result
+		clients_login = userController.loginHandler(username=get_username)
+		# Temporary. Waiting to perform the right query for log in		
 		for x in clients_login:
 			user = {
 				"username": x.username,
 				"password": x.password
 			}
 
-		print(user["password"])
-
 		if user: 
-			if user["password"] == form.password.data:
+			# [To-do] Add encryption
+			if user["password"] == get_password:
+
+				# Set session
 				session['logged_in'] = True
 				session['user'] = user["username"]
+
+				# Display message after being redirected to home page
 				flash('You are now logged in!', 'success')
 
+				# Set cookies.
 				resp =  make_response(redirect('/index'))
 				resp.set_cookie('username', form.username.data)
 				return resp
 			else:
+				# Invalid password
 				error = "Invalid login"
 				return render_template('login.html', form=form, error=error)
 		else: 
@@ -40,6 +55,8 @@ def login():
 
 	return render_template('login.html', form=form, clients_login=clients_login)
 
+# After login in, the user is redirected to the index page. Before that, session and cookies are set as in global
+# variable g, before requesting the index route
 @app.before_request
 def before_request():
 	g.user = None

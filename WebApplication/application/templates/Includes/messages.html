@@ -1,3 +1,9 @@
+<!-- 
+    Messages handler = This file has been imported to index.html, so it can be reused
+    Ex: flash('You are now logged in!', 'success')
+    where the second params is from bootstrap label
+-->
+
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
@@ -5,6 +11,11 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
+
+<!-- Since every file extends index.html, it is possible to passed an error message or simply a message as follow:
+    error = "Invalid login"
+		return render_template('login.html', form=form, error=error)
+-->
 
 {% if error %}
     <div class="alert alert-danger"> {{ error }} </div>

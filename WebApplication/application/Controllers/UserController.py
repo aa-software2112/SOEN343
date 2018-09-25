@@ -9,12 +9,13 @@ class UserController(Controller):
 	def exampleUserControllerFunction(self):
 		print("User Controller")
 
-	def loginHandler(self):
+	# Temporary query handler
+	def loginHandler(self, username):
 
 		clients_data_list = []
-		get_clients_data = ''' SELECT * from client'''
+		get_clients_data = ''' SELECT * from client WHERE username = ? '''
 
-		get_clients_cursor = self.db.executeQuery(get_clients_data, inputParameters=None)
+		get_clients_cursor = self.db.executeQuery(get_clients_data, [username])
 
 		clients_data = get_clients_cursor.fetchall()
 

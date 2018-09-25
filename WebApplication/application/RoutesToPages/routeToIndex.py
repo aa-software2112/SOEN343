@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, session, g, request
 from application import app
 import random 
 
@@ -23,3 +23,4 @@ def index():
 	]
 
 	return render_template('index.html', course='SOEN343', books=books)
+
