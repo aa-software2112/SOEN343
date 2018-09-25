@@ -38,15 +38,16 @@ class UserController(Controller):
 	#function takes self and a string "email" to get the user from the client table.
 	#returns none with message or displays client information and returns client row.
 	def getClientByPassword(self, username, password):
-		getClientCursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
-		foundClient = getClientCursor.fetchone()
-		
-		if foundClient == None:
-			print("There are no client with given Username")
+		get_client_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
+		found_client = get_client_cursor.fetchone()
+		found_client_list = []
+		found_client_list.append(found_client)
+		if found_client == None:
+			print("There are no client with given Username and password")
 		else:
-			print(foundClient)
+			print(found_client_list)
 		
-		return foundClient
+		return found_client_list
 
 	#function takes self and a values to create
 	#creates a new client into the client table
