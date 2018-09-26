@@ -1,4 +1,4 @@
-# This module contains general helper functions.
+"""This module contains general helper functions."""
 import time
 
 def convertEpochToDatetime(epoch_time):

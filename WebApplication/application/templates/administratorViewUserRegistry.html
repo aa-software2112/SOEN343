@@ -7,6 +7,19 @@ User Registry
 
 <!-- Replace Content -->
 {% block content %}
-
+{% for client in logged_in_client_list %}
+{% set name = client.firstName + ' ' + client.lastName %}
+<div class="card w-75">
+  <div class="card-body">
+    <h5 class="card-title"> {{ name }} </h5>
+    <p class="card-text">
+    	{{ client.physicalAddress }} <br>
+        {{ client.email }} <br> 
+        {{ client.phoneNumber }}	
+    </p>
+    <a href="#" class="btn btn-primary">Button</a>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}
 
