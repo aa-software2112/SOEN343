@@ -19,8 +19,7 @@ def userCreator():
 @app.route('/adminView/adminViewUserRegistry')
 def adminViewUserRegistry():
 
-	allLoggedClients = adminController.getAllLoggedClient()
-	return render_template('administratorViewUserRegistry.html', allLoggedClients = allLoggedClients)
+	return render_template('administratorViewUserRegistry.html', allLoggedClients = adminController.getAllLoggedClient())
 	
 @app.route('/adminView/adminViewRecords')
 def adminViewRecords():
