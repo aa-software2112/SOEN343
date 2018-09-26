@@ -30,36 +30,25 @@ def login():
 		# Temporary. Waiting to perform the right query for log in		
 
 		if client_response is None: 
-			error = "Username not found"
+			error = "Invalid login. Please check your username or password"
 			return render_template('login.html', form=form, error=error)
 
 		else: 
-			for client in client_response:
-				client_to_log = {
-					"username": client.username,
-					"password": client.password
-				}
+			client = client_response[0]
+
+			# Set session
+			session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
+			session['logged_in'] = True
+			session['user'] = client.username
+
+			# Display message after being redirected to home page
+			flash('You are now logged in!', 'success')
+
+			# Set cookies.
+			resp =  make_response(redirect('/index'))
+			resp.set_cookie('username', get_username)
+			return resp
 			
-			# [To-do] Add encryption
-			if client_to_log["password"] == get_password:
-
-				# Set session
-				session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
-				session['logged_in'] = True
-				session['user'] = client_to_log["username"]
-
-				# Display message after being redirected to home page
-				flash('You are now logged in!', 'success')
-
-				# Set cookies.
-				resp =  make_response(redirect('/index'))
-				resp.set_cookie('username', get_username)
-				return resp
-			else:
-				# Invalid username or password
-				error = "Invalid login. Please check your username or password"
-				return render_template('login.html', form=form, error=error)
-	
 	return render_template('login.html', form=form)
 
 # Session and cookies are set as in global variable g, before requesting any route
