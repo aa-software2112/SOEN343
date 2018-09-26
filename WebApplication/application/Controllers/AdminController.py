@@ -59,3 +59,11 @@ class AdminController(UserController):
 			print()
 
 		return allLoggedClientList
+
+	#Creates admin using create_client method in UserController.
+	def createAdmin(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged):
+		if isAdmin == 1:
+			UserController.createClient(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
+		else:
+			print("when creating admin, make sure you call this function with a value of 1 for the attribute isAdmin")
+
