@@ -10,7 +10,7 @@ class UserController(Controller):
 		print("User Controller")
 
 	#function takes self and a string "username" to get the user from the client table.
-	#returns list with client information or None if client doesn't exist in database
+	#returns list with client information or emptylist if client doesn't exist in database
 	def getClientByUsername(self, username):
 		get_client_cursor = self.db.executeQuery("Select * From client Where username = ?", (username,))
 		
@@ -21,15 +21,15 @@ class UserController(Controller):
 		for row in found_client:
 			found_client_list.append(Client(row))
 		
-		if found_client == None:
+		if found_client == []:
 			print("There are no client with given username")
-			return None
+			return found_client_list
 		else:
 			print(found_client_list)
 			return found_client_list
 
 	#function takes self and a string "email" to get the user from the client table.
-	#returns list with client information or None if client doesn't exist in database
+	#returns list with client information or emptylist if client doesn't exist in database
 	def getClientByEmail(self, email):
 		get_client_cursor = self.db.executeQuery("Select * From client Where username = ?", (email,))
 		
@@ -40,15 +40,15 @@ class UserController(Controller):
 		for row in found_client:
 			found_client_list.append(Client(row))
 		
-		if found_client == None:
+		if found_client == []:
 			print("There are no client with given email")
-			return None
+			return found_client_list
 		else:
 			print(found_client_list)
 			return found_client_list
 
 	#function takes self and a string "username" & "password" to get the client from the client table.
-	#returns list with client information or None if client doesn't exist in database
+	#returns list with client information or emptylist if client doesn't exist in database
 	def getClientByPassword(self, username, password):
 		get_client_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
 		
@@ -59,9 +59,9 @@ class UserController(Controller):
 		for row in found_client:
 			found_client_list.append(Client(row))
 		
-		if found_client == None:
+		if found_client == []:
 			print("There are no client with given username and password")
-			return None
+			return found_client_list
 		else:
 			print(found_client_list)
 			return found_client_list
