@@ -1,5 +1,6 @@
 from application.Controllers.UserController import UserController
 from application.Classes.ClientContainer import Client
+import application.CommonDefinitions.HelperFunctions as HelperFunctions
 
 class AdminController(UserController):
 	
@@ -46,12 +47,13 @@ class AdminController(UserController):
 		getClientCursor = self.db.executeQuery(getAllLoggedClientQ)
 		loggedClients = getClientCursor.fetchall()
 
-		#loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so soemthing like loggedClients[0].id does not work
+		#loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so something like loggedClients[0].id does not work
 		#instead loggedClients[0] returns a DICTIONARY of all the attributes it found on the first ROW in the table
 		for row in loggedClients:
-
 			#Appending a Client object from the rows obtained by the SQL query
-			allLoggedClientList.append(Client(row))
+			client = Client(row)
+			client.lastLogged = HelperFunctions.convertEpochToDatetime(client.lastLogged)
+			allLoggedClientList.append(client)
 
 		#Printing the obtained list of all logged clients obtained on the list
 		for client in allLoggedClientList:
