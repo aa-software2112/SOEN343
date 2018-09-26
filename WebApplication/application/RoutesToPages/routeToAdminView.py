@@ -1,4 +1,4 @@
-from flask import render_template, g, session, redirect
+from flask import render_template, g, session, redirect, request
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
@@ -6,14 +6,15 @@ import random
 
 @app.route('/adminView')
 def adminView():
+
 	if g.user:
 		return render_template('administratorView.html')
 	return redirect('/index')
+	
+@app.route('/adminView/userCreator')
+def userCreator():
 
-@app.route('/adminView/adminCreator')
-def adminCreator():
-
-	return render_template('administratorCreator.html')
+	return render_template('userCreator.html')
 	
 @app.route('/adminView/adminViewUserRegistry')
 def adminViewUserRegistry():
@@ -29,6 +30,14 @@ def adminViewRecords():
 def adminViewCatalog():
 	
 	return render_template('administratorViewCatalog.html')
+
+@app.route('/registerUser', methods=['POST'])
+def registerUser():
+	print(request.method)
+	for k, v in request.form.items():
+		print(k)
+		print(v)
+	return render_template('userCreator.html')
 	
 
 
