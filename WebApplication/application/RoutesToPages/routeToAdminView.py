@@ -1,4 +1,5 @@
 from flask import render_template
+from flask import request
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
@@ -10,10 +11,10 @@ def adminView():
 	return render_template('administratorView.html')
 
 	
-@app.route('/adminView/adminCreator')
-def adminCreator():
+@app.route('/adminView/userCreator')
+def userCreator():
 
-	return render_template('administratorCreator.html')
+	return render_template('userCreator.html')
 	
 @app.route('/adminView/adminViewUserRegistry')
 def adminViewUserRegistry():
@@ -29,6 +30,14 @@ def adminViewRecords():
 def adminViewCatalog():
 	
 	return render_template('administratorViewCatalog.html')
+
+@app.route('/registerUser', methods=['POST'])
+def registerUser():
+	print(request.method)
+	for k, v in request.form.items():
+		print(k)
+		print(v)
+	return render_template('userCreator.html')
 	
 	
 	
