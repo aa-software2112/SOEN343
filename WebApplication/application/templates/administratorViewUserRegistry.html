@@ -2,11 +2,30 @@
 
 <!-- Replace Title -->
 {% block pageTitle %}
-User Registry
+Registry of Active Users
 {% endblock %}
 
 <!-- Replace Content -->
 {% block content %}
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Username</th>
+      <th scope="col">Last Time Logged</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for client in allLoggedClients %}
+	<tr>
+      <td>{{client.id}}</td>
+      <td>{{client.username}}</td>
+      <td>{{client.lastLogged}}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}
 
