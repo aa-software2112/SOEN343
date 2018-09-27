@@ -1,5 +1,6 @@
 from application.Controllers.UserController import UserController
 from application.Classes.ClientContainer import Client
+import application.CommonDefinitions.HelperFunctions as HelperFunctions
 
 class AdminController(UserController):
 	
@@ -42,20 +43,27 @@ class AdminController(UserController):
 
 		#instantiating the returning list
 		allLoggedClientList = []
-		getAllLoggedClientQ = '''SELECT * FROM client WHERE isLogged=1 '''
-		getClientCursor = self.db.executeQuery(getAllLoggedClientQ)
+		getAllLoggedClientQuery = '''SELECT * FROM client WHERE isLogged=1 '''
+		getClientCursor = self.db.executeQuery(getAllLoggedClientQuery)
 		loggedClients = getClientCursor.fetchall()
 
-		#loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so soemthing like loggedClients[0].id does not work
+		#loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so something like loggedClients[0].id does not work
 		#instead loggedClients[0] returns a DICTIONARY of all the attributes it found on the first ROW in the table
 		for row in loggedClients:
-
 			#Appending a Client object from the rows obtained by the SQL query
-			allLoggedClientList.append(Client(row))
-
-		#Printing the obtained list of all logged clients obtained on the list
-		for client in allLoggedClientList:
+			client = Client(row)
+			# convert to a readable timestamp
+			client.lastLogged = HelperFunctions.convertEpochToDatetime(client.lastLogged)
 			print(client)
-			print()
+			allLoggedClientList.append(client)
 
+		print()
 		return allLoggedClientList
+
+	#Creates admin using create_client method in UserController.
+	def createAdmin(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged):
+		if isAdmin == 1:
+			UserController.createClient(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
+		else:
+			print("When creating admin, make sure you call this function with a value of 1 for the attribute isAdmin.")
+
