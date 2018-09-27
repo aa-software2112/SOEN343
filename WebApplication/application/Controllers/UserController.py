@@ -76,7 +76,7 @@ class UserController(Controller):
 			sql_insert_client = '''INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
 					VALUES(?,?,?,?,?,?,?,?,?,?) '''
 			client = (firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
-			self.db.executeQuery(sql_insert_client, client)
+			self.db.executeQueryWrite(sql_insert_client, client)
 			print("New user has been successfully created in database")
 
 		else:
