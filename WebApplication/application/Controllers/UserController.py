@@ -20,9 +20,9 @@ class UserController(Controller):
 		for row in found_client:
 			found_client_list.append(Client(row))
 		
-		if found_client == None:
+		if found_client == []:
 			print("There are no client with given Username and password")
-			return None
+			return []
 		else:
 			print(found_client_list)
 			return found_client_list

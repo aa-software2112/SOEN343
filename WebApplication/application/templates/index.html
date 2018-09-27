@@ -42,8 +42,8 @@
 
             <!-- Display the navbar depending on the cookies -->
             <div class="navbar-nav ml-4">
-                {% if g.username %}
-                    <a class="nav-item nav-link" href="#"> {{ g.username }}</a>
+                {% if g.user %}
+                    <a class="nav-item nav-link" href="#"> {{ g.user }}</a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                 {% else %}
                     <a class="nav-item nav-link" href="/login"> Login</a>

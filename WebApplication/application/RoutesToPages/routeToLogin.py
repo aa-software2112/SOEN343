@@ -28,8 +28,8 @@ def login():
 		# Return query result
 		client_response = userController.getClientByPassword(username=get_username, password=get_password)
 		# Temporary. Waiting to perform the right query for log in		
-
-		if client_response is None: 
+		print(client_response)
+		if client_response == []: 
 			error = "Invalid login. Please check your username or password"
 			return render_template('login.html', form=form, error=error)
 
@@ -44,10 +44,7 @@ def login():
 			# Display message after being redirected to home page
 			flash('You are now logged in!', 'success')
 
-			# Set cookies.
-			resp =  make_response(redirect('/index'))
-			resp.set_cookie('username', get_username)
-			return resp
+			return redirect('/index')
 			
 	return render_template('login.html', form=form)
 
@@ -57,8 +54,6 @@ def remember_user():
 	user = session.get('user')
 	if user is None:
 		g.user = None
-		g.username = None
 	else:
 		g.user = session['user']
-		g.username = request.cookies.get('username')
 
