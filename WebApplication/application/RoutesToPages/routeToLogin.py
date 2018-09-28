@@ -5,12 +5,6 @@ from application.Classes.forms import LoginForm
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 
-# Declaring variable
-client_response = ""
-client_to_log = {
-	"username": "",
-	"password": ""
-}
 
 # Login Template
 @app.route('/login', methods=['GET', 'POST'])
@@ -18,16 +12,16 @@ def login():
 
 	# import from Classes/forms
 	form = LoginForm()	
-	
+	# Declaring variable
+	client_response = ""
+
 	if form.validate_on_submit():
-		global client_response
-		global client_to_log
 
 		get_username = form.username.data
 		get_password = form.password.data
 		# Return query result
 		client_response = userController.getClientByPassword(username=get_username, password=get_password)
-		
+
 		if client_response == []: 
 			error = "Invalid login. Please check your username or password"
 			return render_template('login.html', form=form, error=error)
