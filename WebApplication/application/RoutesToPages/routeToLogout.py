@@ -5,7 +5,7 @@ from application import userController
 @app.route('/logout')
 def logout(): 
     if g.user:
-        userController.logoutClient(g.user)
+        userController.logoutClient(g.user["username"])
         session.clear()
         flash('Logged out!', 'success')
     return redirect('/index')

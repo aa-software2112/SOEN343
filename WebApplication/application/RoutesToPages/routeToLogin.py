@@ -2,6 +2,7 @@ from flask import Flask,render_template, redirect, session, flash, make_response
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm
+import json
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 
@@ -32,7 +33,7 @@ def login():
 			# Set session
 			session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
 			session['logged_in'] = True
-			session['user'] = client.username
+			session['user'] = client.__dict__
 
 			# Display message after being redirected to home page
 			flash('You are now logged in!', 'success')
@@ -42,11 +43,12 @@ def login():
 	return render_template('login.html', form=form)
 
 # Session and cookies are set as in global variable g, before requesting any route
+# To access session -> ex: g.user["param"]
 @app.before_request
 def remember_user():
 	user = session.get('user')
 	if user is None:
 		g.user = None
 	else:
-		g.user = session['user']
+		g.user = (session['user'])
 
