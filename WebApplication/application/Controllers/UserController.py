@@ -31,7 +31,7 @@ class UserController(Controller):
 	#function takes self and a string "email" to get the user from the client table.
 	#returns list with client information or emptylist if client doesn't exist in database
 	def getClientByEmail(self, email):
-		get_client_cursor = self.db.executeQuery("SELECT * FROM client WHERE username = ?", (email,))
+		get_client_cursor = self.db.executeQuery("SELECT * FROM client WHERE email = ?", (email,))
 		
 		#using fectchmany(1) because there is only one record with this email.
 		found_client = get_client_cursor.fetchmany(1)
