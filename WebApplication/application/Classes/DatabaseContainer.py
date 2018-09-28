@@ -33,6 +33,24 @@ class DatabaseContainer(object):
 			
 		return cursor
 	
+	"""
+	This function executes a query, commits changes in the database and returns the cursor linked to the query
+	The input parameter is optional
+	"""
+	def executeQueryWrite(self, sqlQuery, inputParameters=None):
+		
+		# Create new cursor
+		cursor = self.connection.cursor()
+		
+		if inputParameters == None:
+			cursor.execute(sqlQuery)
+		else:
+			cursor.execute(sqlQuery, inputParameters)
+		
+		self.connection.commit()
+
+		return cursor
+	
 	def closeConnection(self):
 		try:
 			self.connection.close()
