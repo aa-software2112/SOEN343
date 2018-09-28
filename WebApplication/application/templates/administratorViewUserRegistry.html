@@ -14,6 +14,7 @@ Registry of Active Users
       <th scope="col">ID</th>
       <th scope="col">Username</th>
       <th scope="col">Last Time Logged</th>
+      <th scope="col">Is Admin</th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,11 @@ Registry of Active Users
       <td>{{client.id}}</td>
       <td>{{client.username}}</td>
       <td>{{client.lastLogged}}</td>
+      {% if client.isAdmin == 1 %}
+        <td>Yes</td>
+      {% else %}
+        <td>No</td>
+      {% endif %}
     </tr>
 {% endfor %}
   </tbody>
