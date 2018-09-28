@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template
 from application import app
 import random 
 
@@ -6,7 +6,6 @@ import random
 @app.route('/index')
 def index():
 	course = 'SOEN343'
-	userEmail = request.cookies.get('userEmail')
 	books = [
 		{
 			'author':'randomly generated author ' + str(random.randint(0,100)) + '',
@@ -23,4 +22,5 @@ def index():
 		}
 	]
 
-	return render_template('index.html', course='SOEN343', books=books, userEmail=userEmail)
+	return render_template('index.html', course='SOEN343', books=books)
+

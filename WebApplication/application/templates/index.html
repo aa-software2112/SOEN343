@@ -15,14 +15,14 @@
    </head>
    <body>
       <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-         <a class="navbar-brand" href="#">SOEN343 Library</a>
+         <a class="navbar-brand" href="/index">SOEN343 Library</a>
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
          </button>
          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
                <li class="nav-item active">
-                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="/index">Home <span class="sr-only">(current)</span></a>
                </li>
                <li class="nav-item">
                   <a class="nav-link" href="#">Link</a>
@@ -39,23 +39,31 @@
                   </div>
                </li>
             </ul>
+
+            <!-- Display the navbar depending on the cookies -->
             <div class="navbar-nav ml-4">
-                <a class="nav-item nav-link" href="/login"> Login</a>
-                <a class="nav-item nav-link" href="#"> Sign Up</a>
+                {% if g.user %}
+                    <a class="nav-item nav-link" href="#"> {{ g.user["username"] }} </a>
+                    <a class="nav-item nav-link" href="/logout"> Logout </a>
+                {% else %}
+                    <a class="nav-item nav-link" href="/login"> Login</a>
+                    <a class="nav-item nav-link" href="/clientSignup"> Sign Up</a>
+                {% endif %}
+                
             </div>
          </div>
       </nav>
       <main role="main" class="container">
          <div class="starter-template">
-            <h1> {% block pageTitle %} 
-			Starter template for {{ course }} 
-                {% if userEmail %} 
-                    Welcome {{ userEmail }} 
-                {% endif %}
+            <h1> 
+                {% block pageTitle %} 
+			        Starter template for {{ course }} 
 				{% endblock %}
             </h1>
          </div>
-		 
+
+        {% include '/includes/messages.html' %}
+
 		<div id="main-content-area" class="container" >
          {% block content %}
             {% for book in books %}

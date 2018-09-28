@@ -1,5 +1,7 @@
 from application.Controllers.Controller import Controller
 from application.Classes.ClientContainer import Client
+from application.Classes.AdminContainer import Admin
+from application.Classes.UserContainer import User
 
 class UserController(Controller):
 	
@@ -50,22 +52,35 @@ class UserController(Controller):
 	#function takes self and a string "username" & "password" to get the client from the client table.
 	#if client exits, returns list with client information and updates value in attribute isLogged to 1. Returns emptylist if client doesn't exist in database
 	def getClientByPassword(self, username, password):
-		get_client_cursor = self.db.executeQuery("SELECT * FROM client WHERE username = ? AND password = ?", (username, password))
+		get_user_cursor = self.db.executeQuery("SELECT * FROM client WHERE username = ? AND password = ?", (username, password))
 		
 		#using fectchmany(1) because there is only one record with this username & password.
-		found_client = get_client_cursor.fetchmany(1)
-		found_client_list = []
+		found_user = get_user_cursor.fetchmany(1)
+		found_user_list = []
 
-		for row in found_client:
-			found_client_list.append(Client(row))
+		# Append the query cursor response to a User first
+		for row in found_user:
+			matched_user=(User(row))
 		
-		if found_client == []:
+		# If the cursor response returns an emtpy list, this means the login isn't successful
+		if found_user == []:
 			print("There are no client with given username and password")
-			return found_client_list
+			return found_user_list
 		else:
-			print(found_client_list)
+			# Set isLogged to 1 when the login is successful
 			self.db.executeQueryWrite("UPDATE client SET isLogged = 1 WHERE username = ?", (username,))
-			return found_client_list
+
+			# Checks for Admin 
+			if matched_user.isAdmin == 0:
+				for row in found_user:
+					found_user_list.append(Client(row))
+				print("Client")
+			else: 
+				for row in found_user:
+					found_user_list.append(Admin(row))
+				print("Admin")
+			print("UserList", found_user_list)
+			return found_user_list
 	
 	#function takes self and username
 	#updates value in attribute isLogged to 0.
