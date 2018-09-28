@@ -1,5 +1,7 @@
 from application.Controllers.Controller import Controller
 from application.Classes.ClientContainer import Client
+from application.Classes.AdminContainer import Admin
+from application.Classes.UserContainer import User
 
 class UserController(Controller):
 	
@@ -50,21 +52,33 @@ class UserController(Controller):
 	#function takes self and a string "username" & "password" to get the client from the client table.
 	#returns list with client information or emptylist if client doesn't exist in database
 	def getClientByPassword(self, username, password):
-		get_client_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
+		get_user_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
 		
 		#using fectchmany(1) because there is only one record with this username & password.
-		found_client = get_client_cursor.fetchmany(1)
-		found_client_list = []
+		found_user = get_user_cursor.fetchmany(1)
+		found_user_list = []
 
-		for row in found_client:
-			found_client_list.append(Client(row))
+		for row in found_user:
+			found_user_list.append(User(row))
 		
-		if found_client == []:
+		if found_user == []:
 			print("There are no client with given username and password")
-			return found_client_list
+			return found_user_list
 		else:
-			print(found_client_list)
-			return found_client_list
+			user = found_user_list[0]
+
+			if user.isAdmin == 0:
+				Client(user)
+				# for row in found_user:
+				# 	found_user_list.append(Client(row))
+				print("Client")
+			else: 
+				Admin(user)
+				# for row in found_user:
+				# 	found_user_list.append(Admin(row))
+				print("Admin")
+			print(found_user_list)
+			return user
 		
 	#function takes self and a values to create
 	#creates a new client into the client table
