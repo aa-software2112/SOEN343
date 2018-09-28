@@ -52,45 +52,37 @@ class UserController(Controller):
 	#function takes self and a string "username" & "password" to get the client from the client table.
 	#if client exits, returns list with client information and updates value in attribute isLogged to 1. Returns emptylist if client doesn't exist in database
 	def getClientByPassword(self, username, password):
-<<<<<<< HEAD
-		get_user_cursor = self.db.executeQuery("Select * From client Where username = ? AND password = ?", (username, password))
-=======
-		get_client_cursor = self.db.executeQuery("SELECT * FROM client WHERE username = ? AND password = ?", (username, password))
->>>>>>> develop
+		get_user_cursor = self.db.executeQuery("SELECT * FROM client WHERE username = ? AND password = ?", (username, password))
 		
 		#using fectchmany(1) because there is only one record with this username & password.
 		found_user = get_user_cursor.fetchmany(1)
 		found_user_list = []
 
+		# Append the query cursor response to a User first
 		for row in found_user:
 			found_user_list.append(User(row))
 		
+		# If the cursor response returns an emtpy list, this means the login isn't successful
 		if found_user == []:
 			print("There are no client with given username and password")
 			return found_user_list
 		else:
-<<<<<<< HEAD
+			# Set isLogged to 1 when the login is successful
+			self.db.executeQueryWrite("UPDATE client SET isLogged = 1 WHERE username = ?", (username,))
+
 			user = found_user_list[0]
 
+			# Checks for Admin 
 			if user.isAdmin == 0:
-				Client(user)
-				# for row in found_user:
-				# 	found_user_list.append(Client(row))
+				for row in found_user:
+					found_user_list.append(Client(row))
 				print("Client")
 			else: 
-				Admin(user)
-				# for row in found_user:
-				# 	found_user_list.append(Admin(row))
+				for row in found_user:
+					found_user_list.append(Admin(row))
 				print("Admin")
-			print(found_user_list)
-			return user
-		
-	#function takes self and a values to create
-	#creates a new client into the client table
-=======
-			print(found_client_list)
-			self.db.executeQueryWrite("UPDATE client SET isLogged = 1 WHERE username = ?", (username,))
-			return found_client_list
+			print("UserList", found_user_list)
+			return found_user_list
 	
 	#function takes self and username
 	#updates value in attribute isLogged to 0.
@@ -100,7 +92,6 @@ class UserController(Controller):
 
 	#function takes self and several values to create a client
 	#inserts a new client into the client table
->>>>>>> develop
 	def createClient(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged):
 		getClientByUsername = self.getClientByUsername(username)
 		getClientByEmail = self.getClientByEmail(email)

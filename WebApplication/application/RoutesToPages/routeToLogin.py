@@ -27,15 +27,14 @@ def login():
 		get_password = form.password.data
 		# Return query result
 		client_response = userController.getClientByPassword(username=get_username, password=get_password)
-		# Temporary. Waiting to perform the right query for log in		
-		print(client_response)
+		
 		if client_response == []: 
 			error = "Invalid login. Please check your username or password"
 			return render_template('login.html', form=form, error=error)
 
 		else: 
 			client = client_response[0]
-
+		
 			# Set session
 			session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
 			session['logged_in'] = True
