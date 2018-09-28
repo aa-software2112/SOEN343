@@ -60,7 +60,7 @@ class UserController(Controller):
 
 		# Append the query cursor response to a User first
 		for row in found_user:
-			found_user_list.append(User(row))
+			matched_user=(User(row))
 		
 		# If the cursor response returns an emtpy list, this means the login isn't successful
 		if found_user == []:
@@ -70,10 +70,8 @@ class UserController(Controller):
 			# Set isLogged to 1 when the login is successful
 			self.db.executeQueryWrite("UPDATE client SET isLogged = 1 WHERE username = ?", (username,))
 
-			user = found_user_list[0]
-
 			# Checks for Admin 
-			if user.isAdmin == 0:
+			if matched_user.isAdmin == 0:
 				for row in found_user:
 					found_user_list.append(Client(row))
 				print("Client")

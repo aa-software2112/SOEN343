@@ -7,7 +7,7 @@ import random
 @app.route('/adminView')
 def adminView():
 
-	if g.user:
+	if g.user["isAdmin"]:
 		return render_template('administratorView.html')
 	return redirect('/index')
 	
