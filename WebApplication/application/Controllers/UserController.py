@@ -77,7 +77,7 @@ class UserController(Controller):
 	#inserts a new client into the client table
 	def createClient(self,firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged):
 		getClientByUsername = self.getClientByUsername(username)
-		getClientByEmail = self.getClientByEmail(username)
+		getClientByEmail = self.getClientByEmail(email)
 		
 		if len(getClientByUsername) == 0 & len(getClientByEmail) == 0:
 			sql_insert_client = '''INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
