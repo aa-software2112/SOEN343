@@ -47,7 +47,7 @@ def registerUser():
     emaillist = userController.getClientByEmail(email)
     usernamelist = userController.getClientByUsername(username)
 
-    if len(usernamelist) == 0 & len(emaillist) == 0:
+    if (len(usernamelist) == 0) & (len(emaillist) == 0):
 
 
         userController.createClient(firstname, lastname, address, phonenumber, email, username, password, typeofclient, 0, 0)
@@ -55,7 +55,7 @@ def registerUser():
         return redirect("/")
     else:
         print("User already exist in database")
-        ctypes.windll.user32.MessageBoxW(0, "Select different username ", "Username already exist ", 1)
+        ctypes.windll.user32.MessageBoxW(0, "Select different username or emailaddress  ", "Username/email address already exist ", 1)
         return redirect("/adminView/userCreator")
 
 
