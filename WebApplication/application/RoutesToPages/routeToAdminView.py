@@ -1,9 +1,9 @@
-from flask import render_template, g, session, redirect, request
+from flask import render_template, g, session, redirect, request,flash
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
 import random
-import ctypes  #
+
 
 @app.route('/adminView')
 def adminView():
@@ -51,12 +51,12 @@ def registerUser():
 
 
         userController.createClient(firstname, lastname, address, phonenumber, email, username, password, typeofclient, 0, 0)
-        ctypes.windll.user32.MessageBoxW(0, "Registration Confirm!!! ", "New Client Registered  ", 1)
+        flash("User Created Successfully!!",'success')
+
         return redirect("/")
     else:
-        print("User already exist in database")
-        ctypes.windll.user32.MessageBoxW(0, "Select different username or emailaddress  ", "Username/email address already exist ", 1)
-        return redirect("/adminView/userCreator")
+        error = "Username or email already exist !"
+        return render_template('UserCreator.html',  error=error)
 
 
 
