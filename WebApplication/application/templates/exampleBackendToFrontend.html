@@ -9,5 +9,12 @@
 		{% for key in objToDisplay %}
 			<p>{{ key }} has value {{ objToDisplay[key] }}</p>
 		{% endfor %}
+
+		<p>List of all connected clients test:</p>
+		<p>This is a test remember to make a table with ID, USERNAME AND LASTTIMELOGGED</p>
+		{% for client in allLoggedClients %}
+			<p>{{client.firstName}} + {{client.lastName}} </p>
+		{% endfor %}
+
 {% endblock %}
 

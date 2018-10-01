@@ -1,7 +1,12 @@
-./www/app.pyc
-www/__pycache__/
 venv/*
+
+# IDE-based folders, extensions, files
 .idea/
+.vscode/
+.DS_Store
+
+# Do not push database files - can get large and slowdown develop push/pull/fetch/merge
+*.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

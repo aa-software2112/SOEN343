@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Administrator Options
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+	<p class="row">
+		<a href="{{url_for('userCreator')}}" class="admin-view-link col-sm-4">
+			Create User(s)
+		</a>
+	</p>
+	<p class="row">
+		<a href="{{url_for('adminViewUserRegistry')}}" class="admin-view-link col-sm-4">
+			View User Registry
+		</a>
+	</p>
+	<p class="row">
+		<a href="{{url_for('adminViewRecords')}}" class="admin-view-link col-sm-4">
+			View Records
+		</a>
+	</p>
+	<p class="row">
+		<a href="{{url_for('adminViewCatalog')}}" class="admin-view-link col-sm-4">
+			View Catalog
+		</a>
+	</p>
+{% endblock %}
+

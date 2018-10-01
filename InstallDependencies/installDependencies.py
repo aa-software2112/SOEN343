@@ -8,14 +8,19 @@ PYTHON_VERSION = 3
 
 WINDOWS = "win32"
 OSX = "darwin"
+LINUX = "linux"
 
 WINDOWS_PYTHON = "python"
 OSX_PYTHON = "python3"
+LINUX_PYTHON = "python3"
+
 GENERIC_PYTHON = ""
 
+thisOperatingSystem = ""
+
 # Size of the following arrays must match
-listOfLibraries = ["Flask", "numpy", "SQLAlchemy", "flask-sqlalchemy", "flask-migrate", "flask-wtf"]
-versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11", "2.3.2",  "2.2.1", "0.14.2"]
+listOfLibraries = ["Flask", "numpy", "SQLAlchemy", "flask-wtf"]
+versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11", "0.14.2"]
 
 # Make sure python3.X is running
 if not (VERSION_ARRAY[MAJOR_VERSION_INDEX] == PYTHON_VERSION):
@@ -23,11 +28,16 @@ if not (VERSION_ARRAY[MAJOR_VERSION_INDEX] == PYTHON_VERSION):
 	END_PROCESS()
 
 # Compensate for OS
-if SYSTEM_PLATFORM.lower() == WINDOWS:
+thisOperatingSystem = SYSTEM_PLATFORM.lower()
+
+if thisOperatingSystem == WINDOWS:
 	GENERIC_PYTHON = WINDOWS_PYTHON
 	
-elif SYSTEM_PLATFORM.lower() == OSX:
+elif thisOperatingSystem == OSX:
 	GENERIC_PYTHON = OSX_PYTHON
+	
+elif thisOperatingSystem == LINUX:
+	GENERIC_PYTHON = LINUX_PYTHON
 	
 else:
 	print("Not on windows or osx!")
