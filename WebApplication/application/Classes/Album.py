@@ -5,7 +5,9 @@ class Album:
         self._title = arguments['title']
         self._artist = arguments['artist']
         self._label = arguments['label']
-        self._releaseDate = arguments['releaseDate']
+        self._release_date = arguments['release_date']
         self._ASIN = arguments['ASIN']
-    def getId(self):
+
+    def get_id(self):
+        """Returns the id of the object"""
         return self._id
