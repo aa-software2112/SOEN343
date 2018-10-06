@@ -1,8 +1,11 @@
-class Album():
+class Album:
     def __init__(self,arguments):
-        self.type = arguments[0]
-        self.title = arguments[1]
-        self.artist = arguments[2]
-        self.label = arguments[3]
-        self.releaseDate = arguments[4]
-        self.ASIN = arguments[5]
+        self._id = arguments['id']
+        self._type = arguments['type']
+        self._title = arguments['title']
+        self._artist = arguments['artist']
+        self._label = arguments['label']
+        self._releaseDate = arguments['releaseDate']
+        self._ASIN = arguments['ASIN']
+    def getId(self):
+        return self._id

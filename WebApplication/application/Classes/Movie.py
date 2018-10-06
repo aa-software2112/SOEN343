@@ -1,11 +1,15 @@
-class Movie():
+class Movie:
     def __init__(self, arguments):
-        self.title = arguments[0]
-        self.director = arguments[1]
-        self.producers = arguments[2]
-        self.actors = arguments[3]
-        self.language = arguments[4]
-        self.subtitles =arguments[5]
-        self.dubbed = arguments[6]
-        self.releaseDate = arguments[7]
-        self.runtime = arguments[8]
+        self._id = arguments['id']
+        self._title = arguments['title']
+        self._director = arguments['director']
+        self._producers = arguments['producers']
+        self._actors = arguments['actors']
+        self._language = arguments['language']
+        self._subtitles =arguments['subtitles']
+        self._dubbed = arguments['dubbed']
+        self._releaseDate = arguments['releaseDate']
+        self._runtime = arguments['runTime']
+    def getId(self):
+        return self._id
+

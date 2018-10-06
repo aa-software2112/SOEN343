@@ -1,11 +1,14 @@
-class Book():
+class Book:
     def __init__(self, attributes):
-        self.author = attributes[0]
-        self.title = attributes[1]
-        self.format = attributes[2]
-        self.pages = attributes[3]
-        self.publisher = attributes[4]
-        self.yearOfPublication = attributes[5]
-        self.language = attributes[6]
-        self.ISBN10 = attributes[7]
-        self.ISBN13 = attributes[8]
+        self._id = attributes['id']
+        self._author = attributes['author']
+        self._title = attributes['title']
+        # self._format = attributes['format']
+        # self._pages = attributes['pages']
+        # self._publisher = attributes['publisher']
+        # self._yearOfPublication = attributes['yearOfPublication']
+        # self._language = attributes['language']
+        # self._ISBN10 = attributes['ISBN10']
+        # self._ISBN13 = attributes['ISBN13']
+    def getId(self):
+        return self._id

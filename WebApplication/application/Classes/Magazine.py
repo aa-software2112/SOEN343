@@ -1,8 +1,11 @@
-class Magazine():
+class Magazine:
     def __init__(self,arguments):
-        self.title = arguments[0]
-        self.publisher = arguments[1]
-        self.yearOfPublication = arguments[2]
-        self.language = arguments[3]
-        self.ISBN10 = arguments[4]
-        self.ISBN13 = arguments[5]
+        self._id = arguments['id']
+        self._title = arguments['title']
+        self._publisher = arguments['publisher']
+        self._yearOfPublication = arguments['yearOfPublication']
+        self._language = arguments['language']
+        self._ISBN10 = arguments['ISBN10']
+        self._ISBN13 = arguments['ISBN13']
+    def getId(self):
+        return self._id
