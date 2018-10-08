@@ -94,15 +94,15 @@ def initializeAndFillDatabase(pathToDB):
 	#initialized variable with query that creates book table with columns/attributes
 	sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
 									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-									title TEXT NOT NULL,
 									author TEXT NOT NULL,
+									title TEXT NOT NULL,
 									format TEXT NOT NULL,
 									pages INTEGER NOT NULL,
 									publisher TEXT NOT NULL,
+									year_of_publication TEXT NOT NULL,
 									language TEXT NOT NULL,
 									isbn_10 TEXT NOT NULL,
-									isbn_13 TEXT NOT NULL,
-									isLoaned INTEGER NOT NULL
+									isbn_13 TEXT NOT NULL
 								);"""
 
 	#initialized variable with query that creates magazine table with columns/attributes
@@ -110,6 +110,7 @@ def initializeAndFillDatabase(pathToDB):
 									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 									title TEXT NOT NULL,
 									publisher TEXT NOT NULL,
+									year_of_publication TEXT NOT NULL,
 									language TEXT NOT NULL,
 									isbn_10 TEXT NOT NULL,
 									isbn_13 TEXT NOT NULL
@@ -126,20 +127,18 @@ def initializeAndFillDatabase(pathToDB):
 									subtitles TEXT NOT NULL,
 									dubbed TEXT NOT NULL,
 									releaseDate TEXT NOT NULL,
-									runTime INTEGER NOT NULL,
-									isLoaned INTEGER NOT NULL
+									runTime INTEGER NOT NULL
 								);"""
 
-	#initialized variable with query that creates music table with columns/attributes
-	sql_create_music_table = """CREATE TABLE IF NOT EXISTS music (
+	#initialized variable with query that creates album table with columns/attributes
+	sql_create_album_table = """CREATE TABLE IF NOT EXISTS album (
 									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 									type TEXT NOT NULL,
 									title TEXT NOT NULL,
 									artist TEXT NOT NULL,
 									label TEXT NOT NULL,
 									releaseDate TEXT NOT NULL,
-									asin TEXT NOT NULL,
-									isLoaned INTEGER NOT NULL
+									asin TEXT NOT NULL
 								);"""
 
 	#initialized variable with query that creates client table with columns/attributes
@@ -165,7 +164,7 @@ def initializeAndFillDatabase(pathToDB):
 		#create movie table inside database
 		create_table(conn, sql_create_movie_table)
 		#create music table inside database
-		create_table(conn, sql_create_music_table)
+		create_table(conn, sql_create_album_table)
 		#create client table inside database
 		create_table(conn, sql_create_client_table)
 	else:
