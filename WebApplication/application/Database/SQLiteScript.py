@@ -55,7 +55,7 @@ def create_magazine(conn, magazine):
 #creates a new movie into the movie  table
 def create_movie(conn, movie):
    
-    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,releaseDate,runTime)
+    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,release_date,run_time)
               VALUES(?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, movie)
@@ -63,7 +63,7 @@ def create_movie(conn, movie):
 #function takes database connection object 'conn' and a music 
 #creates a new music into the music table
 def create_album(conn, music):
-    sql = ''' INSERT INTO album(type,title,artist,label,releaseDate,asin)
+    sql = ''' INSERT INTO album(type,title,artist,label,release_date,asin)
               VALUES(?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, music)
@@ -128,8 +128,8 @@ def initializeAndFillDatabase(pathToDB):
 									language TEXT NOT NULL,
 									subtitles TEXT NOT NULL,
 									dubbed TEXT NOT NULL,
-									releaseDate TEXT NOT NULL,
-									runTime INTEGER NOT NULL
+									release_date TEXT NOT NULL,
+									run_time INTEGER NOT NULL
 								);"""
 
 	#initialized variable with query that creates album table with columns/attributes
@@ -139,7 +139,7 @@ def initializeAndFillDatabase(pathToDB):
 									title TEXT NOT NULL,
 									artist TEXT NOT NULL,
 									label TEXT NOT NULL,
-									releaseDate TEXT NOT NULL,
+									release_date TEXT NOT NULL,
 									asin TEXT NOT NULL
 								);"""
 

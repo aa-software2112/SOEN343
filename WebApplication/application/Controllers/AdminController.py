@@ -4,8 +4,10 @@ import application.CommonDefinitions.HelperFunctions as HelperFunctions
 
 class AdminController(UserController):
 	
-	def __init__(self, database):
+	def __init__(self, database, catalog_controller):
 		UserController.__init__(self, database)
+		# Admin Controller should have an instance of catalog controller 
+		self._catalog_controller = catalog_controller
 
 	def exampleAdminControllerFunction(self):
 		print("Admin Controller")
