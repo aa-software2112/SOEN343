@@ -12,6 +12,10 @@ class DatabaseContainer(object):
 		try:
 			# Make database useable in all threads
 			self.connection = sqlite3.connect(pathToDatabase, check_same_thread=False)
+			
+			# Make database accessible through index and keys
+			self.connection.row_factory = sqlite3.Row
+			
 			print ("Made connection!")
 		except Error as e:
 			print(e)

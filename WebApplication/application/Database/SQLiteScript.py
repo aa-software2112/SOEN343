@@ -1,5 +1,7 @@
 import sqlite3
 from sqlite3 import Error
+from faker import Faker
+import time
 import glob
 
 #function takes 'database_file_path' (exact path of database in your directory or path + name of database you wish to create. Please write it down in main method) 
@@ -36,7 +38,7 @@ def create_table(conn, sql_create_x_table):
 #function takes database connection object 'conn' and a book
 #creates a new book into the book table
 def create_book(conn, book):
-    sql = ''' INSERT INTO book(title,author,format,pages,publisher,language,isbn_10,isbn_13,isLoaned)
+    sql = ''' INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13)
               VALUES(?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, book)
@@ -44,8 +46,8 @@ def create_book(conn, book):
 #function takes database connection object 'conn' and a magazine
 #creates a new magazine into the magazine table
 def create_magazine(conn, magazine):
-    sql = ''' INSERT INTO magazine(title,publisher,language,isbn_10,isbn_13)
-              VALUES(?,?,?,?,?) '''
+    sql = ''' INSERT INTO magazine(title,publisher,year_of_publication,language,isbn_10,isbn_13)
+              VALUES(?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, magazine)
 
@@ -53,16 +55,16 @@ def create_magazine(conn, magazine):
 #creates a new movie into the movie  table
 def create_movie(conn, movie):
    
-    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,releaseDate,runTime,isLoaned)
-              VALUES(?,?,?,?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,release_date,run_time)
+              VALUES(?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, movie)
 
 #function takes database connection object 'conn' and a music 
 #creates a new music into the music table
-def create_music(conn, music):
-    sql = ''' INSERT INTO music(type,title,artist,label,releaseDate,asin,isLoaned)
-              VALUES(?,?,?,?,?,?,?) '''
+def create_album(conn, music):
+    sql = ''' INSERT INTO album(type,title,artist,label,release_date,asin)
+              VALUES(?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, music)
 
@@ -94,15 +96,15 @@ def initializeAndFillDatabase(pathToDB):
 	#initialized variable with query that creates book table with columns/attributes
 	sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
 									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-									title TEXT NOT NULL,
 									author TEXT NOT NULL,
+									title TEXT NOT NULL,
 									format TEXT NOT NULL,
 									pages INTEGER NOT NULL,
 									publisher TEXT NOT NULL,
+									year_of_publication TEXT NOT NULL,
 									language TEXT NOT NULL,
 									isbn_10 TEXT NOT NULL,
-									isbn_13 TEXT NOT NULL,
-									isLoaned INTEGER NOT NULL
+									isbn_13 TEXT NOT NULL
 								);"""
 
 	#initialized variable with query that creates magazine table with columns/attributes
@@ -110,6 +112,7 @@ def initializeAndFillDatabase(pathToDB):
 									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 									title TEXT NOT NULL,
 									publisher TEXT NOT NULL,
+									year_of_publication TEXT NOT NULL,
 									language TEXT NOT NULL,
 									isbn_10 TEXT NOT NULL,
 									isbn_13 TEXT NOT NULL
@@ -125,21 +128,19 @@ def initializeAndFillDatabase(pathToDB):
 									language TEXT NOT NULL,
 									subtitles TEXT NOT NULL,
 									dubbed TEXT NOT NULL,
-									releaseDate TEXT NOT NULL,
-									runTime INTEGER NOT NULL,
-									isLoaned INTEGER NOT NULL
+									release_date TEXT NOT NULL,
+									run_time INTEGER NOT NULL
 								);"""
 
-	#initialized variable with query that creates music table with columns/attributes
-	sql_create_music_table = """CREATE TABLE IF NOT EXISTS music (
+	#initialized variable with query that creates album table with columns/attributes
+	sql_create_album_table = """CREATE TABLE IF NOT EXISTS album (
 									id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 									type TEXT NOT NULL,
 									title TEXT NOT NULL,
 									artist TEXT NOT NULL,
 									label TEXT NOT NULL,
-									releaseDate TEXT NOT NULL,
-									asin TEXT NOT NULL,
-									isLoaned INTEGER NOT NULL
+									release_date TEXT NOT NULL,
+									asin TEXT NOT NULL
 								);"""
 
 	#initialized variable with query that creates client table with columns/attributes
@@ -157,38 +158,64 @@ def initializeAndFillDatabase(pathToDB):
 									lastLogged INTEGER NOT NULL
 								);"""
 		
-	if conn is not None:
-		#creates book table inside database
-		create_table(conn, sql_create_book_table)
-		#create magazine table inside database
-		create_table(conn, sql_create_magazine_table)
-		#create movie table inside database
-		create_table(conn, sql_create_movie_table)
-		#create music table inside database
-		create_table(conn, sql_create_music_table)
-		#create client table inside database
-		create_table(conn, sql_create_client_table)
-	else:
+	if conn is None:
 		print("Error! cannot create the database connection.")
+		return
+		
+	#creates book table inside database
+	create_table(conn, sql_create_book_table)
+	#create magazine table inside database
+	create_table(conn, sql_create_magazine_table)
+	#create movie table inside database
+	create_table(conn, sql_create_movie_table)
+	#create album table inside database
+	create_table(conn, sql_create_album_table)
+	#create client table inside database
+	create_table(conn, sql_create_client_table)
+		
 
 	with conn:
-		#create a new book inside book table
-		book = ('Do Androids Dream of Electric Sheep?', 'Philip K. Dick', 'Paperback', 240, 'Del Rey; Reprint edition (Sept. 26 2017)', 'English', '1524796972', '978-1524796976', 1)
-		create_book(conn, book)
+		
+		NUM_BOOKS = 150
+		MAX_BOOK_PAGES = 1500
+		NUM_MAGAZINES = 175
+		NUM_MOVIES = 100
+		NUM_ALBUMS = 200
+		NUM_USERS = 300
+		book_types = ['Paperback', 'Hardcover', 'Graphic', 'Coffee Table Book', 'Textbook']
+		languages = ['English', 'French', 'Italian', 'Spanish', 'Greek', 'Russian', 'German']
+		album_types = ["Vinyl", "CD", "Cassette"]
+		
+		movie_name = lambda : "The " + f.job() if f.random_int()%2 == 0 else " ".join(f.words()).capitalize()
+		album_name = movie_name
+		names = lambda : ", ".join([f.name() for x in range(1 + f.random_int()%9)])
+		date = lambda: " ".join([f.month_name()[:3], f.day_of_month(), f.year()] )
+		asin = lambda: "".join([ f.random_letter().upper() if f.random_int()%2 == 0 else str(f.random_digit()) for x in range(10)])
+		phone_number = lambda: "".join([str(f.random_digit()) for x in range(3)]) + "-" + "".join([str(f.random_digit()) for x in range(3)]) + "-" + "".join([str(f.random_digit()) for x in range(4)])
+		
+		# Fake data generator 
+		f = Faker()
+			
+		for b in range(NUM_BOOKS):	
+			book = (f.name(), f.catch_phrase(),book_types[f.random_int()%len(book_types)], f.random_int()%MAX_BOOK_PAGES, f.last_name(), str(f.random_int()%100 + 1910), languages[f.random_int()%len(languages)], f.isbn10(), f.isbn13())
+			create_book(conn, book)
 
-		#create a new magazine inside magazine table
-		magazine = ('TIME', 'Time (May 13 2008)', 'English', '1603200185', '978-1603200189')
-		create_magazine(conn, magazine)
+		for m in range(NUM_MAGAZINES):
+			magazine = (f.word().upper(), f.last_name(), str(f.random_int()%100 + 1910), languages[f.random_int()%len(languages)],  f.isbn10(), f.isbn13())
+			create_magazine(conn, magazine)
 
-		#create a new movie inside movie table
-		movie = ('Until the End of the World', 'Wim Wenders','Anatole Dauman, Ingrid Windisch, Joachim von Mengershausen, Pascale Daum.','Bruno Ganz, Solveig Dommartin, Otto Sander,Curt Bois, Peter Falk.','German','English','English, French','Oct. 20 2009', 127, 1)
-		create_movie(conn, movie)
+		for m in range(NUM_MOVIES):
+			movie = (movie_name(), f.name(), names(), names(),languages[f.random_int()%len(languages)],languages[f.random_int()%len(languages)],languages[f.random_int()%len(languages)],date(), 60 + f.random_int()%(2*60))
+			create_movie(conn, movie)
 
-		#create a new music inside music table
-		music = ('CD','Anastasis','Dead Can Dance', 'Sony Music', 'Aug. 14 2012','B008FOB124',0)
-		create_music(conn, music)
+		for a in range(NUM_ALBUMS):
+			album = (album_types[f.random_int()%len(album_types)],album_name(),f.name(), f.word().upper(), date(), asin())
+			create_album(conn, album)
 
-		#store clients info inside variable so that we can insert them in client table
+		for u in range(NUM_USERS):
+			client = (f.first_name(), f.last_name(), f.address().replace("\n", ", "), f.email(), phone_number(), f.user_name(), f.password(), f.random_int()%2, f.random_int()%2, int(time.time() - f.random_int()*f.random_int()))
+			create_client(conn, client)
+			
 		client1 = ('Aaron','Doe', '1451 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student1@hotmail.com','514-555-0001', 'antman', 'password1', 0, 1, 1537207100)
 		client2 = ('Burns','Doe', '1452 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student2@hotmail.com','514-555-0002', 'batman', 'password2', 0, 1, 1537207200)
 		client3 = ('Chloe','Doe', '1453 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student3@hotmail.com','514-555-0003', 'catwoman', 'password3', 1, 1, 1537207300)

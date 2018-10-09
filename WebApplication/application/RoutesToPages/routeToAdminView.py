@@ -50,7 +50,7 @@ def registerUser():
     if (len(usernamelist) == 0) & (len(emaillist) == 0):
 
 
-        userController.createClient(firstname, lastname, address, phonenumber, email, username, password, typeofclient, 0, 0)
+        userController.createClient(firstname, lastname, address, email, phonenumber, username, password, typeofclient, 0, 0)
         flash("User Created Successfully!!",'success')
 
         return redirect("/")

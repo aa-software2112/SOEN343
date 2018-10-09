@@ -19,8 +19,8 @@ GENERIC_PYTHON = ""
 thisOperatingSystem = ""
 
 # Size of the following arrays must match
-listOfLibraries = ["Flask", "numpy", "SQLAlchemy", "flask-wtf"]
-versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11", "0.14.2"]
+listOfLibraries = ["Flask", "numpy", "SQLAlchemy", "flask-wtf", "faker"]
+versionsOfLibraries = ["1.0.2", "1.15.1", "1.2.11", "0.14.2", "0.9.1"]
 
 # Make sure python3.X is running
 if not (VERSION_ARRAY[MAJOR_VERSION_INDEX] == PYTHON_VERSION):
