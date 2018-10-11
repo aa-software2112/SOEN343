@@ -41,6 +41,10 @@ class BookCatalog(Catalog):
 		# can act as a modify too!
 		self._books[book.get_id()] = book
 
+	def add_new_book(self, book):
+		book_length = len(self._books)+1
+		self._books[book_length] = book
+
 	def remove(self, id):
 		return self._books.pop(id, None)
 		

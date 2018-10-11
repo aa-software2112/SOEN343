@@ -73,5 +73,13 @@ class AdminController(UserController):
 	def view_inventory(self):
 	
 		return self._catalog_controller.get_all_catalogs()
-	
+
+	def add_new_book(self, catalog_add_item):
+		return self._catalog_controller.add_book_to_catalog(catalog_add_item)
+
+
+
+
+
+
 			

@@ -65,4 +65,6 @@ class CatalogController(Controller):
 								}
 		return dict_of_catalogs
 
+	def add_book_to_catalog(self, catalog_add_item):
+		self._inventory[CatalogController.BOOK_TYPE].add_new_book(catalog_add_item)
 	

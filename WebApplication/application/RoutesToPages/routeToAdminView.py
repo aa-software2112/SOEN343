@@ -2,6 +2,7 @@ from flask import render_template, g, session, redirect, request,flash
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
+from application.Classes.Book import Book
 import random
 
 
@@ -75,3 +76,53 @@ def registerUser():
 @app.route('/adminView/modifyBook')
 def modifyBook():
     return render_template('modifyBook.html')
+
+@app.route('/adminView/adminViewAddCatalog', methods=['POST', 'GET'])
+def adminViewAddCatalog():
+	catalog_item={}
+
+	if request.method == 'POST':
+		_author = request.form.get('author')
+		_title = request.form.get('title')
+		_format = request.form.get('format')
+		_pages = request.form.get('pages')
+		_publisher = request.form.get('publisher')
+		_year_of_publication = request.form.get('year_of_publication')
+		_language = request.form.get('language')
+		_isbn_10 = request.form.get('isbn_10')
+		_isbn_13 = request.form.get('isbn_13')
+
+		catalog_item = {
+		'id': str(544),
+		'author': _author,
+		'title': _title,
+		'format': _format,
+		'pages': _pages,
+		'publisher': _publisher,
+		'year_of_publication': _year_of_publication,
+		'language': _language,
+		'isbn_10': _isbn_10,
+		'isbn_13': _isbn_13
+	}
+	new_book = []
+	for row in catalog_item:
+		new_book.append(Book(row))
+
+	
+
+	adminController.add_new_book(catalog_add_item=new_book)
+
+
+	return render_template('addCatalog.html')
+
+
+
+
+
+
+
+
+
+
+
+
