@@ -56,8 +56,13 @@ class CatalogController(Controller):
 					
 			
 	
-	def viewInventory(self):
-		return self._inventory
-
+	def get_all_catalogs(self):
+		
+		dict_of_catalogs = {"books": self._inventory[CatalogController.BOOK_TYPE].get_all(),
+								"movies": self._inventory[CatalogController.MOVIE_TYPE].get_all(),
+								"magazines": self._inventory[CatalogController.MAGAZINE_TYPE].get_all(),
+								"albums": self._inventory[CatalogController.ALBUM_TYPE].get_all()
+								}
+		return dict_of_catalogs
 
 
