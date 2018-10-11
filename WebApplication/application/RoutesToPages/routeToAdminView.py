@@ -2,6 +2,7 @@ from flask import render_template, g, session, redirect, request,flash
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
+from application.Classes import Book, Magazine, Movie, Album
 import random
 
 
@@ -22,23 +23,17 @@ def adminViewUserRegistry():
 
 	return render_template('administratorViewUserRegistry.html', allLoggedClients = adminController.getAllLoggedClient())
 	
-@app.route('/adminView/adminViewCatalog')
+@app.route('/adminView/adminViewCatalog', methods=['GET','POST'])
 def adminViewCatalog():
 
-	dict_of_catalogs = adminController.view_inventory()
-	
-	# comment this out when fully implemented
-	for catalog_name in dict_of_catalogs.keys():
-	
-		print("*****\nDictionary: {}\n*****".format(catalog_name))
-		
-		dict_of_objects = dict_of_catalogs[catalog_name]
-		
-		for object_id, media_object in dict_of_objects.items():
-			
-			print ("ID {} OBJ {}".format(object_id, media_object))
-	
-	return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
+        dict_of_catalogs = adminController.view_inventory()
+        # comment this out when fully implemented
+        for catalog_name in dict_of_catalogs.keys():
+            print("*****\nDictionary: {}\n*****".format(catalog_name))
+            dict_of_objects = dict_of_catalogs[catalog_name]
+        for object_id, media_object in dict_of_objects.items():
+            print ("ID {} OBJ {}".format(object_id, media_object))
+            return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
@@ -67,10 +62,14 @@ def registerUser():
         return render_template('UserCreator.html',  error=error)
 
 
-@app.route('/adminView/modifyBook')
+@app.route('/adminView/modifyBook', methods=['GET', 'POST'])
 def modify_book():
-    return render_template('modifyBook.html')
+    id=request.form['modify_book']
+    print(adminController.get_book_by_id(int(id)))
+    return render_template('modifyBook.html', book=adminController.get_book_by_id(int(id)))
 
-@app.route('/adminView/modifyMagazine')
+@app.route('/adminView/modifyMagazine', methods=['GET', 'POST'])
 def modify_magazine():
-    return render_template('modifyMagazine.html')
+    id = request.form['modify_magazine']
+    print(adminController.get_magazine_by_id(int(id)))
+    return render_template('modifyMagazine.html', magazine=adminController.get_magazine_by_id(int(id)))

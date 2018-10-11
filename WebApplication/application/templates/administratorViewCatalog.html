@@ -53,9 +53,9 @@ Catalog Viewer
                     <td>{{catalog_item._ISBN13}}</td>
                     <td>
                         <form action="/adminView/modifyBook" method="post">
-                        <a href="{{url_for('modify_book')}}" name="modify_book" value={{catalog_item._id}}" class="btn btn-outline-info" style="cursor:pointer">
+                        <button type="submit" href="{{url_for('modify_book')}}" name="modify_book" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
                             <i class="far fa-edit"></i>
-                        </a>
+                        </button>
                         </form>
                     </td>
                 </tr>
@@ -162,10 +162,10 @@ Catalog Viewer
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
                     <td>
-                        <form action="/adminView/modifyBook" method="post">
-                        <a href="{{url_for('modify_magazine')}}" name="modify_book" value={{catalog_item._id}}" class="btn btn-outline-info" style="cursor:pointer">
+                        <form action="/adminView/modifyMagazine" method="post">
+                        <button type="submit" href="{{url_for('modify_magazine')}}" name="modify_magazine" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
                             <i class="far fa-edit"></i>
-                        </a>
+                        </button>
                         </form>
                     </td>
                 </tr>
