@@ -8,17 +8,47 @@ Catalog Viewer
 <!-- Replace Content -->
 {% block content %}
 <div class="card-columns">
-    
-    <div class="card p-3">
-      <blockquote class="blockquote mb-0 card-body">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-        <footer class="blockquote-footer">
-          <small class="text-muted">
-            Someone famous in <cite title="Source Title">Source Title</cite>
-          </small>
-        </footer>
-      </blockquote>
-    </div>
-   
-{% endblock %}
 
+    {% for catalog_name in dict_of_catalogs.keys() %}
+    {% for key, catalog_item in dict_of_catalogs["books"].items() %}
+    <div class="card p-2">
+        <div class="card-body">
+            <blockquote class="blockquote mb-0 card-body">
+                <p> {{ catalog_item._title }} </p>
+                <footer class="blockquote-footer">
+                    <small class="text-muted">
+                        By <cite title="Source Title"> {{ catalog_item._author }}</cite>
+                    </small>
+                </footer>
+            </blockquote>
+            <div class="text-right">
+                <p class="card-text"> {{ catalog_item._publisher }} [{{ catalog_item._year_of_publication}}] </p>
+            </div>
+
+        </div>
+        <div class="card-footer text-center">
+            <div class="row">
+                <div class="col-4">
+                    <small class="text-muted">{{ catalog_item._format }} </small>
+                </div>
+                <div class="col-8">
+                    <small class="text-muted">ISBN-10 {{ catalog_item._ISBN10 }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+    <div class="card p-3">
+        <blockquote class="blockquote mb-0 card-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+            <footer class="blockquote-footer">
+                <small class="text-muted">
+                    Someone famous in <cite title="Source Title">Source Title</cite>
+                </small>
+            </footer>
+        </blockquote>
+    </div>
+
+    {% endblock %}
