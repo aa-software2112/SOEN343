@@ -22,11 +22,6 @@ def adminViewUserRegistry():
 
 	return render_template('administratorViewUserRegistry.html', allLoggedClients = adminController.getAllLoggedClient())
 	
-@app.route('/adminView/adminViewRecords')
-def adminViewRecords():
-
-	return render_template('administratorViewRecords.html')
-	
 @app.route('/adminView/adminViewCatalog')
 def adminViewCatalog():
 
