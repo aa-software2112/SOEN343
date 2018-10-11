@@ -7,7 +7,6 @@ Catalog Viewer
 
 <!-- Replace Content -->
 {% block content %}
-
 <ul class="nav nav-tabs">
     <li class="nav-item">
         <a class="nav-link active" href="#Books" data-toggle="tab"> Books </a>
@@ -37,6 +36,7 @@ Catalog Viewer
                     <th scope="col"> Language </th>
                     <th scope="col"> ISBN10 </th>
                     <th scope="col"> ISBN13 </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -51,6 +51,7 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
+                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -70,6 +71,7 @@ Catalog Viewer
                     <th scope="col"> Dubbed </th>
                     <th scope="col"> Release Date </th>
                     <th scope="col"> Run Time </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -85,6 +87,7 @@ Catalog Viewer
                     <td>{{catalog_item._dubbed}}</td>
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._runtime}}</td>
+                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -101,6 +104,7 @@ Catalog Viewer
                     <th scope="col"> Label </th>
                     <th scope="col"> Release Date </th>
                     <th scope="col"> ASIN </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +117,7 @@ Catalog Viewer
                     <td>{{catalog_item._label}}</td>
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._ASIN}}</td>
+                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -129,6 +134,7 @@ Catalog Viewer
                     <th scope="col"> Language </th>
                     <th scope="col"> ISBN10 </th>
                     <th scope="col"> ISBN13 </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -141,6 +147,7 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
+                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
                 </tr>
                 {% endfor %}
             </tbody>
