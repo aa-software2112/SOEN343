@@ -51,13 +51,18 @@ class CatalogController(Controller):
 					catalog.add(constructor(row))
 			
 			# Uncomment these two lines to see all objects in all catalogs
-			#for k, v in self._inventory.items():
-			#	v.display()
+			for k, v in self._inventory.items():
+				v.display()
 					
 			
 	
-	def viewInventory(self):
-		return self._inventory
+	def get_all_catalogs(self):
+		
+		dict_of_catalogs = {"books": self._inventory[CatalogController.BOOK_TYPE].get_all(),
+								"movies": self._inventory[CatalogController.MOVIE_TYPE].get_all(),
+								"magazines": self._inventory[CatalogController.MAGAZINE_TYPE].get_all(),
+								"albums": self._inventory[CatalogController.ALBUM_TYPE].get_all()
+								}
+		return dict_of_catalogs
 
-
-
+	

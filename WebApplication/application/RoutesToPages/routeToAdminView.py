@@ -24,13 +24,26 @@ def adminViewUserRegistry():
 	
 @app.route('/adminView/adminViewRecords')
 def adminViewRecords():
-	
+
 	return render_template('administratorViewRecords.html')
 	
 @app.route('/adminView/adminViewCatalog')
 def adminViewCatalog():
+
+	dict_of_catalogs = adminController.view_inventory()
 	
-	return render_template('administratorViewCatalog.html')
+	# comment this out when fully implemented
+	for catalog_name in dict_of_catalogs.keys():
+	
+		print("*****\nDictionary: {}\n*****".format(catalog_name))
+		
+		dict_of_objects = dict_of_catalogs[catalog_name]
+		
+		for object_id, media_object in dict_of_objects.items():
+			
+			print ("ID {} OBJ {}".format(object_id, media_object))
+	
+	return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
