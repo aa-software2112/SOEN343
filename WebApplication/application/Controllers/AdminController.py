@@ -39,7 +39,7 @@ class AdminController(UserController):
 			
 		# Here you would return a list of objects
 		return
-
+		
 	#Function to get a list of all logged clients to send to UserResgitryViewer
 	def getAllLoggedClient(self):
 
@@ -69,3 +69,9 @@ class AdminController(UserController):
 		else:
 			print("When creating admin, make sure you call this function with a value of 1 for the attribute isAdmin.")
 
+			
+	def view_inventory(self):
+	
+		return self._catalog_controller.get_all_catalogs()
+	
+			
