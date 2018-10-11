@@ -65,4 +65,4 @@ class CatalogController(Controller):
 								}
 		return dict_of_catalogs
 
-
+	

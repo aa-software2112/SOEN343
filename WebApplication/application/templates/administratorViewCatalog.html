@@ -7,23 +7,23 @@ Catalog Viewer
 
 <!-- Replace Content -->
 {% block content %}
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs nav-justified">
     <li class="nav-item">
-        <a class="nav-link active" href="#Books" data-toggle="tab"> Books </a>
+        <a class="nav-link active" href="#Books" role="tab" data-toggle="tab"> Books </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#Movies" data-toggle="tab"> Movies </a>
+        <a class="nav-link" href="#Movies" role="tab" data-toggle="tab"> Movies </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#Albums" data-toggle="tab"> Albums </a>
+        <a class="nav-link" href="#Albums" role="tab" data-toggle="tab"> Albums </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#Magazines" data-toggle="tab"> Magazines </a>
+        <a class="nav-link" href="#Magazines" role="tab" data-toggle="tab"> Magazines </a>
     </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane" id="Books">
+    <div class="tab-pane active" role="tabpanel" id="Books">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -51,13 +51,17 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
-                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info" style="cursor:pointer">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="tab-pane" id="Movies">
+    <div class="tab-pane" role="tabpanel" id="Movies">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -87,13 +91,17 @@ Catalog Viewer
                     <td>{{catalog_item._dubbed}}</td>
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._runtime}}</td>
-                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info" style="cursor:pointer">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="tab-pane" id="Albums">
+    <div class="tab-pane" role="tabpanel" id="Albums">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -117,13 +125,17 @@ Catalog Viewer
                     <td>{{catalog_item._label}}</td>
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._ASIN}}</td>
-                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info" style="cursor:pointer">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="tab-pane" id="Magazines">
+    <div class="tab-pane" role="tabpanel" id="Magazines">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -147,7 +159,11 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
-                    <td style="cursor:pointer"> <i class="fas fa-redo"></i></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info" style="cursor:pointer">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
