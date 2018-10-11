@@ -72,5 +72,6 @@ def registerUser():
         return render_template('UserCreator.html',  error=error)
 
 
-
-	
+@app.route('/adminView/modifyBook')
+def modifyBook():
+    return render_template('modifyBook.html')
