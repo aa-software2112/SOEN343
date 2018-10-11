@@ -22,11 +22,6 @@ def adminViewUserRegistry():
 
 	return render_template('administratorViewUserRegistry.html', allLoggedClients = adminController.getAllLoggedClient())
 	
-@app.route('/adminView/adminViewRecords')
-def adminViewRecords():
-
-	return render_template('administratorViewRecords.html')
-	
 @app.route('/adminView/adminViewCatalog')
 def adminViewCatalog():
 
@@ -73,5 +68,9 @@ def registerUser():
 
 
 @app.route('/adminView/modifyBook')
-def modifyBook():
+def modify_book():
     return render_template('modifyBook.html')
+
+@app.route('/adminView/modifyMagazine')
+def modify_magazine():
+    return render_template('modifyMagazine.html')
