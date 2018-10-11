@@ -68,5 +68,9 @@ def registerUser():
 
 
 @app.route('/adminView/modifyBook')
-def modifyBook():
+def modify_book():
     return render_template('modifyBook.html')
+
+@app.route('/adminView/modifyMagazine')
+def modify_magazine():
+    return render_template('modifyMagazine.html')
