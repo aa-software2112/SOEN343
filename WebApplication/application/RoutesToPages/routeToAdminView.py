@@ -58,6 +58,7 @@ def registerUser():
         error = "Username or email already exist !"
         return render_template('UserCreator.html',  error=error)
 
+
 @app.route('/adminView/modifyBook')
 def modifyBook():
     return render_template('modifyBook.html')
