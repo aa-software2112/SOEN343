@@ -20,6 +20,11 @@ class Catalog(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def modify(self, modifiedObject):
+        """This method adds a single object to a collection"""
+        pass
+
+    @abc.abstractmethod
     def remove(self, id):
         """This method removes an object from the collection, the object is returned"""
         pass
@@ -37,15 +42,18 @@ class BookCatalog(Catalog):
 	def get(self, id):
 		return self._books[id]
 
+	def modify(self, modified_book):
+		self._books[modified_book.get_id()] = modified_book
+
 	def add(self, book):
 		# can act as a modify too!
 		self._books[book.get_id()] = book
 
 	def remove(self, id):
 		return self._books.pop(id, None)
-		
+
 	def display(self):
-		
+
 		for k, v in self._books.items():
 			print(v)
 
@@ -64,11 +72,14 @@ class MovieCatalog(Catalog):
 	def add(self, movie):
 		self._movies[movie.get_id()] = movie
 
+	def modify(self, movie):
+		self._movies[movie.get_id()] = movie
+
 	def remove(self, id):
 		return self._movies.pop(id, None)
-		
+
 	def display(self):
-		
+
 		for k, v in self._movies.items():
 			print(v)
 
@@ -85,6 +96,9 @@ class MagazineCatalog(Catalog):
 	def get(self, id):
 		return self._magazines[id]
 
+	def modify(self, magazine):
+		self._magazines[magazine.get_id()] = magazine
+
 	def add(self, magazine):
 		self._magazines[magazine.get_id()] = magazine
 
@@ -92,7 +106,7 @@ class MagazineCatalog(Catalog):
 		return self._magazines.pop(id, None)
 
 	def display(self):
-		
+
 		for k, v in self._magazines.items():
 			print(v)
 
@@ -107,6 +121,9 @@ class AlbumCatalog(Catalog):
 
 	def get(self, id):
 		return self._albums[id]
+
+	def modify(self, album):
+		self._albums[album.get_id()] = album
 
 	def add(self, album):
 		self._albums[album.get_id()] = album
