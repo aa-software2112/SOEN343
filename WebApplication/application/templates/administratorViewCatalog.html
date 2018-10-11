@@ -7,48 +7,146 @@ Catalog Viewer
 
 <!-- Replace Content -->
 {% block content %}
-<div class="card-columns">
 
-    {% for catalog_name in dict_of_catalogs.keys() %}
-    {% for key, catalog_item in dict_of_catalogs["books"].items() %}
-    <div class="card p-2">
-        <div class="card-body">
-            <blockquote class="blockquote mb-0 card-body">
-                <p> {{ catalog_item._title }} </p>
-                <footer class="blockquote-footer">
-                    <small class="text-muted">
-                        By <cite title="Source Title"> {{ catalog_item._author }}</cite>
-                    </small>
-                </footer>
-            </blockquote>
-            <div class="text-right">
-                <p class="card-text"> {{ catalog_item._publisher }} [{{ catalog_item._year_of_publication}}] </p>
-            </div>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" href="#Books" data-toggle="tab"> Books </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#Movies" data-toggle="tab"> Movies </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#Albums" data-toggle="tab"> Albums </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#Magazines" data-toggle="tab"> Magazines </a>
+    </li>
+</ul>
 
-        </div>
-        <div class="card-footer text-center">
-            <div class="row">
-                <div class="col-4">
-                    <small class="text-muted">{{ catalog_item._format }} </small>
-                </div>
-                <div class="col-8">
-                    <small class="text-muted">ISBN-10 {{ catalog_item._ISBN10 }}</small>
-                </div>
-            </div>
-        </div>
+<div class="tab-content">
+    <div class="tab-pane" id="Books">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Author </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Format </th>
+                    <th scope="col"> Publisher </th>
+                    <th scope="col"> Year of Publication </th>
+                    <th scope="col"> Language </th>
+                    <th scope="col"> ISBN10 </th>
+                    <th scope="col"> ISBN13 </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["books"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._author}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._format}}</td>
+                    <td>{{catalog_item._publisher}}</td>
+                    <td>{{catalog_item._year_of_publication}}</td>
+                    <td>{{catalog_item._language}}</td>
+                    <td>{{catalog_item._ISBN10}}</td>
+                    <td>{{catalog_item._ISBN13}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    {% endfor %}
-    {% endfor %}
-
-    <div class="card p-3">
-        <blockquote class="blockquote mb-0 card-body">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <footer class="blockquote-footer">
-                <small class="text-muted">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-            </footer>
-        </blockquote>
+    <div class="tab-pane" id="Movies">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Director </th>
+                    <th scope="col"> Producers </th>
+                    <th scope="col"> Actors </th>
+                    <th scope="col"> Language </th>
+                    <th scope="col"> Subtitle </th>
+                    <th scope="col"> Dubbed </th>
+                    <th scope="col"> Release Date </th>
+                    <th scope="col"> Run Time </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["movies"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._director}}</td>
+                    <td>{{catalog_item._producers}}</td>
+                    <td>{{catalog_item._actors}}</td>
+                    <td>{{catalog_item._language}}</td>
+                    <td>{{catalog_item._subtitles}}</td>
+                    <td>{{catalog_item._dubbed}}</td>
+                    <td>{{catalog_item._release_date}}</td>
+                    <td>{{catalog_item._runtime}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <div class="tab-pane" id="Albums">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Type </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Artist </th>
+                    <th scope="col"> Label </th>
+                    <th scope="col"> Release Date </th>
+                    <th scope="col"> ASIN </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["albums"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._type}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._artist}}</td>
+                    <td>{{catalog_item._label}}</td>
+                    <td>{{catalog_item._release_date}}</td>
+                    <td>{{catalog_item._ASIN}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="Magazines">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Publisher </th>
+                    <th scope="col"> Year of Publication </th>
+                    <th scope="col"> Language </th>
+                    <th scope="col"> ISBN10 </th>
+                    <th scope="col"> ISBN13 </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["magazines"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._publisher}}</td>
+                    <td>{{catalog_item._year_of_publication}}</td>
+                    <td>{{catalog_item._language}}</td>
+                    <td>{{catalog_item._ISBN10}}</td>
+                    <td>{{catalog_item._ISBN13}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    {% endblock %}
+
+{% endblock %}
