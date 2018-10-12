@@ -130,9 +130,11 @@ Catalog Viewer
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._ASIN}}</td>
                     <td>
-                        <button type="button" class="btn btn-outline-info" style="cursor:pointer">
+                        <form action="/adminView/modifyAlbumForm" method="post">
+                        <button type="submit" href="{{url_for('modify_album_form')}}" name="modify_album" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
                             <i class="far fa-edit"></i>
                         </button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
