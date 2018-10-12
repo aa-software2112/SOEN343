@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Movie
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+{% if errorMessage %}
+	<div class="alert alert-danger" role="alert"> {{ errorMessage }}
+    </div>
+{% endif %}
+<div class="card">
+    <div class="card-body">
+		<form action="#" method="post">
+		  <legend class="text-center pb-4"> Add Movie </legend>
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" name="title" placeholder="get title here" required>
+		  </div>
+		  <div class="form-group">
+		    <label for="director">Director</label>
+		    <input type="text" class="form-control" name="director" placeholder="get director here" required>
+		  </div>
+		  <div class="form-group">
+		    <label for="producers">Producers</label>
+		    <input type="text" class="form-control" name="producers" placeholder="get producers here" required>
+		  </div>
+		  <div class="form-group">
+		    <label for="actors">Actors</label>
+		    <input type="text" class="form-control" name="actors" placeholder="get actors here" required>
+		  </div>
+		  <div class="form-group">
+		    <label for="language">Language</label>
+		    <input type="text" class="form-control" name="language" placeholder="get language here" required>
+		  </div>
+		  <div class="form-group">
+		    <label for="subtitles">Subtitles</label>
+		    <input type="text" class="form-control" name="subtitles" placeholder="get subtitles here" required>
+		  </div>
+			<div class="form-group">
+		    <label for="dubbed">Dubbed</label>
+		    <input type="text" class="form-control" name="dubbed" placeholder="get dubbed here" required>
+		  </div>
+			<div class="form-group">
+		    <label for="release_date">Release Date</label>
+		    <input type="text" class="form-control" name="release_date" placeholder="get release_date here" required>
+		  </div>
+            <div class="form-group">
+		    <label for="run_time">Runtime</label>
+		    <input type="text" class="form-control" name="run_time" placeholder="get run_time here" required>
+		  </div>
+		  <button type="submit" name="save" class="btn btn-primary">Save</button>
+			<form action="#" method="post">
+			<a href="#" class="btn btn-info">Cancel</a>
+			</form>
+
+		</form>
+    </div>
+</div>
+{% endblock %}
+

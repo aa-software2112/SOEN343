@@ -64,6 +64,18 @@ class CatalogController(Controller):
 								}
 		return dict_of_catalogs
 
+	def add_book_to_catalog(self, catalog_add_item):
+		self._inventory[CatalogController.BOOK_TYPE].add_new_book(catalog_add_item)
+
+	def add_movie_to_catalog(self, catalog_add_item):
+		self._inventory[CatalogController.MOVIE_TYPE].add_new_movie(catalog_add_item)
+		
+	def add_magazine_to_catalog(self, catalog_add_item):
+		self._inventory[CatalogController.MAGAZINE_TYPE].add_new_magazine(catalog_add_item)
+		
+	def add_album_to_catalog(self, catalog_add_item):
+                self._inventory[CatalogController.ALBUM_TYPE].add_new_album(catalog_add_item)	
+		
 	def view_catalog_inventory(self):
 		return self._inventory
 

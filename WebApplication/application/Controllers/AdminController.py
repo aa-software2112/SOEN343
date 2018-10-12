@@ -72,6 +72,21 @@ class AdminController(UserController):
 	def view_inventory(self):
 		return self._catalog_controller.get_all_catalogs()
 
+	def add_new_book(self, catalog_add_item):
+		return self._catalog_controller.add_book_to_catalog(catalog_add_item)
+
+	def add_new_magazine(self, catalog_add_item):
+		return self._catalog_controller.add_magazine_to_catalog(catalog_add_item)
+	
+	def add_new_album(self, catalog_add_item):
+               return self._catalog_controller.add_album_to_catalog(catalog_add_item)
+
+	def add_new_movie(self, catalog_add_item):
+		return self._catalog_controller.add_movie_to_catalog(catalog_add_item)
+		
+	def add_new_magazine(self, catalog_add_item):
+		return self._catalog_controller.add_magazine_to_catalog(catalog_add_item)
+
 	def modify_book(self, modified_book):
 		self._catalog_controller.view_catalog_inventory()['1'].modify(modified_book)
 
@@ -83,7 +98,6 @@ class AdminController(UserController):
 
 	def get_magazine_by_id(self,id):
 		return self._catalog_controller.get_magazine_by_id(id)
-
 
 	def modify_album(self, modified_album):
 		self._catalog_controller.view_catalog_inventory()['4'].modify(modified_album)
