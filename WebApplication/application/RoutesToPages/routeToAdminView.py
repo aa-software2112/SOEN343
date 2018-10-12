@@ -74,3 +74,7 @@ def modify_book():
 @app.route('/adminView/modifyMagazine')
 def modify_magazine():
     return render_template('modifyMagazine.html')
+
+@app.route('/adminView/modifyMovie')
+def modify_movie():
+		return render_template('modifyMovie.html')

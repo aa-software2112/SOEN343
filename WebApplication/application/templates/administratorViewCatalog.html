@@ -94,9 +94,11 @@ Catalog Viewer
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._runtime}}</td>
                     <td>
-                        <button type="button" class="btn btn-outline-info" style="cursor:pointer">
+                        <form action="/adminView/modifyMovie" method="post">
+                        <a href="{{url_for('modify_movie')}}" name="modify_movie" value={{catalog_item.id}}" class="btn btn-outline-info" style="cursor:pointer">
                             <i class="far fa-edit"></i>
-                        </button>
+                        </a>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
