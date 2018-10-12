@@ -1,8 +1,8 @@
 import abc
 from application.Classes.Book import Book
+from application.Classes.Movie import Movie
 from application.Classes.Magazine import Magazine
 from application.Classes.Album import Album
-
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -71,6 +71,11 @@ class MovieCatalog(Catalog):
 
 	def add(self, movie):
 		self._movies[movie.get_id()] = movie
+	
+	def add_new_movie(self, catalog_add_item):
+		newMovie = Movie(catalog_add_item)
+		movie_length = len(self._movies)+1
+		self._movies[movie_length] = newMovie
 
 	def remove(self, id):
 		return self._movies.pop(id, None)

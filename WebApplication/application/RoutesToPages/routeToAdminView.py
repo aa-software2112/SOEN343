@@ -77,6 +77,13 @@ def registerUser():
 def modifyBook():
     return render_template('modifyBook.html')
 
+
+@app.route('/adminView/adminViewAddToCatalog')
+def adminViewAddToCatalog():
+
+	return render_template('administratorViewAddToCatalog.html')
+
+
 @app.route('/adminView/adminViewAddBook', methods=['POST', 'GET'])
 def adminViewAddBook():
 	catalog_item={}
@@ -105,12 +112,43 @@ def adminViewAddBook():
 			'isbn_13': _isbn_13
 		}
 
-
 		adminController.add_new_book(catalog_add_item=catalog_item)
 	
-
-
 	return render_template('addBook.html')
+
+
+@app.route('/adminView/adminViewAddMovie', methods=['POST', 'GET'])
+def adminViewAddMovie():
+	catalog_item={}
+  
+	if request.method == 'POST':
+		_title = request.form.get('title')
+		_director = request.form.get('director')
+		_producers = request.form.get('producers')
+		_actors = request.form.get('actors')
+		_language = request.form.get('language')
+		_subtitles = request.form.get('subtitles')
+		_dubbed = request.form.get('dubbed')
+		_release_date = request.form.get('release_date')
+		_run_time = request.form.get('run_time')
+
+		catalog_item = {
+			'id': 333,
+			'title': _title,
+			'director': _director,
+			'producers': _producers,
+			'actors': _actors,
+			'language': _language,
+			'subtitles': _subtitles,
+			'dubbed': _dubbed,
+			'release_date': _release_date,
+			'run_time': _run_time
+		}
+
+		adminController.add_new_movie(catalog_add_item=catalog_item)
+
+	return render_template('addMovie.html')
+
 
 @app.route('/adminView/adminViewAddMagazine', methods=['POST', 'GET'])
 def adminViewAddMagazine():
@@ -137,14 +175,13 @@ def adminViewAddMagazine():
 
 		adminController.add_new_magazine(catalog_add_item=catalog_item)
 	
-
-
 	return render_template('addMagazine.html')
+
 
 @app.route('/adminView/adminViewAddalbum', methods=['POST', 'GET'])
 def adminViewAddalbum():
     catalog_item = {}
-
+    
     if request.method == 'POST':
         _type = request.form.get('type')
         _title = request.form.get('title')
@@ -152,7 +189,6 @@ def adminViewAddalbum():
         _label = request.form.get('label')
         _release_date = request.form.get('release_date')
         _asin = request.form.get('asin')
-
 
         catalog_item = {
             'id': 544,
@@ -166,15 +202,9 @@ def adminViewAddalbum():
         }
         flash("Entry Created Successfully!!", 'success')
 
-
         adminController.add_new_album(catalog_add_item=catalog_item)
 
     return render_template('AddAlbum.html')
-
-
-
-
-
 
 
 

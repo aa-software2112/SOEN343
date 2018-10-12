@@ -83,6 +83,13 @@ class AdminController(UserController):
 	def add_new_album(self, catalog_add_item):
                return self._catalog_controller.add_album_to_catalog(catalog_add_item)
 
+	def add_new_movie(self, catalog_add_item):
+		return self._catalog_controller.add_movie_to_catalog(catalog_add_item)
+		
+	def add_new_magazine(self, catalog_add_item):
+		return self._catalog_controller.add_magazine_to_catalog(catalog_add_item)
+
+
 
 
 
