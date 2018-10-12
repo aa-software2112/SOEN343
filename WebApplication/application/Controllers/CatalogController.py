@@ -73,4 +73,7 @@ class CatalogController(Controller):
 	def get_magazine_by_id(self,id):
 		return self.get_all_catalogs()['magazines'].get(id)
 
+	def get_movie_by_id(self,id):
+		return self.get_all_catalogs()['movies'].get(id)
+
 
