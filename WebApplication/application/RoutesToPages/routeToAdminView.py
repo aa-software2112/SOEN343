@@ -112,6 +112,35 @@ def adminViewAddBook():
 
 	return render_template('addBook.html')
 
+@app.route('/adminView/adminViewAddMagazine', methods=['POST', 'GET'])
+def adminViewAddMagazine():
+	catalog_item={}
+
+	if request.method == 'POST':
+		_title = request.form.get('title')
+		_publisher = request.form.get('publisher')
+		_year_of_publication = request.form.get('year_of_publication')
+		_language = request.form.get('language')
+		_isbn_10 = request.form.get('isbn_10')
+		_isbn_13 = request.form.get('isbn_13')
+
+		catalog_item = {
+			'id': 544,
+			'title': _title,
+			'publisher': _publisher,
+			'year_of_publication': _year_of_publication,
+			'language': _language,
+			'isbn_10': _isbn_10,
+			'isbn_13': _isbn_13
+		}
+
+
+		adminController.add_new_magazine(catalog_add_item=catalog_item)
+	
+
+
+	return render_template('addMagazine.html')
+
 
 
 

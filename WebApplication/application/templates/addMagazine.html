@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Add a Magazine
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+{% if errorMessage %}
+	<div class="alert alert-danger" role="alert"> {{ errorMessage }}
+    </div>
+{% endif %}
+<div class="card">
+    <div class="card-body">
+		<form action="#" method="post">
+		  <legend class="text-center pb-4"> Add Magazine </legend>
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" name="title" value="get title here" >
+		   </div> <div class="form-group">
+		    <label for="publisher">Publisher</label>
+		    <input type="text" class="form-control" name="publisher" value="get publisher">
+		  </div>
+		  <div class="form-group">
+		    <label for="year_of_publication">Year of Publication</label>
+		    <input type="text" class="form-control" name="year_of_publication" value="get year of publication here" pattern=".{4,}" title="Please use 4 numbers">
+		  </div>
+		  <div class="form-group">
+		    <label for="language">Language</label>
+		    <input type="text" class="form-control" name="language" value="get language here">
+		  </div>
+			<div class="form-group">
+		    <label for="isbn_10">ISBN 10</label>
+		    <input type="text" class="form-control" name="isbn_10" value="get ISBN 10 here">
+		  </div>
+			<div class="form-group">
+		    <label for="isbn_13">ISBN 13</label>
+		    <input type="text" class="form-control" name="isbn_13" value="get ISBN 13 here">
+		  </div>
+		  <button type="submit" name="save" class="btn btn-primary">Save</button>
+			<form action="#" method="post">
+				<button type="submit" name="delete" class="btn btn-danger">Delete</button>
+			<a href="#" class="btn btn-info">Cancel</a>
+			</form>
+
+		</form>
+    </div>
+</div>
+{% endblock %}
+

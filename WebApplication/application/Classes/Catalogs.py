@@ -1,5 +1,6 @@
 import abc
 from application.Classes.Book import Book
+from application.Classes.Magazine import Magazine
 
 
 class Catalog(abc.ABC):
@@ -93,6 +94,11 @@ class MagazineCatalog(Catalog):
 
 	def add(self, magazine):
 		self._magazines[magazine.get_id()] = magazine
+
+	def add_new_magazine(self, catalog_add_item):
+		newMagazine = Magazine(catalog_add_item)
+		magazine_length = len(self._magazines)+1
+		self._magazines[magazine_length] = newMagazine
 
 	def remove(self, id):
 		return self._magazines.pop(id, None)

@@ -67,4 +67,8 @@ class CatalogController(Controller):
 
 	def add_book_to_catalog(self, catalog_add_item):
 		self._inventory[CatalogController.BOOK_TYPE].add_new_book(catalog_add_item)
+
+
+	def add_magazine_to_catalog(self, catalog_add_item):
+		self._inventory[CatalogController.MAGAZINE_TYPE].add_new_magazine(catalog_add_item)
 	
