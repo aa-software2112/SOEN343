@@ -9,42 +9,42 @@ import random
 @app.route('/adminView')
 def adminView():
 
-	if g.user["isAdmin"]:
-		return render_template('administratorView.html')
-	return redirect('/index')
-	
+    if g.user["isAdmin"]:
+        return render_template('administratorView.html')
+    return redirect('/index')
+
 @app.route('/adminView/userCreator')
 def userCreator():
 
-	return render_template('userCreator.html')
-	
+    return render_template('userCreator.html')
+
 @app.route('/adminView/adminViewUserRegistry')
 def adminViewUserRegistry():
 
-	return render_template('administratorViewUserRegistry.html', allLoggedClients = adminController.getAllLoggedClient())
-	
+    return render_template('administratorViewUserRegistry.html', allLoggedClients = adminController.getAllLoggedClient())
+
 @app.route('/adminView/adminViewRecords')
 def adminViewRecords():
 
-	return render_template('administratorViewRecords.html')
-	
+    return render_template('administratorViewRecords.html')
+
 @app.route('/adminView/adminViewCatalog')
 def adminViewCatalog():
 
-	dict_of_catalogs = adminController.view_inventory()
-	
-	# comment this out when fully implemented
-	for catalog_name in dict_of_catalogs.keys():
-	
-		print("*****\nDictionary: {}\n*****".format(catalog_name))
-		
-		dict_of_objects = dict_of_catalogs[catalog_name]
-		
-		for object_id, media_object in dict_of_objects.items():
-			
-			print ("ID {} OBJ {}".format(object_id, media_object))
-	
-	return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
+    dict_of_catalogs = adminController.view_inventory()
+
+    # comment this out when fully implemented
+    for catalog_name in dict_of_catalogs.keys():
+
+        print("*****\nDictionary: {}\n*****".format(catalog_name))
+
+        dict_of_objects = dict_of_catalogs[catalog_name]
+
+        for object_id, media_object in dict_of_objects.items():
+
+            print ("ID {} OBJ {}".format(object_id, media_object))
+
+    return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
@@ -79,38 +79,54 @@ def modifyBook():
 
 @app.route('/adminView/adminViewAddCatalog', methods=['POST', 'GET'])
 def adminViewAddCatalog():
-	catalog_item={}
+    catalog_item={}
 
-	if request.method == 'POST':
-		_author = request.form.get('author')
-		_title = request.form.get('title')
-		_format = request.form.get('format')
-		_pages = request.form.get('pages')
-		_publisher = request.form.get('publisher')
-		_year_of_publication = request.form.get('year_of_publication')
-		_language = request.form.get('language')
-		_isbn_10 = request.form.get('isbn_10')
-		_isbn_13 = request.form.get('isbn_13')
+    if request.method == 'POST':
+        _author = request.form.get('author')
+        _title = request.form.get('title')
+        _format = request.form.get('format')
+        _pages = request.form.get('pages')
+        _publisher = request.form.get('publisher')
+        _year_of_publication = request.form.get('year_of_publication')
+        _language = request.form.get('language')
+        _isbn_10 = request.form.get('isbn_10')
+        _isbn_13 = request.form.get('isbn_13')
 
-		catalog_item = {
-			'id': 544,
-			'author': _author,
-			'title': _title,
-			'format': _format,
-			'pages': _pages,
-			'publisher': _publisher,
-			'year_of_publication': _year_of_publication,
-			'language': _language,
-			'isbn_10': _isbn_10,
-			'isbn_13': _isbn_13
-		}
-
-
-		adminController.add_new_book(catalog_add_item=catalog_item)
-	
+        catalog_item = {
+        'id': str(544),
+        'author': _author,
+        'title': _title,
+        'format': _format,
+        'pages': _pages,
+        'publisher': _publisher,
+        'year_of_publication': _year_of_publication,
+        'language': _language,
+        'isbn_10': _isbn_10,
+        'isbn_13': _isbn_13
+    }
+        new_book = []
+        print(catalog_item)
 
 
-	return render_template('addCatalog.html')
+        new_book.append(Book(catalog_item))
+
+
+
+
+
+
+
+
+
+
+        adminController.add_new_book(catalog_add_item=new_book.pop())
+
+
+
+
+
+
+    return render_template('addCatalog.html')
 
 
 
