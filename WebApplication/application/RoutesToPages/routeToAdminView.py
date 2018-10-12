@@ -111,7 +111,8 @@ def adminViewAddBook():
 			'isbn_10': _isbn_10,
 			'isbn_13': _isbn_13
 		}
-
+		flash("Book Entry Created Successfully!!", 'success')
+		
 		adminController.add_new_book(catalog_add_item=catalog_item)
 	
 	return render_template('addBook.html')
@@ -144,7 +145,8 @@ def adminViewAddMovie():
 			'release_date': _release_date,
 			'run_time': _run_time
 		}
-
+		flash("Movie Entry Created Successfully!!", 'success')
+		
 		adminController.add_new_movie(catalog_add_item=catalog_item)
 
 	return render_template('addMovie.html')
@@ -171,7 +173,7 @@ def adminViewAddMagazine():
 			'isbn_10': _isbn_10,
 			'isbn_13': _isbn_13
 		}
-
+		flash("Magazine Entry Created Successfully!!", 'success')
 
 		adminController.add_new_magazine(catalog_add_item=catalog_item)
 	
@@ -200,7 +202,7 @@ def adminViewAddalbum():
             'asin': _asin,
 
         }
-        flash("Entry Created Successfully!!", 'success')
+        flash("Album Entry Created Successfully!!", 'success')
 
         adminController.add_new_album(catalog_add_item=catalog_item)
 

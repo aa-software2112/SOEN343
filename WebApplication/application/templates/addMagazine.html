@@ -2,7 +2,7 @@
 
 <!-- Replace Title -->
 {% block pageTitle %}
-Add a Magazine
+Magazine
 {% endblock %}
 
 <!-- Replace Content -->
@@ -17,26 +17,26 @@ Add a Magazine
 		  <legend class="text-center pb-4"> Add Magazine </legend>
 		  <div class="form-group">
 		    <label for="title">Title</label>
-		    <input type="text" class="form-control" name="title" value="get title here" >
+		    <input type="text" class="form-control" name="title" placeholder="get title here" required>
 		   </div> <div class="form-group">
 		    <label for="publisher">Publisher</label>
-		    <input type="text" class="form-control" name="publisher" value="get publisher">
+		    <input type="text" class="form-control" name="publisher" placeholder="get publisher" required>
 		  </div>
 		  <div class="form-group">
 		    <label for="year_of_publication">Year of Publication</label>
-		    <input type="text" class="form-control" name="year_of_publication" value="get year of publication here" pattern=".{4,}" title="Please use 4 numbers">
+		    <input type="text" class="form-control" name="year_of_publication" placeholder="get year of publication here" pattern=".{4,}" title="Please use 4 numbers" required>
 		  </div>
 		  <div class="form-group">
 		    <label for="language">Language</label>
-		    <input type="text" class="form-control" name="language" value="get language here">
+		    <input type="text" class="form-control" name="language" placeholder="get language here" required>
 		  </div>
 			<div class="form-group">
 		    <label for="isbn_10">ISBN 10</label>
-		    <input type="text" class="form-control" name="isbn_10" value="get ISBN 10 here">
+		    <input type="text" class="form-control" name="isbn_10" placeholder="get ISBN 10 here" required>
 		  </div>
 			<div class="form-group">
 		    <label for="isbn_13">ISBN 13</label>
-		    <input type="text" class="form-control" name="isbn_13" value="get ISBN 13 here">
+		    <input type="text" class="form-control" name="isbn_13" placeholder="get ISBN 13 here" required>
 		  </div>
 		  <button type="submit" name="save" class="btn btn-primary">Save</button>
 			<form action="#" method="post">
