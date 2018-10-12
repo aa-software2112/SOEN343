@@ -75,3 +75,6 @@ class CatalogController(Controller):
 
 	def get_album_by_id(self,id):
 		return self.get_all_catalogs()['albums'].get(id)
+
+	def get_movie_by_id(self,id):
+		return self.get_all_catalogs()['movies'].get(id)
