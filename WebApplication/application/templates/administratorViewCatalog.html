@@ -31,6 +31,7 @@ Catalog Viewer
                     <th scope="col"> Author </th>
                     <th scope="col"> Title </th>
                     <th scope="col"> Format </th>
+                    <th scope="col"> Pages </th>
                     <th scope="col"> Publisher </th>
                     <th scope="col"> Year of Publication </th>
                     <th scope="col"> Language </th>
@@ -46,16 +47,17 @@ Catalog Viewer
                     <td>{{catalog_item._author}}</td>
                     <td>{{catalog_item._title}}</td>
                     <td>{{catalog_item._format}}</td>
+                    <td>{{catalog_item._pages}}</td>
                     <td>{{catalog_item._publisher}}</td>
                     <td>{{catalog_item._year_of_publication}}</td>
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
                     <td>
-                        <form action="/adminView/modifyBook" method="post">
-                        <a href="{{url_for('modify_book')}}" name="modify_book" value={{catalog_item._id}}" class="btn btn-outline-info" style="cursor:pointer">
+                        <form action="/adminView/modifyBookForm" method="post">
+                        <button type="submit" href="{{url_for('modify_book_form')}}" name="modify_book" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
                             <i class="far fa-edit"></i>
-                        </a>
+                        </button>
                         </form>
                     </td>
                 </tr>
@@ -164,10 +166,10 @@ Catalog Viewer
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
                     <td>
-                        <form action="/adminView/modifyBook" method="post">
-                        <a href="{{url_for('modify_magazine')}}" name="modify_book" value={{catalog_item._id}}" class="btn btn-outline-info" style="cursor:pointer">
+                        <form action="/adminView/modifyMagazineForm" method="post">
+                        <button type="submit" href="{{url_for('modify_magazine_form')}}" name="modify_magazine" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
                             <i class="far fa-edit"></i>
-                        </a>
+                        </button>
                         </form>
                     </td>
                 </tr>

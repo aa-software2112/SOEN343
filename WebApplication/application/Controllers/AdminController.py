@@ -73,5 +73,12 @@ class AdminController(UserController):
 	def view_inventory(self):
 	
 		return self._catalog_controller.get_all_catalogs()
-	
-			
+
+	def modify_book(self, modified_book):
+		self._catalog_controller.view_catalog_inventory()['1'].modify(modified_book)
+
+	def get_book_by_id(self,id):
+		return self._catalog_controller.get_book_by_id(id)
+
+	def get_magazine_by_id(self,id):
+		return self._catalog_controller.get_magazine_by_id(id)
