@@ -112,12 +112,43 @@ def adminViewAddBook():
 			'isbn_13': _isbn_13
 		}
 
-
 		adminController.add_new_book(catalog_add_item=catalog_item)
 	
-
-
 	return render_template('addBook.html')
+
+
+@app.route('/adminView/adminViewAddMovie', methods=['POST', 'GET'])
+def adminViewAddMovie():
+	catalog_item={}
+  
+	if request.method == 'POST':
+		_title = request.form.get('title')
+		_director = request.form.get('director')
+		_producers = request.form.get('producers')
+		_actors = request.form.get('actors')
+		_language = request.form.get('language')
+		_subtitles = request.form.get('subtitles')
+		_dubbed = request.form.get('dubbed')
+		_release_date = request.form.get('release_date')
+		_run_time = request.form.get('run_time')
+
+		catalog_item = {
+			'id': 333,
+			'title': _title,
+			'director': _director,
+			'producers': _producers,
+			'actors': _actors,
+			'language': _language,
+			'subtitles': _subtitles,
+			'dubbed': _dubbed,
+			'release_date': _release_date,
+			'run_time': _run_time
+		}
+
+		adminController.add_new_movie(catalog_add_item=catalog_item)
+
+	return render_template('addMovie.html')
+
 
 @app.route('/adminView/adminViewAddMagazine', methods=['POST', 'GET'])
 def adminViewAddMagazine():
@@ -147,41 +178,33 @@ def adminViewAddMagazine():
 	return render_template('addMagazine.html')
 
 
-@app.route('/adminView/adminViewAddMovie', methods=['POST', 'GET'])
-def adminViewAddMovie():
-	catalog_item={}
+@app.route('/adminView/adminViewAddalbum', methods=['POST', 'GET'])
+def adminViewAddalbum():
+    catalog_item = {}
+    
+    if request.method == 'POST':
+        _type = request.form.get('type')
+        _title = request.form.get('title')
+        _artist = request.form.get('artist')
+        _label = request.form.get('label')
+        _release_date = request.form.get('release_date')
+        _asin = request.form.get('asin')
 
-	if request.method == 'POST':
-		_title = request.form.get('title')
-		_director = request.form.get('director')
-		_producers = request.form.get('producers')
-		_actors = request.form.get('actors')
-		_language = request.form.get('language')
-		_subtitles = request.form.get('subtitles')
-		_dubbed = request.form.get('dubbed')
-		_release_date = request.form.get('release_date')
-		_run_time = request.form.get('run_time')
+        catalog_item = {
+            'id': 544,
+            'type': _type,
+            'title': _title,
+            'artist': _artist,
+            'label': _label,
+            'release_date': _release_date,
+            'asin': _asin,
 
-		catalog_item = {
-			'id': 333,
-			'title': _title,
-			'director': _director,
-			'producers': _producers,
-			'actors': _actors,
-			'language': _language,
-			'subtitles': _subtitles,
-			'dubbed': _dubbed,
-			'release_date': _release_date,
-			'run_time': _run_time
-		}
+        }
+        flash("Entry Created Successfully!!", 'success')
 
+        adminController.add_new_album(catalog_add_item=catalog_item)
 
-		adminController.add_new_movie(catalog_add_item=catalog_item)
-
-	return render_template('addMovie.html')
-
-
-
+    return render_template('AddAlbum.html')
 
 
 
