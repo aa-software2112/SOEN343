@@ -48,21 +48,12 @@ class CatalogController(Controller):
 				
 				# Create an object for each row
 				for row in all_rows:
+				#	print(type(constructor(row)._id))
 					catalog.add(constructor(row))
 			
 			# Uncomment these two lines to see all objects in all catalogs
 			#for k, v in self._inventory.items():
 			#	v.display()
-
-		old_book = self._inventory['1'].get(150)
-		attributes = {'id': old_book._id, 'author': old_book._author, 'title': old_book._title,
-					  'format': old_book._format, 'pages': old_book._pages, 'publisher': old_book._publisher
-			, 'year_of_publication': '1900', 'language': old_book._language, 'isbn_10': old_book._ISBN10,
-					  'isbn_13': old_book._ISBN13}
-		modified_book = Book(attributes)
-		self._inventory['1'].modify(modified_book)
-		print(self.get_book_by_id(150))
-		print(old_book)
 	
 	def get_all_catalogs(self):
 		
