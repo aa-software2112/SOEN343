@@ -17,6 +17,7 @@ Modify a Magazine
 		  <legend class="text-center pb-4"> Modify Magazine </legend>
 		  <div class="form-group">
 		    <label for="title">Title</label>
+			  <input type="hidden" name="id" value="{{magazine._id}}">
 		    <input type="text" class="form-control" name="title" value='{{magazine._title}}' >
 		   </div> <div class="form-group">
 		    <label for="publisher">Publisher</label>
@@ -41,7 +42,7 @@ Modify a Magazine
 		  <button type="submit" name="save" class="btn btn-primary">Save</button>
 			<form action="#" method="post">
 				<button type="submit" name="delete" class="btn btn-danger">Delete</button>
-			<a href="#" class="btn btn-info">Cancel</a>
+			<a href="/adminView/adminViewCatalog" class="btn btn-info">Cancel</a>
 			</form>
 
 		</form>

@@ -125,5 +125,5 @@ def modify_magazine():
                       }
 
         modified_magazine = Magazine(attributes)
-        adminController.modify_book(modified_magazine)
+        adminController.modify_magazine(modified_magazine)
         return redirect('/adminView/adminViewCatalog')
