@@ -84,8 +84,16 @@ class AdminController(UserController):
 	def get_magazine_by_id(self,id):
 		return self._catalog_controller.get_magazine_by_id(id)
 
+
+	def modify_album(self, modified_album):
+		self._catalog_controller.view_catalog_inventory()['4'].modify(modified_album)
+
+	def get_album_by_id(self,id):
+		return self._catalog_controller.get_album_by_id(id)
+  
 	def get_movie_by_id(self,id):
 		return self._catalog_controller.get_movie_by_id(id)
 
 	def modify_movie(self, modified_movie):
 		self._catalog_controller.view_catalog_inventory()['2'].modify(modified_movie)
+

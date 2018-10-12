@@ -13,36 +13,37 @@ Modify an Album Type
 {% endif %}
 <div class="card">
     <div class="card-body">
-		<form action="#" method="post">
+		<form action="/modifyAlbum" method="post">
 		  <legend class="text-center pb-4"> Modify Album Type</legend>
 		  <div class="form-group">
 		    <label for="type">Type</label>
-		    <input type="text" class="form-control" name="type" value="get type here">
+			  <input type="hidden" name="id" value="{{album._id}}">
+		    <input type="text" class="form-control" name="type" value='{{album._type}}' >
 		  </div>
 		  <div class="form-group">
 		    <label for="title">Title</label>
-		    <input type="text" class="form-control" name="title" value="get title here" >
+		    <input type="text" class="form-control" name="title" value='{{album._title}}' >
 		  </div>
 		  <div class="form-group">
 		    <label for="artist">Artist</label>
-		    <input type="text" class="form-control" name="artist" value="get artist here">
+		    <input type="text" class="form-control" name="artist" value='{{album._artist}}' >
 		  </div>
 		  <div class="form-group">
 		    <label for="label">Label</label>
-		    <input type="text" class="form-control" name="label" value="get label here" >
+		    <input type="text" class="form-control" name="label" value='{{album._label}}' >
 		  </div>
 		  <div class="form-group">
 		    <label for="realese_date">Release Date</label>
-		    <input type="text" class="form-control" name="release_date" value="get release date here">
+		    <input type="text" class="form-control" name="release_date" value='{{album._release_date}}' >
 		  </div>
 		  <div class="form-group">
 		    <label for="asin">ASIN</label>
-		    <input type="text" class="form-control" name="asin" value="get asin here">
+		    <input type="text" class="form-control" name="asin" value='{{album._ASIN}}' >
 		  </div>
 		  <button type="submit" name="save" class="btn btn-primary">Save</button>
 			<form action="#" method="post">
 				<button type="submit" name="delete" class="btn btn-danger">Delete</button>
-			<a href="#" class="btn btn-info">Cancel</a>
+			<a href="/adminView/adminViewCatalog" class="btn btn-info">Cancel</a>
 			</form>
 		</form>
     </div>
