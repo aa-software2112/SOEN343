@@ -98,6 +98,7 @@ def modify_book():
 
         modified_book = Book(attributes)
         adminController.modify_book(modified_book)
+        flash("Book modified Successfully!!", 'success')
         return redirect('/adminView/adminViewCatalog')
 
 @app.route('/adminView/modifyMagazineForm', methods=['GET', 'POST'])
@@ -126,6 +127,7 @@ def modify_magazine():
 
         modified_magazine = Magazine(attributes)
         adminController.modify_magazine(modified_magazine)
+        flash("Magazine modified Successfully!!", 'success')
         return redirect('/adminView/adminViewCatalog')
 
 @app.route('/adminView/modifyAlbumForm', methods=['GET', 'POST'])
@@ -154,6 +156,8 @@ def modify_album():
 
         modified_album = Album(attributes)
         adminController.modify_album(modified_album)
+        flash("Album modified Successfully!!", 'success')
+        return redirect('/adminView/adminViewCatalog')
 
 @app.route('/adminView/modifyMovieForm', methods=['GET', 'POST'])
 def modify_movie_form():
@@ -188,4 +192,5 @@ def modify_movie():
 
         modified_movie = Movie(attributes)
         adminController.modify_movie(modified_movie)
+        flash("Movie modified Successfully!!", 'success')
         return redirect('/adminView/adminViewCatalog')
