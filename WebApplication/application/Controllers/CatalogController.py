@@ -61,7 +61,7 @@ class CatalogController(Controller):
 					  'isbn_13': old_book._ISBN13}
 		modified_book = Book(attributes)
 		self._inventory['1'].modify(modified_book)
-		print(self.get_book_by_id(1))
+		print(self.get_book_by_id(150))
 		print(old_book)
 	
 	def get_all_catalogs(self):
@@ -72,6 +72,9 @@ class CatalogController(Controller):
 								"albums": self._inventory[CatalogController.ALBUM_TYPE].get_all()
 								}
 		return dict_of_catalogs
+
+	def view_catalog_inventory(self):
+		return self._inventory
 
 	def get_book_by_id(self, id):
 		return self.get_all_catalogs()['books'].get(id)
