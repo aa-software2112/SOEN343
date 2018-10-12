@@ -13,30 +13,30 @@ Modify a Magazine
 {% endif %}
 <div class="card">
     <div class="card-body">
-		<form action="#" method="post">
+		<form action="/modifyMagazine" method="post">
 		  <legend class="text-center pb-4"> Modify Magazine </legend>
 		  <div class="form-group">
 		    <label for="title">Title</label>
-		    <input type="text" class="form-control" name="title" value={{magazine._title}} >
+		    <input type="text" class="form-control" name="title" value='{{magazine._title}}' >
 		   </div> <div class="form-group">
 		    <label for="publisher">Publisher</label>
-		    <input type="text" class="form-control" name="publisher" value={{magazine._publisher}}>
+		    <input type="text" class="form-control" name="publisher" value='{{magazine._publisher}}'>
 		  </div>
 		  <div class="form-group">
 		    <label for="year_of_publication">Year of Publication</label>
-		    <input type="text" class="form-control" name="year_of_publication" value={{magazine._year_of_publication}} pattern=".{4,}" title="Please use 4 numbers">
+		    <input type="text" class="form-control" name="year_of_publication" value='{{magazine._year_of_publication}}' pattern=".{4,}" title="Please use 4 numbers">
 		  </div>
 		  <div class="form-group">
 		    <label for="language">Language</label>
-		    <input type="text" class="form-control" name="language" value={{magazine._language}}>
+		    <input type="text" class="form-control" name="language" value='{{magazine._language}}'>
 		  </div>
 			<div class="form-group">
 		    <label for="isbn_10">ISBN 10</label>
-		    <input type="text" class="form-control" name="isbn_10" value={{magazine._ISBN10}}>
+		    <input type="text" class="form-control" name="isbn_10" value='{{magazine._ISBN10}}'>
 		  </div>
 			<div class="form-group">
 		    <label for="isbn_13">ISBN 13</label>
-		    <input type="text" class="form-control" name="isbn_13" value={{magazine._ISBN13}}>
+		    <input type="text" class="form-control" name="isbn_13" value='{{magazine._ISBN13}}'>
 		  </div>
 		  <button type="submit" name="save" class="btn btn-primary">Save</button>
 			<form action="#" method="post">
