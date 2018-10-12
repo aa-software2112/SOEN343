@@ -108,7 +108,6 @@ class MagazineCatalog(Catalog):
 		for k, v in self._magazines.items():
 			print(v)
 
-
 class AlbumCatalog(Catalog):
 
 	def __init__(self):
@@ -119,6 +118,12 @@ class AlbumCatalog(Catalog):
 
 	def get(self, id):
 		return self._albums[id]
+
+	def add_new_album(self, album):
+		print(album['title'])
+		newAlbum = Album(album)
+		album_length = len(self._albums)+1
+		self._albums[album_length] = newAlbum
 
 	def add(self, album):
 		self._albums[album.get_id()] = album
