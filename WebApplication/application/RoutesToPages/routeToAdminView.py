@@ -77,8 +77,8 @@ def registerUser():
 def modifyBook():
     return render_template('modifyBook.html')
 
-@app.route('/adminView/adminViewAddCatalog', methods=['POST', 'GET'])
-def adminViewAddCatalog():
+@app.route('/adminView/adminViewAddBook', methods=['POST', 'GET'])
+def adminViewAddBook():
 	catalog_item={}
 
 	if request.method == 'POST':
@@ -110,7 +110,7 @@ def adminViewAddCatalog():
 	
 
 
-	return render_template('addCatalog.html')
+	return render_template('addBook.html')
 
 
 

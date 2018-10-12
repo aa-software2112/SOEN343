@@ -42,9 +42,8 @@ class BookCatalog(Catalog):
 		# can act as a modify too!
 		self._books[book.get_id()] = book
 
-	def add_new_book(self, book):
-		print(book['title'])
-		newBook = Book(book)
+	def add_new_book(self, catalog_add_item):
+		newBook = Book(catalog_add_item)
 		book_length = len(self._books)+1
 		self._books[book_length] = newBook
 
