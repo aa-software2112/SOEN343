@@ -3,6 +3,8 @@ from application import app
 from application import userController, adminController
 from application import databaseObject as db
 from application.Classes.Book import Book
+from application.Classes.Magazine import Magazine
+from application.Classes.Album import Album
 from application.Classes.Movie import Movie
 import random
 
@@ -82,7 +84,7 @@ def modify_book():
         isbn_10 = request.form["isbn_10"]
         isbn_13 = request.form["isbn_13"]
 
-        attributes = {'id': id,
+        attributes = {'id': int(id),
                       'author': author,
                       'title': title,
                       'format': format,
@@ -101,8 +103,30 @@ def modify_book():
 @app.route('/adminView/modifyMagazineForm', methods=['GET', 'POST'])
 def modify_magazine_form():
     id = request.form['modify_magazine']
-    print(adminController.get_magazine_by_id(int(id)))
     return render_template('modifyMagazine.html', magazine=adminController.get_magazine_by_id(int(id)))
+
+@app.route('/modifyMagazine', methods=['POST'])
+def modify_magazine():
+        id = request.form["id"]
+        title = request.form["title"]
+        publisher = request.form["publisher"]
+        year_of_publication = request.form["year_of_publication"]
+        language = request.form["language"]
+        isbn_10 = request.form["isbn_10"]
+        isbn_13 = request.form["isbn_13"]
+
+        attributes = {'id': int(id),
+                      'title': title,
+                      'publisher': publisher,
+                      'year_of_publication': year_of_publication,
+                      'language': language,
+                      'isbn_10': isbn_10,
+                      'isbn_13': isbn_13
+                      }
+
+        modified_magazine = Magazine(attributes)
+        adminController.modify_magazine(modified_magazine)
+        return redirect('/adminView/adminViewCatalog')
 
 @app.route('/adminView/modifyMovieForm', methods=['GET', 'POST'])
 def modify_movie_form():
