@@ -1,6 +1,7 @@
 import abc
 from application.Classes.Book import Book
 from application.Classes.Magazine import Magazine
+from application.Classes.Album import Album
 
 
 class Catalog(abc.ABC):
