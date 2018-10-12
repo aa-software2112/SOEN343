@@ -7,6 +7,13 @@ Catalog Viewer
 
 <!-- Replace Content -->
 {% block content %}
+<div class="row">
+    <div class="col-12">
+        <a href ="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info float-right my-3" style="cursor:pointer">
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
+</div>
 <ul class="nav nav-tabs nav-justified">
     <li class="nav-item">
         <a class="nav-link active" href="#Books" role="tab" data-toggle="tab"> Books </a>
