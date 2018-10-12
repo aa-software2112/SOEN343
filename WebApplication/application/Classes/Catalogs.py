@@ -1,4 +1,5 @@
 import abc
+from application.Classes.Book import Book
 
 
 class Catalog(abc.ABC):
@@ -42,8 +43,10 @@ class BookCatalog(Catalog):
 		self._books[book.get_id()] = book
 
 	def add_new_book(self, book):
+		print(book['title'])
+		newBook = Book(book)
 		book_length = len(self._books)+1
-		self._books[book_length] = book
+		self._books[book_length] = newBook
 
 	def remove(self, id):
 		return self._books.pop(id, None)

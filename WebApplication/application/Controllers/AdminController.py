@@ -75,6 +75,7 @@ class AdminController(UserController):
 		return self._catalog_controller.get_all_catalogs()
 
 	def add_new_book(self, catalog_add_item):
+		print(catalog_add_item['title'])
 		return self._catalog_controller.add_book_to_catalog(catalog_add_item)
 
 

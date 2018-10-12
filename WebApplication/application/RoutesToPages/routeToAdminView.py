@@ -93,24 +93,21 @@ def adminViewAddCatalog():
 		_isbn_13 = request.form.get('isbn_13')
 
 		catalog_item = {
-		'id': str(544),
-		'author': _author,
-		'title': _title,
-		'format': _format,
-		'pages': _pages,
-		'publisher': _publisher,
-		'year_of_publication': _year_of_publication,
-		'language': _language,
-		'isbn_10': _isbn_10,
-		'isbn_13': _isbn_13
-	}
-	new_book = []
-	for row in catalog_item:
-		new_book.append(Book(row))
+			'id': 544,
+			'author': _author,
+			'title': _title,
+			'format': _format,
+			'pages': _pages,
+			'publisher': _publisher,
+			'year_of_publication': _year_of_publication,
+			'language': _language,
+			'isbn_10': _isbn_10,
+			'isbn_13': _isbn_13
+		}
 
+
+		adminController.add_new_book(catalog_add_item=catalog_item)
 	
-
-	adminController.add_new_book(catalog_add_item=new_book)
 
 
 	return render_template('addCatalog.html')
