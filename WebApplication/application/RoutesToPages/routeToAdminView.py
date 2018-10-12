@@ -89,7 +89,6 @@ def adminViewAddBook():
 		_isbn_13 = request.form.get('isbn_13')
 
 		catalog_item = {
-			'id': 544,
 			'author': _author,
 			'title': _title,
 			'format': _format,
@@ -123,7 +122,6 @@ def adminViewAddMovie():
 		_run_time = request.form.get('run_time')
 
 		catalog_item = {
-			'id': 333,
 			'title': _title,
 			'director': _director,
 			'producers': _producers,
@@ -153,7 +151,6 @@ def adminViewAddMagazine():
 		_isbn_13 = request.form.get('isbn_13')
 
 		catalog_item = {
-			'id': 544,
 			'title': _title,
 			'publisher': _publisher,
 			'year_of_publication': _year_of_publication,
@@ -167,8 +164,8 @@ def adminViewAddMagazine():
 	
 	return render_template('addMagazine.html')
 
-@app.route('/adminView/adminViewAddalbum', methods=['POST', 'GET'])
-def adminViewAddalbum():
+@app.route('/adminView/adminViewAddAlbum', methods=['POST', 'GET'])
+def adminViewAddAlbum():
     catalog_item = {}
     
     if request.method == 'POST':
@@ -180,7 +177,6 @@ def adminViewAddalbum():
         _asin = request.form.get('asin')
 
         catalog_item = {
-            'id': 544,
             'type': _type,
             'title': _title,
             'artist': _artist,
