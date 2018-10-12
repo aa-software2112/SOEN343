@@ -127,3 +127,31 @@ def modify_magazine():
         modified_magazine = Magazine(attributes)
         adminController.modify_magazine(modified_magazine)
         return redirect('/adminView/adminViewCatalog')
+
+@app.route('/adminView/modifyAlbumForm', methods=['GET', 'POST'])
+def modify_album_form():
+    id = request.form['modify_album']
+    return render_template('modifyAlbum.html', album=adminController.get_album_by_id(int(id)))
+
+@app.route('/modifyAlbum', methods=['POST'])
+def modify_album():
+        id = request.form["id"]
+        type = request.form["type"]
+        title = request.form["title"]
+        artist = request.form["artist"]
+        label = request.form["label"]
+        release_date = request.form["release_date"]
+        asin = request.form["asin"]
+
+        attributes = {'id': int(id),
+                      'type': type,
+                      'title': title,
+                      'artist': artist,
+                      'label': label,
+                      'release_date': release_date,
+                      'asin': asin
+                      }
+
+        modified_album = Album(attributes)
+        adminController.modify_album(modified_album)
+        return redirect('/adminView/adminViewCatalog')
