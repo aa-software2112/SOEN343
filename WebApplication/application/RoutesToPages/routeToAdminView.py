@@ -3,6 +3,7 @@ from application import app
 from application import userController, adminController
 from application import databaseObject as db
 from application.Classes.Book import Book
+from application.Classes.Movie import Movie
 import random
 
 
@@ -102,3 +103,38 @@ def modify_magazine_form():
     id = request.form['modify_magazine']
     print(adminController.get_magazine_by_id(int(id)))
     return render_template('modifyMagazine.html', magazine=adminController.get_magazine_by_id(int(id)))
+
+@app.route('/adminView/modifyMovieForm', methods=['GET', 'POST'])
+def modify_movie_form():
+    id=request.form['modify_movie']
+    return render_template('modifyMovie.html', movie=adminController.get_movie_by_id(int(id)))
+
+@app.route('/modifyMovie', methods=['POST'])
+def modify_movie():
+        id = request.form["id"]
+        title = request.form["title"]
+        director = request.form["director"]
+        producers = request.form["producers"]
+        actors = request.form["actors"]
+        language = request.form["language"]
+        subtitles = request.form["subtitles"]
+        dubbed = request.form["dubbed"]
+        release_date = request.form["release_date"]
+        run_time = request.form["run_time"]
+
+        attributes = {'id': int(id),
+                      'title': title,
+                      'director': director,
+                      'producers': producers,
+                      'actors': actors,
+                      'language': language,
+                      'subtitles': subtitles,
+                      'language': language,
+                      'dubbed': dubbed,
+                      'release_date': release_date,
+                      'run_time': run_time
+                      }
+
+        modified_movie = Movie(attributes)
+        adminController.modify_movie(modified_movie)
+        return redirect('/adminView/adminViewCatalog')
