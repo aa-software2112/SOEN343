@@ -2,7 +2,7 @@ from flask import render_template, g, session, redirect, request,flash
 from application import app
 from application import userController, adminController
 from application import databaseObject as db
-from application.Classes import Book, Magazine, Movie, Album
+from application.Classes.Book import Book
 import random
 
 
@@ -62,14 +62,43 @@ def registerUser():
         return render_template('UserCreator.html',  error=error)
 
 
-@app.route('/adminView/modifyBook', methods=['GET', 'POST'])
-def modify_book():
+@app.route('/adminView/modifyBookForm', methods=['GET', 'POST'])
+def modify_book_form():
     id=request.form['modify_book']
-    print(adminController.get_book_by_id(int(id)))
+    #print(adminController.get_book_by_id(int(id)))
     return render_template('modifyBook.html', book=adminController.get_book_by_id(int(id)))
 
-@app.route('/adminView/modifyMagazine', methods=['GET', 'POST'])
-def modify_magazine():
+@app.route('/modifyBook', methods=['POST'])
+def modify_book():
+        id = request.form["id"]
+        author = request.form["author"]
+        title = request.form["title"]
+        format = request.form["format"]
+        pages = request.form["pages"]
+        publisher = request.form["publisher"]
+        year_of_publication = request.form["year_of_publication"]
+        language = request.form["language"]
+        isbn_10 = request.form["isbn_10"]
+        isbn_13 = request.form["isbn_13"]
+
+        attributes = {'id': id,
+                      'author': author,
+                      'title': title,
+                      'format': format,
+                      'pages': pages,
+                      'publisher': publisher,
+                      'year_of_publication': year_of_publication,
+                      'language': language,
+                      'isbn_10': isbn_10,
+                      'isbn_13': isbn_13
+                      }
+
+        modified_book = Book(attributes)
+        adminController.modify_book(modified_book)
+        return redirect('/adminView/adminViewCatalog')
+
+@app.route('/adminView/modifyMagazineForm', methods=['GET', 'POST'])
+def modify_magazine_form():
     id = request.form['modify_magazine']
     print(adminController.get_magazine_by_id(int(id)))
     return render_template('modifyMagazine.html', magazine=adminController.get_magazine_by_id(int(id)))
