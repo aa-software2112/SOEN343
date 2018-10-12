@@ -97,3 +97,5 @@ class AdminController(UserController):
 	def modify_movie(self, modified_movie):
 		self._catalog_controller.view_catalog_inventory()['2'].modify(modified_movie)
 
+	def delete_catalog(self, id, type):
+		self._catalog_controller.view_catalog_inventory()[type].remove(id)
