@@ -48,13 +48,12 @@ class CatalogController(Controller):
 				
 				# Create an object for each row
 				for row in all_rows:
+				#	print(type(constructor(row)._id))
 					catalog.add(constructor(row))
 			
 			# Uncomment these two lines to see all objects in all catalogs
-			for k, v in self._inventory.items():
-				v.display()
-					
-			
+			#for k, v in self._inventory.items():
+			#	v.display()
 	
 	def get_all_catalogs(self):
 		
@@ -77,4 +76,17 @@ class CatalogController(Controller):
 	def add_album_to_catalog(self, catalog_add_item):
                 self._inventory[CatalogController.ALBUM_TYPE].add_new_album(catalog_add_item)	
 		
+	def view_catalog_inventory(self):
+		return self._inventory
 
+	def get_book_by_id(self, id):
+		return self.get_all_catalogs()['books'].get(id)
+
+	def get_magazine_by_id(self,id):
+		return self.get_all_catalogs()['magazines'].get(id)
+
+	def get_album_by_id(self,id):
+		return self.get_all_catalogs()['albums'].get(id)
+
+	def get_movie_by_id(self,id):
+		return self.get_all_catalogs()['movies'].get(id)
