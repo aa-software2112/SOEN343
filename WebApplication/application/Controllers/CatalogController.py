@@ -71,4 +71,8 @@ class CatalogController(Controller):
 
 	def add_magazine_to_catalog(self, catalog_add_item):
 		self._inventory[CatalogController.MAGAZINE_TYPE].add_new_magazine(catalog_add_item)
+		
+	def add_album_to_catalog(self, catalog_add_item):
+                self._inventory[CatalogController.ALBUM_TYPE].add_new_album(catalog_add_item)	
+		
 	
