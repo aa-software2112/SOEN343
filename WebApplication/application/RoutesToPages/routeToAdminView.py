@@ -141,7 +141,35 @@ def adminViewAddMagazine():
 
 	return render_template('addMagazine.html')
 
+@app.route('/adminView/adminViewAddalbum', methods=['POST', 'GET'])
+def adminViewAddalbum():
+    catalog_item = {}
 
+    if request.method == 'POST':
+        _type = request.form.get('type')
+        _title = request.form.get('title')
+        _artist = request.form.get('artist')
+        _label = request.form.get('label')
+        _release_date = request.form.get('release_date')
+        _asin = request.form.get('asin')
+
+
+        catalog_item = {
+            'id': 544,
+            'type': _type,
+            'title': _title,
+            'artist': _artist,
+            'label': _label,
+            'release_date': _release_date,
+            'asin': _asin,
+
+        }
+        flash("Entry Created Successfully!!", 'success')
+
+
+        adminController.add_new_album(catalog_add_item=catalog_item)
+
+    return render_template('AddAlbum.html')
 
 
 
