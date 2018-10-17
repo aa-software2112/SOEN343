@@ -14,10 +14,10 @@ class CatalogController(Controller):
 
 	def __init__(self, database):
 		Controller.__init__(self, database)
-		self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(),
-							CatalogController.MOVIE_TYPE: MovieCatalog(),
-							CatalogController.MAGAZINE_TYPE: MagazineCatalog(),
-							CatalogController.ALBUM_TYPE: AlbumCatalog()}
+		self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(database),
+							CatalogController.MOVIE_TYPE: MovieCatalog(database),
+							CatalogController.MAGAZINE_TYPE: MagazineCatalog(database),
+							CatalogController.ALBUM_TYPE: AlbumCatalog(database)}
 		self._constructors = {CatalogController.BOOK_TYPE: Book,
 							CatalogController.MOVIE_TYPE: Movie,
 							CatalogController.MAGAZINE_TYPE: Magazine,
@@ -49,11 +49,11 @@ class CatalogController(Controller):
 				# Create an object for each row
 				for row in all_rows:
 				#	print(type(constructor(row)._id))
-					catalog.add(constructor(row))
+					catalog.add(constructor(row), False)
 			
 			# Uncomment these two lines to see all objects in all catalogs
-			#for k, v in self._inventory.items():
-			#	v.display()
+			for k, v in self._inventory.items():
+				v.display()
 	
 	def get_all_catalogs(self):
 		
@@ -65,16 +65,16 @@ class CatalogController(Controller):
 		return dict_of_catalogs
 
 	def add_book_to_catalog(self, book):
-		self._inventory[CatalogController.BOOK_TYPE].add(book)
+		self._inventory[CatalogController.BOOK_TYPE].add(book,True)
 
 	def add_movie_to_catalog(self, movie):
-		self._inventory[CatalogController.MOVIE_TYPE].add(movie)
+		self._inventory[CatalogController.MOVIE_TYPE].add(movie,True)
 		
 	def add_magazine_to_catalog(self, magazine):
-		self._inventory[CatalogController.MAGAZINE_TYPE].add(magazine)
+		self._inventory[CatalogController.MAGAZINE_TYPE].add(magazine,True)
 		
 	def add_album_to_catalog(self, album):
-		self._inventory[CatalogController.ALBUM_TYPE].add(album)
+		self._inventory[CatalogController.ALBUM_TYPE].add(album,True)
 		
 	def view_catalog_inventory(self):
 		return self._inventory
