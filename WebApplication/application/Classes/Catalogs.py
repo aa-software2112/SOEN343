@@ -50,13 +50,8 @@ class BookCatalog(Catalog):
 
 	def add(self, book):
 		# can act as a modify too!
-		self._books[book.get_id()] = book
-
-	def add_new_book(self, catalog_add_item):
-		book_length = len(self._books)+1
-		catalog_add_item.update({'id':book_length})
-		newBook = Book(catalog_add_item)
-		self._books[book_length] = newBook
+		book._id = len(self._books)+1
+		self._books[book._id] = book
 
 	def remove(self, id):
 		return self._books.pop(id, None)
@@ -79,13 +74,8 @@ class MovieCatalog(Catalog):
 		return self._movies[id]
 
 	def add(self, movie):
-		self._movies[movie.get_id()] = movie
-	
-	def add_new_movie(self, catalog_add_item):
-		movie_length = len(self._movies)+1
-		catalog_add_item.update({'id':movie_length})
-		newMovie = Movie(catalog_add_item)
-		self._movies[movie_length] = newMovie
+		movie._id = len(self._movies)+1
+		self._movies[movie._id] = movie
 
 	def modify(self, movie):
 		self._movies[movie.get_id()] = movie
@@ -111,17 +101,12 @@ class MagazineCatalog(Catalog):
 	def get(self, id):
 		return self._magazines[id]
 
+	def add(self, magazine):
+		magazine._id = len(self._magazines)+1
+		self._magazines[magazine._id] = magazine
+
 	def modify(self, magazine):
 		self._magazines[magazine.get_id()] = magazine
-
-	def add(self, magazine):
-		self._magazines[magazine.get_id()] = magazine
-
-	def add_new_magazine(self, catalog_add_item):
-		magazine_length = len(self._magazines)+1
-		catalog_add_item.update({'id':magazine_length})
-		newMagazine = Magazine(catalog_add_item)
-		self._magazines[magazine_length] = newMagazine
 
 	def remove(self, id):
 		return self._magazines.pop(id, None)
@@ -142,16 +127,11 @@ class AlbumCatalog(Catalog):
 	def get(self, id):
 		return self._albums[id]
 
-	def add_new_album(self, album):
-		album_length = len(self._albums)+1
-		album.update({'id':album_length})
-		newAlbum = Album(album)
-		self._albums[album_length] = newAlbum
+	def add(self, album):
+		album._id = len(self._albums) + 1
+		self._albums[album._id] = album
 
 	def modify(self, album):
-		self._albums[album.get_id()] = album
-
-	def add(self, album):
 		self._albums[album.get_id()] = album
 
 	def remove(self, id):

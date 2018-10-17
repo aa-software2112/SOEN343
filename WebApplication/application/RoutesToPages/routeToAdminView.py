@@ -35,7 +35,7 @@ def adminViewCatalog():
             dict_of_objects = dict_of_catalogs[catalog_name]
         for object_id, media_object in dict_of_objects.items():
             print ("ID {} OBJ {}".format(object_id, media_object))
-            return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
+        return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
@@ -62,11 +62,6 @@ def registerUser():
         error = "Username or email already exist !"
         return render_template('UserCreator.html',  error=error)
 
-@app.route('/adminView/modifyBook')
-def modifyBook():
-    return render_template('modifyBook.html')
-
-
 @app.route('/adminView/adminViewAddToCatalog')
 def adminViewAddToCatalog():
 
@@ -75,99 +70,95 @@ def adminViewAddToCatalog():
 
 @app.route('/adminView/adminViewAddBook', methods=['POST', 'GET'])
 def adminViewAddBook():
-	catalog_item={}
+    if request.method == 'POST':
+        _author = request.form.get('author')
+        _title = request.form.get('title')
+        _format = request.form.get('format')
+        _pages = request.form.get('pages')
+        _publisher = request.form.get('publisher')
+        _year_of_publication = request.form.get('year_of_publication')
+        _language = request.form.get('language')
+        _isbn_10 = request.form.get('isbn_10')
+        _isbn_13 = request.form.get('isbn_13')
 
-	if request.method == 'POST':
-		_author = request.form.get('author')
-		_title = request.form.get('title')
-		_format = request.form.get('format')
-		_pages = request.form.get('pages')
-		_publisher = request.form.get('publisher')
-		_year_of_publication = request.form.get('year_of_publication')
-		_language = request.form.get('language')
-		_isbn_10 = request.form.get('isbn_10')
-		_isbn_13 = request.form.get('isbn_13')
-
-		catalog_item = {
-			'author': _author,
-			'title': _title,
-			'format': _format,
-			'pages': _pages,
-			'publisher': _publisher,
-			'year_of_publication': _year_of_publication,
-			'language': _language,
-			'isbn_10': _isbn_10,
-			'isbn_13': _isbn_13
-		}
-		flash("Book Entry Created Successfully!!", 'success')
-		
-		adminController.add_new_book(catalog_add_item=catalog_item)
-	
-	return render_template('addBook.html')
+        book_attributes = {
+            'id': 0,
+            'author': _author,
+            'title': _title,
+            'format': _format,
+            'pages': _pages,
+            'publisher': _publisher,
+            'year_of_publication': _year_of_publication,
+            'language': _language,
+            'isbn_10': _isbn_10,
+            'isbn_13': _isbn_13
+        }
+        new_book = Book(book_attributes)
+        adminController.add_new_book(new_book)
+        flash("Book Entry Created Successfully!!", 'success')
+        return redirect('/adminView/adminViewCatalog')
+    return render_template('addBook.html')
 
 
 @app.route('/adminView/adminViewAddMovie', methods=['POST', 'GET'])
 def adminViewAddMovie():
-	catalog_item={}
-  
-	if request.method == 'POST':
-		_title = request.form.get('title')
-		_director = request.form.get('director')
-		_producers = request.form.get('producers')
-		_actors = request.form.get('actors')
-		_language = request.form.get('language')
-		_subtitles = request.form.get('subtitles')
-		_dubbed = request.form.get('dubbed')
-		_release_date = request.form.get('release_date')
-		_run_time = request.form.get('run_time')
+    if request.method == 'POST':
+        _title = request.form.get('title')
+        _director = request.form.get('director')
+        _producers = request.form.get('producers')
+        _actors = request.form.get('actors')
+        _language = request.form.get('language')
+        _subtitles = request.form.get('subtitles')
+        _dubbed = request.form.get('dubbed')
+        _release_date = request.form.get('release_date')
+        _run_time = request.form.get('run_time')
 
-		catalog_item = {
-			'title': _title,
-			'director': _director,
-			'producers': _producers,
-			'actors': _actors,
-			'language': _language,
-			'subtitles': _subtitles,
-			'dubbed': _dubbed,
-			'release_date': _release_date,
-			'run_time': _run_time
-		}
-		flash("Movie Entry Created Successfully!!", 'success')
-		
-		adminController.add_new_movie(catalog_add_item=catalog_item)
-
-	return render_template('addMovie.html')
+        movie_attributes = {
+            'id': 0,
+            'title': _title,
+            'director': _director,
+            'producers': _producers,
+            'actors': _actors,
+            'language': _language,
+            'subtitles': _subtitles,
+            'dubbed': _dubbed,
+            'release_date': _release_date,
+            'run_time': _run_time
+        }
+        new_movie = Movie(movie_attributes)
+        adminController.add_new_movie(new_movie)
+        flash("Movie Entry Created Successfully!!", 'success')
+        return redirect('/adminView/adminViewCatalog')
+    return render_template('addMovie.html')
 
 @app.route('/adminView/adminViewAddMagazine', methods=['POST', 'GET'])
 def adminViewAddMagazine():
-	catalog_item={}
+        if request.method == 'POST':
+            _title = request.form.get('title')
+            _publisher = request.form.get('publisher')
+            _year_of_publication = request.form.get('year_of_publication')
+            _language = request.form.get('language')
+            _isbn_10 = request.form.get('isbn_10')
+            _isbn_13 = request.form.get('isbn_13')
 
-	if request.method == 'POST':
-		_title = request.form.get('title')
-		_publisher = request.form.get('publisher')
-		_year_of_publication = request.form.get('year_of_publication')
-		_language = request.form.get('language')
-		_isbn_10 = request.form.get('isbn_10')
-		_isbn_13 = request.form.get('isbn_13')
+            magazine_attributes = {
+                'id': 0,
+                'title': _title,
+                'publisher': _publisher,
+                'year_of_publication': _year_of_publication,
+                'language': _language,
+                'isbn_10': _isbn_10,
+                'isbn_13': _isbn_13
+            }
 
-		catalog_item = {
-			'title': _title,
-			'publisher': _publisher,
-			'year_of_publication': _year_of_publication,
-			'language': _language,
-			'isbn_10': _isbn_10,
-			'isbn_13': _isbn_13
-		}
-		flash("Magazine Entry Created Successfully!!", 'success')
-
-		adminController.add_new_magazine(catalog_add_item=catalog_item)
-	
-	return render_template('addMagazine.html')
+            new_magazine = Magazine(magazine_attributes)
+            adminController.add_new_magazine(new_magazine)
+            flash("Magazine Entry Created Successfully!!", 'success')
+            return redirect('/adminView/adminViewCatalog')
+        return render_template('addMagazine.html')
 
 @app.route('/adminView/adminViewAddAlbum', methods=['POST', 'GET'])
 def adminViewAddAlbum():
-    catalog_item = {}
-    
     if request.method == 'POST':
         _type = request.form.get('type')
         _title = request.form.get('title')
@@ -176,18 +167,19 @@ def adminViewAddAlbum():
         _release_date = request.form.get('release_date')
         _asin = request.form.get('asin')
 
-        catalog_item = {
+        album_attributes = {
+            'id': 0,
             'type': _type,
             'title': _title,
             'artist': _artist,
             'label': _label,
             'release_date': _release_date,
             'asin': _asin,
-
         }
+        new_album=Album(album_attributes)
+        adminController.add_new_album(new_album)
         flash("Album Entry Created Successfully!!", 'success')
-
-        adminController.add_new_album(catalog_add_item=catalog_item)
+        return redirect('/adminView/adminViewCatalog')
 
     return render_template('AddAlbum.html')
 

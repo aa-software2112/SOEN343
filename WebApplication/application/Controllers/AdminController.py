@@ -72,20 +72,17 @@ class AdminController(UserController):
 	def view_inventory(self):
 		return self._catalog_controller.get_all_catalogs()
 
-	def add_new_book(self, catalog_add_item):
-		return self._catalog_controller.add_book_to_catalog(catalog_add_item)
+	def add_new_book(self, book):
+		return self._catalog_controller.add_book_to_catalog(book)
 
-	def add_new_magazine(self, catalog_add_item):
-		return self._catalog_controller.add_magazine_to_catalog(catalog_add_item)
+	def add_new_magazine(self, magazine):
+		return self._catalog_controller.add_magazine_to_catalog(magazine)
 	
-	def add_new_album(self, catalog_add_item):
-               return self._catalog_controller.add_album_to_catalog(catalog_add_item)
+	def add_new_album(self, album):
+		return self._catalog_controller.add_album_to_catalog(album)
 
-	def add_new_movie(self, catalog_add_item):
-		return self._catalog_controller.add_movie_to_catalog(catalog_add_item)
-		
-	def add_new_magazine(self, catalog_add_item):
-		return self._catalog_controller.add_magazine_to_catalog(catalog_add_item)
+	def add_new_movie(self, movie):
+		return self._catalog_controller.add_movie_to_catalog(movie)
 
 	def modify_book(self, modified_book):
 		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.BOOK_TYPE].modify(modified_book)
