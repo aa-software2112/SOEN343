@@ -88,10 +88,10 @@ class AdminController(UserController):
 		return self._catalog_controller.add_magazine_to_catalog(catalog_add_item)
 
 	def modify_book(self, modified_book):
-		self._catalog_controller.view_catalog_inventory()['1'].modify(modified_book)
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.BOOK_TYPE].modify(modified_book)
 
 	def modify_magazine(self, modified_magazine):
-		self._catalog_controller.view_catalog_inventory()['3'].modify(modified_magazine)
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.MAGAZINE_TYPE].modify(modified_magazine)
 
 	def get_book_by_id(self,id):
 		return self._catalog_controller.get_book_by_id(id)
@@ -100,7 +100,7 @@ class AdminController(UserController):
 		return self._catalog_controller.get_magazine_by_id(id)
 
 	def modify_album(self, modified_album):
-		self._catalog_controller.view_catalog_inventory()['4'].modify(modified_album)
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.ALBUM_TYPE].modify(modified_album)
 
 	def get_album_by_id(self,id):
 		return self._catalog_controller.get_album_by_id(id)
@@ -109,7 +109,7 @@ class AdminController(UserController):
 		return self._catalog_controller.get_movie_by_id(id)
 
 	def modify_movie(self, modified_movie):
-		self._catalog_controller.view_catalog_inventory()['2'].modify(modified_movie)
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.MOVIE_TYPE].modify(modified_movie)
 
 	def delete_catalog(self, id, type):
 		self._catalog_controller.view_catalog_inventory()[type].remove(id)
