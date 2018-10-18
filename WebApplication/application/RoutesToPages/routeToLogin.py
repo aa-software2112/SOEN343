@@ -1,4 +1,4 @@
-from flask import Flask,render_template, redirect, session, flash, make_response, g, request
+from flask import Flask,render_template, redirect, session, flash, make_response, g, request, url_for
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm
@@ -41,7 +41,7 @@ def login():
 			# Display message after being redirected to home page
 			flash('You are now logged in!', 'success')
 
-			return redirect('/index')
+			return redirect(url_for('index'))
 			
 	return render_template('login.html', form=form)
 

@@ -8,8 +8,10 @@ def convertEpochToDatetime(epoch_time):
     """Returns time in 'month/day/year hour:minute:second' format given the epoch time"""
     return time.strftime("%m/%d/%Y %H:%M:%S %Z", time.localtime(epoch_time))
 
+# Login protection
 def login_required(f):
     @wraps(f)
+    # if the user isn't logged in, redirect to the login page
     def login_check(*args, **kwargs):
         if g.user is None:
             flash('Please login first!', 'warning')
@@ -26,7 +28,8 @@ def is_logged(f):
             return redirect(url_for('index'))
         return f(*args, **kwargs)
     return login_check
-    
+
+# Admin protection
 def admin_required(f):
     @wraps(f)
     def admin_check(*args, **kwargs):
