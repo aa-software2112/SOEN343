@@ -2,6 +2,8 @@ from flask import Flask,render_template, redirect, session, flash, make_response
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm
+from application.CommonDefinitions.HelperFunctions import is_logged
+
 import json
 
 app.config['SECRET_KEY'] = 'SOEN_343'
@@ -9,6 +11,7 @@ app.config['SECRET_KEY'] = 'SOEN_343'
 
 # Login Template
 @app.route('/login', methods=['GET', 'POST'])
+@is_logged
 def login():
 
 	# import from Classes/forms
