@@ -30,11 +30,11 @@ def adminViewCatalog():
 
         dict_of_catalogs = adminController.view_inventory()
         # comment this out when fully implemented
-        for catalog_name in dict_of_catalogs.keys():
-            print("*****\nDictionary: {}\n*****".format(catalog_name))
-            dict_of_objects = dict_of_catalogs[catalog_name]
-            for object_id, media_object in dict_of_objects.items():
-                print ("ID {} OBJ {}".format(object_id, media_object))
+        #for catalog_name in dict_of_catalogs.keys():
+         #   print("*****\nDictionary: {}\n*****".format(catalog_name))
+          #  dict_of_objects = dict_of_catalogs[catalog_name]
+           # for object_id, media_object in dict_of_objects.items():
+            #    print ("ID {} OBJ {}".format(object_id, media_object))
 
         return render_template('administratorViewCatalog.html', dict_of_catalogs=dict_of_catalogs)
 
@@ -82,8 +82,11 @@ def adminViewAddBook():
         _isbn_10 = request.form.get('isbn_10')
         _isbn_13 = request.form.get('isbn_13')
 
+        # we need the last id of the book inside the dictionary of catalogs to update the new book created with the next id, ie +1
+        last_book_id = list(adminController.view_inventory()['albums'].keys())[-1]
+
         book_attributes = {
-            'id': 0,
+            'id': last_book_id,
             'author': _author,
             'title': _title,
             'format': _format,
@@ -114,8 +117,11 @@ def adminViewAddMovie():
         _release_date = request.form.get('release_date')
         _run_time = request.form.get('run_time')
 
+        # we need the last id of the movie inside the dictionary of catalogs to update the new movie created with the next id, ie +1
+        last_movie_id = list(adminController.view_inventory()['albums'].keys())[-1]
+
         movie_attributes = {
-            'id': 0,
+            'id': last_movie_id+1,
             'title': _title,
             'director': _director,
             'producers': _producers,
@@ -142,8 +148,11 @@ def adminViewAddMagazine():
             _isbn_10 = request.form.get('isbn_10')
             _isbn_13 = request.form.get('isbn_13')
 
+            # we need the last id of the magazine inside the dictionary of catalogs to update the new magazine created with the next id, ie +1
+            last_magazine_id = list(adminController.view_inventory()['magazines'].keys())[-1]
+
             magazine_attributes = {
-                'id': 0,
+                'id': last_magazine_id+1,
                 'title': _title,
                 'publisher': _publisher,
                 'year_of_publication': _year_of_publication,
@@ -168,8 +177,12 @@ def adminViewAddAlbum():
         _release_date = request.form.get('release_date')
         _asin = request.form.get('asin')
 
+        #we need the last id of the album inside the dictionary of catalogs to update the new album created with the next id, ie +1
+        last_album_id = list(adminController.view_inventory()['albums'].keys())[-1]
+        #print(last_album_id)
+
         album_attributes = {
-            'id': 0,
+            'id': last_album_id+1,
             'type': _type,
             'title': _title,
             'artist': _artist,
@@ -177,7 +190,7 @@ def adminViewAddAlbum():
             'release_date': _release_date,
             'asin': _asin,
         }
-        new_album=Album(album_attributes)
+        new_album = Album(album_attributes)
         adminController.add_new_album(new_album)
         flash("Album Entry Created Successfully!!", 'success')
         return redirect('/adminView/adminViewCatalog')
@@ -214,7 +227,7 @@ def modify_book():
                       'isbn_10': isbn_10,
                       'isbn_13': isbn_13
                       }
-        
+
         modified_book = Book(attributes)
         adminController.modify_book(modified_book)
         flash("Book modified succesfully.", 'success')
@@ -320,7 +333,6 @@ def deleteCatalog():
 
   id = request.form["id"]
   type = request.form["type"]
-
   adminController.delete_catalog(int(id), type)
 
   flash("Entry deleted succesfully.", 'success')

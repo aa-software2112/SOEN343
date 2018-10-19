@@ -52,9 +52,9 @@ class CatalogController(Controller):
 					catalog.add(constructor(row), False)
 			
 			# Uncomment these two lines to see all objects in all catalogs
-			for k, v in self._inventory.items():
-				v.display()
-	
+			#for k, v in self._inventory.items():
+			#	v.display()
+
 	def get_all_catalogs(self):
 		
 		dict_of_catalogs = {"books": self._inventory[CatalogController.BOOK_TYPE].get_all(),

@@ -44,20 +44,28 @@ class BookCatalog(Catalog):
 		return self._books[id]
 
 	def modify(self, modified_book):
+		modify_book_query = 'UPDATE book SET author = ?, title = ?, format = ?, pages = ?, publisher = ?, year_of_publication = ?' \
+							', language = ?, isbn_10 = ?, isbn_13 = ? WHERE id = ? '
+		tuple_for_modify_query = (modified_book._author, modified_book._title, modified_book._format, modified_book._pages
+								  , modified_book._publisher, modified_book._year_of_publication, modified_book._language
+								  , modified_book._ISBN10, modified_book._ISBN13, modified_book._id)
+		self.db.executeQueryWrite(modify_book_query,tuple_for_modify_query)
 		self._books[modified_book.get_id()] = modified_book
 
 	def add(self, book, add_to_db):
 		# can act as a modify too!
-		book._id = len(self._books)+1
 		self._books[book._id] = book
 		if add_to_db is True:
-			insert_new_book = 'INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13)' \
+			insert_new_book_query = 'INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13)' \
 					 'VALUES(?,?,?,?,?,?,?,?,?)'
-			new_book = (book._author, book._title, book._format, book._pages, book._publisher, book._year_of_publication
+			tuple_for_insert_query = (book._author, book._title, book._format, book._pages, book._publisher, book._year_of_publication
 						, book._language, book._ISBN10, book._ISBN13)
-			self.db.executeQueryWrite(insert_new_book, new_book)
+			self.db.executeQueryWrite(insert_new_book_query, tuple_for_insert_query)
 
 	def remove(self, id):
+		remove_book = 'DELETE FROM book WHERE id = ?'
+		#the comma after id is because the execute query from sqlite takes only tuples as second parameters
+		self.db.executeQueryWrite(remove_book, (id,))
 		return self._books.pop(id, None)
 
 	def display(self):
@@ -69,7 +77,7 @@ class BookCatalog(Catalog):
 class MovieCatalog(Catalog):
 
 	def __init__(self, database):
-
+		Controller.__init__(self, database)
 		self._movies = {}
 
 	def get_all(self):
@@ -79,27 +87,33 @@ class MovieCatalog(Catalog):
 		return self._movies[id]
 
 	def add(self, movie, add_to_db):
-		movie._id = len(self._movies)+1
 		self._movies[movie._id] = movie
 		if add_to_db is True:
-			insert_new_movie = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time)' \
+			insert_new_movie_query = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time)' \
 					 'VALUES(?,?,?,?,?,?,?,?,?)'
-			new_movie = (movie._title, movie._director, movie._producers, movie._actors, movie._language, movie._subtitles, movie._dubbed
+			tuple_for_insert_query = (movie._title, movie._director, movie._producers, movie._actors, movie._language, movie._subtitles, movie._dubbed
 						 , movie._release_date, movie._runtime)
-			self.db.executeQueryWrite(insert_new_movie, new_movie)
+			self.db.executeQueryWrite(insert_new_movie_query, tuple_for_insert_query)
 
-	def modify(self, movie):
-		self._movies[movie.get_id()] = movie
+	def modify(self, modified_movie):
+
+		modify_movie_query = 'UPDATE movie SET title = ?, director = ?, producers = ?, actors = ?, language = ?, subtitles = ?' \
+							 ', dubbed = ?, release_date = ?, run_time = ? WHERE id = ?'
+		tuple_for_modify_query = (modified_movie._title, modified_movie._director, modified_movie._producers, modified_movie._actors, modified_movie._language, modified_movie._subtitles
+								  , modified_movie._dubbed, modified_movie._release_date, modified_movie._runtime, modified_movie._id)
+		self.db.executeQueryWrite(modify_movie_query, tuple_for_modify_query)
+		self._movies[modified_movie.get_id()] = modified_movie
 
 	def remove(self, id):
+		remove_movie = 'DELETE FROM movie WHERE id = ?'
+		# the comma after id is because the execute query from sqlite takes only tuples as second parameters
+		self.db.executeQueryWrite(remove_movie, (id,))
 		return self._movies.pop(id, None)
 
 	def display(self):
 
 		for k, v in self._movies.items():
 			print(v)
-
-
 
 class MagazineCatalog(Catalog):
 
@@ -114,19 +128,26 @@ class MagazineCatalog(Catalog):
 		return self._magazines[id]
 
 	def add(self, magazine, add_to_db):
-		magazine._id = len(self._magazines)+1
 		self._magazines[magazine._id] = magazine
 		if add_to_db is True:
-			insert_new_magazine = 'INSERT INTO magazine(title, publisher, year_of_publication, language, isbn_10, isbn_13)' \
+			insert_new_magazine_query = 'INSERT INTO magazine(title, publisher, year_of_publication, language, isbn_10, isbn_13)' \
 					 'VALUES(?,?,?,?,?,?)'
-			new_magazine = (magazine._title, magazine._publisher, magazine._year_of_publication, magazine._language, magazine._ISBN10
+			tuple_for_insert_query = (magazine._title, magazine._publisher, magazine._year_of_publication, magazine._language, magazine._ISBN10
 							,magazine._ISBN13)
-			self.db.executeQueryWrite(insert_new_magazine, new_magazine)
+			self.db.executeQueryWrite(insert_new_magazine_query, tuple_for_insert_query)
 
-	def modify(self, magazine):
-		self._magazines[magazine.get_id()] = magazine
+	def modify(self, modified_magazine):
+		modify_magazine_query = 'UPDATE magazine SET title = ?, publisher = ?, year_of_publication = ?, language = ?, isbn_10 = ?, isbn_13 = ?' \
+								'WHERE id = ? '
+		tuple_for_modify_query = (modified_magazine._title, modified_magazine._publisher, modified_magazine._year_of_publication, modified_magazine._language
+								  , modified_magazine._ISBN10, modified_magazine._ISBN13, modified_magazine._id)
+		self.db.executeQueryWrite(modify_magazine_query,tuple_for_modify_query)
+		self._magazines[modified_magazine.get_id()] = modified_magazine
 
 	def remove(self, id):
+		remove_magazine = 'DELETE FROM magazine WHERE id = ?'
+		# the comma after id is because the execute query from sqlite takes only tuples as second parameters
+		self.db.executeQueryWrite(remove_magazine, (id,))
 		return self._magazines.pop(id, None)
 
 	def display(self):
@@ -147,17 +168,23 @@ class AlbumCatalog(Catalog):
 		return self._albums[id]
 
 	def add(self, album, add_to_db):
-		album._id = len(self._albums) + 1
 		self._albums[album._id] = album
 		if add_to_db is True:
 			insert_new_album = 'INSERT INTO album(type, title, artist, label, release_date, asin) VALUES(?,?,?,?,?,?)'
-			new_album = (album._type, album._title, album._artist, album._label, album._release_date, album._ASIN)
-			self.db.executeQueryWrite(insert_new_album, new_album)
+			tuple_for_insert_query = (album._type, album._title, album._artist, album._label, album._release_date, album._ASIN)
+			self.db.executeQueryWrite(insert_new_album, tuple_for_insert_query)
 
-	def modify(self, album):
-		self._albums[album.get_id()] = album
+	def modify(self, modified_album):
+		modify_album_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
+		tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist, modified_album._label
+								  , modified_album._release_date, modified_album._ASIN, modified_album._id)
+		self.db.executeQueryWrite(modify_album_query,tuple_for_modify_query)
+		self._albums[modified_album.get_id()] = modified_album
 
 	def remove(self, id):
+		remove_album = 'DELETE FROM album WHERE id = ?'
+		# the comma after id is because the execute query from sqlite takes only tuples as second parameters
+		self.db.executeQueryWrite(remove_album, (id,))
 		return self._albums.pop(id, None)
 
 	def display(self):
