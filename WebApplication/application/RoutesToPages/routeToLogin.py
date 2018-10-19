@@ -1,7 +1,9 @@
-from flask import Flask,render_template, redirect, session, flash, make_response, g, request
+from flask import Flask,render_template, redirect, session, flash, make_response, g, request, url_for
 from application import app
 from application import userController
 from application.Classes.forms import LoginForm
+from application.CommonDefinitions.HelperFunctions import is_logged
+
 import json
 
 app.config['SECRET_KEY'] = 'SOEN_343'
@@ -9,6 +11,7 @@ app.config['SECRET_KEY'] = 'SOEN_343'
 
 # Login Template
 @app.route('/login', methods=['GET', 'POST'])
+@is_logged
 def login():
 
 	# import from Classes/forms
@@ -38,7 +41,7 @@ def login():
 			# Display message after being redirected to home page
 			flash('You are now logged in!', 'success')
 
-			return redirect('/index')
+			return redirect(url_for('index'))
 			
 	return render_template('login.html', form=form)
 
