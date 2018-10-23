@@ -1,6 +1,9 @@
 class Movie:
 	def __init__(self, arguments):
-		self._id = arguments['id']
+		if 'id' in arguments:
+			self._id = arguments['id']
+		else:
+			self._id = 0
 		self._title = arguments['title']
 		self._director = arguments['director']
 		self._producers = arguments['producers']

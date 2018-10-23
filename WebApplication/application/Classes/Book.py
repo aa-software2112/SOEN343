@@ -1,6 +1,9 @@
 class Book:
 	def __init__(self, attributes):
-		self._id = attributes['id']
+		if 'id' in attributes:
+			self._id = attributes['id']
+		else:
+			self._id = 0
 		self._author = attributes['author']
 		self._title = attributes['title']
 		self._format = attributes['format']

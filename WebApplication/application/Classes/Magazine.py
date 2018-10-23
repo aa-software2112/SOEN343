@@ -1,6 +1,9 @@
 class Magazine:
 	def __init__(self,arguments):
-		self._id = arguments['id']
+		if 'id' in arguments:
+			self._id = arguments['id']
+		else:
+			self._id = 0
 		self._title = arguments['title']
 		self._publisher = arguments['publisher']
 		self._year_of_publication = arguments['year_of_publication']

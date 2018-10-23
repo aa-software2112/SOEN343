@@ -1,6 +1,10 @@
 from application.Controllers.UserController import UserController
 from application.Classes.ClientContainer import Client
 import application.CommonDefinitions.HelperFunctions as HelperFunctions
+from application.Classes.Album import Album
+from application.Classes.Book import Book
+from application.Classes.Magazine import Magazine
+from application.Classes.Movie import Movie
 
 class AdminController(UserController):
 	
@@ -72,23 +76,30 @@ class AdminController(UserController):
 	def view_inventory(self):
 		return self._catalog_controller.get_all_catalogs()
 
-	def add_new_book(self, book):
-		return self._catalog_controller.add_book_to_catalog(book)
+	def add_new_book(self, request_form):
+		return self._catalog_controller.add_book_to_catalog(Book(request_form))
 
-	def add_new_magazine(self, magazine):
-		return self._catalog_controller.add_magazine_to_catalog(magazine)
+	def add_new_magazine(self, request_form):
+		return self._catalog_controller.add_magazine_to_catalog(Magazine(request_form))
 	
-	def add_new_album(self, album):
-		return self._catalog_controller.add_album_to_catalog(album)
+	def add_new_album(self, request_form):
+		return self._catalog_controller.add_album_to_catalog(Album(request_form))
 
-	def add_new_movie(self, movie):
-		return self._catalog_controller.add_movie_to_catalog(movie)
+	def add_new_movie(self, request_form):
+		return self._catalog_controller.add_movie_to_catalog(Movie(request_form))
 
-	def modify_book(self, modified_book):
-		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.BOOK_TYPE].modify(modified_book)
+	#Modify takes a dictionary from the request form and passes an object created with the request form
+	def modify_book(self, request_form):
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.BOOK_TYPE].modify(Book(request_form))
 
-	def modify_magazine(self, modified_magazine):
-		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.MAGAZINE_TYPE].modify(modified_magazine)
+	def modify_magazine(self, request_form):
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.MAGAZINE_TYPE].modify(Magazine(request_form))
+
+	def modify_album(self, request_form):
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.ALBUM_TYPE].modify(Album(request_form))
+
+	def modify_movie(self, request_form):
+		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.MOVIE_TYPE].modify(Movie(request_form))
 
 	def get_book_by_id(self,id):
 		return self._catalog_controller.get_book_by_id(id)
@@ -96,17 +107,11 @@ class AdminController(UserController):
 	def get_magazine_by_id(self,id):
 		return self._catalog_controller.get_magazine_by_id(id)
 
-	def modify_album(self, modified_album):
-		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.ALBUM_TYPE].modify(modified_album)
-
 	def get_album_by_id(self,id):
 		return self._catalog_controller.get_album_by_id(id)
-  
+
 	def get_movie_by_id(self,id):
 		return self._catalog_controller.get_movie_by_id(id)
-
-	def modify_movie(self, modified_movie):
-		self._catalog_controller.view_catalog_inventory()[self._catalog_controller.MOVIE_TYPE].modify(modified_movie)
 
 	def delete_catalog(self, id, type):
 		self._catalog_controller.view_catalog_inventory()[type].remove(id)

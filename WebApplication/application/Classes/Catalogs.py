@@ -1,5 +1,4 @@
 import abc
-from application.Controllers.Controller import Controller
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -33,7 +32,7 @@ class Catalog(abc.ABC):
 class BookCatalog(Catalog):
 
 	def __init__(self, database):
-		Controller.__init__(self, database)
+		self.db = database
 		# private variable convention in python have '_' prefix
 		self._books = {}
 
@@ -54,13 +53,21 @@ class BookCatalog(Catalog):
 
 	def add(self, book, add_to_db):
 		# can act as a modify too!
-		self._books[book._id] = book
+
 		if add_to_db is True:
 			insert_new_book_query = 'INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13)' \
 					 'VALUES(?,?,?,?,?,?,?,?,?)'
 			tuple_for_insert_query = (book._author, book._title, book._format, book._pages, book._publisher, book._year_of_publication
 						, book._language, book._ISBN10, book._ISBN13)
-			self.db.executeQueryWrite(insert_new_book_query, tuple_for_insert_query)
+
+			# getting the id of the last inserted book
+			new_book_id = self.db.executeQueryWrite(insert_new_book_query, tuple_for_insert_query).lastrowid
+			# since the object created has by default id = 0, we have to set its id to the id obtained above
+			book._id = new_book_id
+			self._magazines[new_book_id] = book
+
+		else:
+			self._books[book._id] = book
 
 	def remove(self, id):
 		remove_book = 'DELETE FROM book WHERE id = ?'
@@ -77,7 +84,7 @@ class BookCatalog(Catalog):
 class MovieCatalog(Catalog):
 
 	def __init__(self, database):
-		Controller.__init__(self, database)
+		self.db = database
 		self._movies = {}
 
 	def get_all(self):
@@ -87,13 +94,21 @@ class MovieCatalog(Catalog):
 		return self._movies[id]
 
 	def add(self, movie, add_to_db):
-		self._movies[movie._id] = movie
+
 		if add_to_db is True:
 			insert_new_movie_query = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time)' \
 					 'VALUES(?,?,?,?,?,?,?,?,?)'
 			tuple_for_insert_query = (movie._title, movie._director, movie._producers, movie._actors, movie._language, movie._subtitles, movie._dubbed
 						 , movie._release_date, movie._runtime)
-			self.db.executeQueryWrite(insert_new_movie_query, tuple_for_insert_query)
+
+			#getting the id of the last inserted movie
+			new_movie_id = self.db.executeQueryWrite(insert_new_movie_query, tuple_for_insert_query).lastrowid
+			#since the object created has by default id = 0, we have to set its id to the id obtained above
+			movie._id = new_movie_id
+			self._magazines[new_movie_id] = movie
+
+		else:
+			self._movies[movie._id] = movie
 
 	def modify(self, modified_movie):
 
@@ -118,7 +133,7 @@ class MovieCatalog(Catalog):
 class MagazineCatalog(Catalog):
 
 	def __init__(self, database):
-		Controller.__init__(self, database)
+		self.db = database
 		self._magazines = {}
 
 	def get_all(self):
@@ -128,13 +143,21 @@ class MagazineCatalog(Catalog):
 		return self._magazines[id]
 
 	def add(self, magazine, add_to_db):
-		self._magazines[magazine._id] = magazine
 		if add_to_db is True:
+
 			insert_new_magazine_query = 'INSERT INTO magazine(title, publisher, year_of_publication, language, isbn_10, isbn_13)' \
 					 'VALUES(?,?,?,?,?,?)'
 			tuple_for_insert_query = (magazine._title, magazine._publisher, magazine._year_of_publication, magazine._language, magazine._ISBN10
 							,magazine._ISBN13)
-			self.db.executeQueryWrite(insert_new_magazine_query, tuple_for_insert_query)
+
+			# getting the id of the last inserted magazine
+			new_magazine_id = self.db.executeQueryWrite(insert_new_magazine_query, tuple_for_insert_query).lastrowid
+			# since the object created has by default id = 0, we have to set its id to the id obtained above
+			magazine._id = new_magazine_id
+			self._magazines[new_magazine_id] = magazine
+
+		else:
+			self._magazines[magazine._id] = magazine
 
 	def modify(self, modified_magazine):
 		modify_magazine_query = 'UPDATE magazine SET title = ?, publisher = ?, year_of_publication = ?, language = ?, isbn_10 = ?, isbn_13 = ?' \
@@ -158,7 +181,7 @@ class MagazineCatalog(Catalog):
 class AlbumCatalog(Catalog):
 
 	def __init__(self, database):
-		Controller.__init__(self, database)
+		self.db = database
 		self._albums = {}
 
 	def get_all(self):
@@ -167,19 +190,29 @@ class AlbumCatalog(Catalog):
 	def get(self, id):
 		return self._albums[id]
 
+
 	def add(self, album, add_to_db):
-		self._albums[album._id] = album
+
 		if add_to_db is True:
 			insert_new_album = 'INSERT INTO album(type, title, artist, label, release_date, asin) VALUES(?,?,?,?,?,?)'
 			tuple_for_insert_query = (album._type, album._title, album._artist, album._label, album._release_date, album._ASIN)
-			self.db.executeQueryWrite(insert_new_album, tuple_for_insert_query)
+
+			# getting the id of the last inserted album
+			new_album_id = self.db.executeQueryWrite(insert_new_album, tuple_for_insert_query).lastrowid
+			# since the object created has by default id = 0, we have to set its id to the id obtained above
+			album._id = new_album_id
+			self._albums[new_album_id] = album
+
+		else:
+			self._albums[album._id]=album
+
 
 	def modify(self, modified_album):
 		modify_album_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
 		tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist, modified_album._label
-								  , modified_album._release_date, modified_album._ASIN, modified_album._id)
+								  , modified_album._release_date, modified_album._ASIN, int(modified_album._id))
 		self.db.executeQueryWrite(modify_album_query,tuple_for_modify_query)
-		self._albums[modified_album.get_id()] = modified_album
+		self._albums[int(modified_album.get_id())] = modified_album
 
 	def remove(self, id):
 		remove_album = 'DELETE FROM album WHERE id = ?'

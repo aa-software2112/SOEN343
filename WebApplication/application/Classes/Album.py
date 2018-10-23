@@ -1,6 +1,9 @@
 class Album:
 	def __init__(self,arguments):
-		self._id = arguments['id']
+		if 'id' in arguments:
+			self._id = arguments['id']
+		else:
+			self._id = 0
 		self._type = arguments['type']
 		self._title = arguments['title']
 		self._artist = arguments['artist']
