@@ -1,6 +1,7 @@
 class Book:
 	def __init__(self, attributes):
-		if 'id' in attributes:
+		# Currently from CatalogController, the .fetchall() returns a sqlite3.row object, so I convert it to a dictionary to search the 'id' key
+		if 'id' in dict(attributes):
 			self._id = attributes['id']
 		else:
 			self._id = 0

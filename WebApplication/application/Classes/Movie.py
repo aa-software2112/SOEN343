@@ -1,6 +1,7 @@
 class Movie:
 	def __init__(self, arguments):
-		if 'id' in arguments:
+		# Currently from CatalogController, the .fetchall() returns a sqlite3.row object, so I convert it to a dictionary to search the 'id' key
+		if 'id' in dict(arguments):
 			self._id = arguments['id']
 		else:
 			self._id = 0

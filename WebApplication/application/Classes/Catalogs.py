@@ -64,7 +64,7 @@ class BookCatalog(Catalog):
 			new_book_id = self.db.executeQueryWrite(insert_new_book_query, tuple_for_insert_query).lastrowid
 			# since the object created has by default id = 0, we have to set its id to the id obtained above
 			book._id = new_book_id
-			self._magazines[new_book_id] = book
+			self._books[new_book_id] = book
 
 		else:
 			self._books[book._id] = book
@@ -105,7 +105,7 @@ class MovieCatalog(Catalog):
 			new_movie_id = self.db.executeQueryWrite(insert_new_movie_query, tuple_for_insert_query).lastrowid
 			#since the object created has by default id = 0, we have to set its id to the id obtained above
 			movie._id = new_movie_id
-			self._magazines[new_movie_id] = movie
+			self._movies[new_movie_id] = movie
 
 		else:
 			self._movies[movie._id] = movie
