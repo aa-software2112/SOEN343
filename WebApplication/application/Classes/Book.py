@@ -1,6 +1,10 @@
 class Book:
 	def __init__(self, attributes):
-		self._id = attributes['id']
+		# Currently from CatalogController, the .fetchall() returns a sqlite3.row object, so I convert it to a dictionary to search the 'id' key
+		if 'id' in dict(attributes):
+			self._id = attributes['id']
+		else:
+			self._id = 0
 		self._author = attributes['author']
 		self._title = attributes['title']
 		self._format = attributes['format']
