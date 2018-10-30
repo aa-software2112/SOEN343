@@ -46,11 +46,15 @@
       </nav>
       <main role="main" class="container">
          <div class="starter-template">
+            {% if g.user %}
             <h1> 
                 {% block pageTitle %} 
-			        Welcome {{ g.user["username"]}}!
+			        Welcome {{ g.user["firstName"]}}!
 				{% endblock %}
             </h1>
+            {% else %}
+                <h1> Welcome to MediaMagnet! Please login.</h1>
+            {% endif %}
          </div>
 
         {% include '/includes/messages.html' %}

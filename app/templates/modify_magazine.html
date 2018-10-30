@@ -11,7 +11,8 @@ Modify a Magazine
 {% endif %}
 <div class="card">
    <div class="card-body">
-      <form action="/modifyMagazine" method="post">
+      <form action="/modifyCatalog" method="post">
+        <input type="hidden" name="type" value="3">
          <div class="form-group">
             <label for="title">Title</label>
             <input type="hidden" name="id" value="{{magazine._id}}">

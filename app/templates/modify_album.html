@@ -11,7 +11,8 @@ Modify an Album Type
 {% endif %}
 <div class="card">
    <div class="card-body">
-      <form action="/modifyAlbum" method="post">
+      <form action="/modifyCatalog" method="post">
+        <input type="hidden" name="type" value="4">
          <div class="form-group">
             <label for="type">Type</label>
             <input type="hidden" name="id" value="{{album._id}}">

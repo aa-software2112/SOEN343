@@ -1,5 +1,5 @@
 """
-This file includes all paths and filenames common across entire application
+This module includes all paths and filenames common across entire application
 """
 
 DATABASE_NAME = "SOEN343_DATABASE.db"

@@ -49,7 +49,7 @@ class BookCatalog(Catalog):
         tuple_for_modify_query = (modified_book._author, modified_book._title, modified_book._format, modified_book._pages, modified_book._publisher,
                                   modified_book._year_of_publication, modified_book._language, modified_book._ISBN10, modified_book._ISBN13, modified_book._id)
         self.db.execute_query_write(modify_book_query, tuple_for_modify_query)
-        self._books[modified_book.get_id()] = modified_book
+        self._books[int(modified_book.get_id())] = modified_book
 
     def add(self, book, add_to_db):
         # can act as a modify too!
@@ -122,7 +122,7 @@ class MovieCatalog(Catalog):
         tuple_for_modify_query = (modified_movie._title, modified_movie._director, modified_movie._producers, modified_movie._actors, modified_movie._language,
                                   modified_movie._subtitles, modified_movie._dubbed, modified_movie._release_date, modified_movie._runtime, modified_movie._id)
         self.db.execute_query_write(modify_movie_query, tuple_for_modify_query)
-        self._movies[modified_movie.get_id()] = modified_movie
+        self._movies[int(modified_movie.get_id())] = modified_movie
 
     def remove(self, id):
         remove_movie = 'DELETE FROM movie WHERE id = ?'
@@ -175,7 +175,7 @@ class MagazineCatalog(Catalog):
                                   modified_magazine._language, modified_magazine._ISBN10, modified_magazine._ISBN13, modified_magazine._id)
         self.db.execute_query_write(
             modify_magazine_query, tuple_for_modify_query)
-        self._magazines[modified_magazine.get_id()] = modified_magazine
+        self._magazines[int(modified_magazine.get_id())] = modified_magazine
 
     def remove(self, id):
         remove_magazine = 'DELETE FROM magazine WHERE id = ?'

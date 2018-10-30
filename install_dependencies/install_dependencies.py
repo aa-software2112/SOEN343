@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 
 MAJOR_VERSION_INDEX = 0
 PYTHON_VERSION = 3
@@ -20,30 +21,30 @@ version_of_libraries = ["1.0.2", "1.15.1", "1.2.11", "0.14.2", "0.9.1"]
 
 # Make sure python3.X is running
 if not (sys.version_info[MAJOR_VERSION_INDEX] == PYTHON_VERSION):
-	print("Not running python 3!")
-	sys.exit(0)
+    print("Not running python 3!")
+    sys.exit(0)
 
 # Compensate for OS
 this_operating_system = sys.platform.lower()
 
 if this_operating_system == WINDOWS:
-	GENERIC_PYTHON = WINDOWS_PYTHON
-	
+    GENERIC_PYTHON = WINDOWS_PYTHON
+
 elif this_operating_system == OSX:
-	GENERIC_PYTHON = OSX_PYTHON
-	
+    GENERIC_PYTHON = OSX_PYTHON
+
 elif this_operating_system == LINUX:
-	GENERIC_PYTHON = LINUX_PYTHON
-	
+    GENERIC_PYTHON = LINUX_PYTHON
+
 else:
-	print("Not on windows, osx or linux!")
-	sys.exit(0)
-	
+    print("Not on windows, osx or linux!")
+    sys.exit(0)
+
 # Upgrade pip
 os.system(GENERIC_PYTHON + " -m pip install --upgrade pip")
 
 # Install libraries with correct version
 for library, version in zip(list_of_libraries, version_of_libraries):
-	os.system(GENERIC_PYTHON + " -m pip install " + library + "==" + version)
+    os.system(GENERIC_PYTHON + " -m pip install " + library + "==" + version)
 
 print("\nPackages installed successfully.")
