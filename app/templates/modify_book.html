@@ -13,7 +13,8 @@ Modify a Book
 {% endif %}
 <div class="card">
     <div class="card-body">
-		<form action="/modifyBook" method="post">
+		<form action="/modifyCatalog" method="post">
+          <input type="hidden" name="type" value="1">
 		  <div class="form-group">
 		    <label for="author">Author</label>
               <input type="hidden" name="id" value="{{book._id}}">

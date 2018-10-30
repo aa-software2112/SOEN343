@@ -1,4 +1,6 @@
-# This module contains general helper functions.
+"""
+This module contains general helper functions.
+"""
 from functools import wraps
 from flask import g, redirect, request, url_for, flash
 import time

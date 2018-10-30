@@ -11,7 +11,8 @@ Modify a Movie
 {% endif %}
 <div class="card">
    <div class="card-body">
-      <form action="/modifyMovie" method="post">
+      <form action="/modifyCatalog" method="post">
+        <input type="hidden" name="type" value="2">
          <div class="form-group">
             <label for="title">Title</label>
             <input type="hidden" name="id" value="{{movie._id}}">

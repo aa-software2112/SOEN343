@@ -13,11 +13,14 @@ class UserController(Controller):
         print("User Controller")
 
     # function takes self and a string "username" to get the user from the client table.
-    # returns list with client information or emptylist if client doesn't exist in database
+    # returns list with client information or emptylist if client doesn't
+    # exist in database
     def get_client_by_username(self, username):
-        get_client_cursor = self.db.execute_query("Select * From client WHERE username = ?", (username,))
+        get_client_cursor = self.db.execute_query(
+            "Select * From client WHERE username = ?", (username,))
 
-        # using fectchmany(1) because there is only one record with this username.
+        # using fectchmany(1) because there is only one record with this
+        # username.
         found_client = get_client_cursor.fetchmany(1)
         found_client_list = []
 
@@ -32,9 +35,11 @@ class UserController(Controller):
             return found_client_list
 
     # function takes self and a string "email" to get the user from the client table.
-    # returns list with client information or emptylist if client doesn't exist in database
+    # returns list with client information or emptylist if client doesn't
+    # exist in database
     def get_client_by_email(self, email):
-        get_client_cursor = self.db.execute_query("SELECT * FROM client WHERE email = ?", (email,))
+        get_client_cursor = self.db.execute_query(
+            "SELECT * FROM client WHERE email = ?", (email,))
 
         # using fectchmany(1) because there is only one record with this email.
         found_client = get_client_cursor.fetchmany(1)
@@ -51,12 +56,15 @@ class UserController(Controller):
             return found_client_list
 
     # function takes self and a string "username" & "password" to get the client from the client table.
-    # if client exits, returns list with client information and updates value in attribute isLogged to 1. Returns emptylist if client doesn't exist in database
+    # if client exits, returns list with client information and updates value
+    # in attribute isLogged to 1. Returns emptylist if client doesn't exist in
+    # database
     def get_client_by_password(self, username, password):
         get_user_cursor = self.db.execute_query("SELECT * FROM client WHERE username = ? AND password = ?",
                                                 (username, password))
 
-        # using fectchmany(1) because there is only one record with this username & password.
+        # using fectchmany(1) because there is only one record with this
+        # username & password.
         found_user = get_user_cursor.fetchmany(1)
         found_user_list = []
 
@@ -64,13 +72,15 @@ class UserController(Controller):
         for row in found_user:
             matched_user = (User(row))
 
-        # If the cursor response returns an emtpy list, this means the login isn't successful
+        # If the cursor response returns an emtpy list, this means the login
+        # isn't successful
         if found_user == []:
             print("There are no client with given username and password")
             return found_user_list
         else:
             # Set isLogged to 1 when the login is successful
-            self.db.execute_query_write("UPDATE client SET isLogged = 1 WHERE username = ?", (username,))
+            self.db.execute_query_write(
+                "UPDATE client SET isLogged = 1 WHERE username = ?", (username,))
 
             # Checks for Admin
             if matched_user.isAdmin == 0:
@@ -87,7 +97,8 @@ class UserController(Controller):
     # function takes self and username
     # updates value in attribute isLogged to 0.
     def logout_client(self, username):
-        self.db.execute_query_write("UPDATE client SET isLogged = 0 WHERE username = ?", (username,))
+        self.db.execute_query_write(
+            "UPDATE client SET isLogged = 0 WHERE username = ?", (username,))
         print("Client has been logged out")
 
     # function takes self and several values to create a client

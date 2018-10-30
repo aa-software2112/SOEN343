@@ -9,11 +9,12 @@ Catalog Viewer
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <a href ="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info float-right my-3" style="cursor:pointer">
-            <i class="fas fa-plus"></i>
+        <a href ="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info btn-lg btn-block" style="cursor:pointer">
+            Add Entry
         </a>
     </div>
 </div>
+<br>
 <ul class="nav nav-tabs nav-justified">
     <li class="nav-item">
         <a class="nav-link active" href="#Books" role="tab" data-toggle="tab"> Books </a>
@@ -28,7 +29,6 @@ Catalog Viewer
         <a class="nav-link" href="#Magazines" role="tab" data-toggle="tab"> Magazines </a>
     </li>
 </ul>
-
 <div class="tab-content">
     <div class="tab-pane active" role="tabpanel" id="Books">
         <table class="table table-hover">
@@ -61,10 +61,11 @@ Catalog Viewer
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
                     <td>
-                        <form action="/adminView/modifyBookForm" method="post">
-                        <button type="submit" href="{{url_for('modify_book_form')}}" name="modify_book" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
-                            <i class="far fa-edit"></i>
-                        </button>
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="1">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -103,10 +104,11 @@ Catalog Viewer
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._runtime}}</td>
                     <td>
-                        <form action="/adminView/modifyMovieForm" method="post">
-                        <button type="submit" href="{{url_for('modify_movie_form')}}" name="modify_movie" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
-                            <i class="far fa-edit"></i>
-                        </button>
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="2">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -139,10 +141,11 @@ Catalog Viewer
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._ASIN}}</td>
                     <td>
-                        <form action="/adminView/modifyAlbumForm" method="post">
-                        <button type="submit" href="{{url_for('modify_album_form')}}" name="modify_album" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
-                            <i class="far fa-edit"></i>
-                        </button>
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="4">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -175,10 +178,11 @@ Catalog Viewer
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
                     <td>
-                        <form action="/adminView/modifyMagazineForm" method="post">
-                        <button type="submit" href="{{url_for('modify_magazine_form')}}" name="modify_magazine" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
-                            <i class="far fa-edit"></i>
-                        </button>
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="3">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -187,6 +191,4 @@ Catalog Viewer
         </table>
     </div>
 </div>
-
-
 {% endblock %}
