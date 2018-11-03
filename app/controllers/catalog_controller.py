@@ -79,14 +79,5 @@ class CatalogController(Controller):
     def view_catalog_inventory(self):
         return self._inventory
 
-    def get_book_by_id(self, id):
-        return self.get_all_catalogs()['books'].get(id)
-
-    def get_magazine_by_id(self, id):
-        return self.get_all_catalogs()['magazines'].get(id)
-
-    def get_album_by_id(self, id):
-        return self.get_all_catalogs()['albums'].get(id)
-
-    def get_movie_by_id(self, id):
-        return self.get_all_catalogs()['movies'].get(id)
+    def get_catalog_entry_by_id(self,catalog_type, id):
+        return self.view_catalog_inventory()[catalog_type].get(id)
