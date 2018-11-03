@@ -64,29 +64,14 @@ class CatalogController(Controller):
                             }
         return dict_of_catalogs
 
-    def add_book_to_catalog(self, book):
-        self._inventory[CatalogController.BOOK_TYPE].add(book, True)
-
-    def add_movie_to_catalog(self, movie):
-        self._inventory[CatalogController.MOVIE_TYPE].add(movie, True)
-
-    def add_magazine_to_catalog(self, magazine):
-        self._inventory[CatalogController.MAGAZINE_TYPE].add(magazine, True)
-
-    def add_album_to_catalog(self, album):
-        self._inventory[CatalogController.ALBUM_TYPE].add(album, True)
+    def add_entry_to_catalog(self, type, new_record_object):
+        self._inventory[type].add(new_record_object, True)
 
     def view_catalog_inventory(self):
         return self._inventory
 
-    def get_book_by_id(self, id):
-        return self.get_all_catalogs()['books'].get(id)
+    def modify_catalog_entry(self, type, modified_entry_object):
+        return self._inventory[type].modify(modified_entry_object)
 
-    def get_magazine_by_id(self, id):
-        return self.get_all_catalogs()['magazines'].get(id)
-
-    def get_album_by_id(self, id):
-        return self.get_all_catalogs()['albums'].get(id)
-
-    def get_movie_by_id(self, id):
-        return self.get_all_catalogs()['movies'].get(id)
+    def get_catalog_entry_by_id(self,catalog_type, id):
+        return self.view_catalog_inventory()[catalog_type].get(id)
