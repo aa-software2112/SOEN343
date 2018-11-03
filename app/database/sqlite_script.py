@@ -101,6 +101,46 @@ def create_client(conn, client):
     cur = conn.cursor()
     cur.execute(sql, client)
 
+def create_book_copy(conn, book):
+    """
+    Function takes database connection object 'conn' and a book copy
+    creates a new book copy into the book copy table
+    """
+    sql = ''' INSERT INTO book_copy(book_id,isLoaned)
+              VALUES(?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, book)
+
+def create_magazine_copy(conn, magazine):
+    """
+    Function takes database connection object 'conn' and a magazine copy
+    creates a new magazine copy into the magazine copy table
+    """
+    sql = ''' INSERT INTO magazine_copy(magazine_id,isLoaned)
+              VALUES(?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, magazine)
+
+def create_movie_copy(conn, movie):
+    """
+    Function takes database connection object 'conn' and a movie copy
+    creates a new movie copy into the movie copy table
+    """
+    sql = ''' INSERT INTO movie_copy(movie_id,isLoaned)
+              VALUES(?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, movie)
+
+def create_album_copy(conn, album):
+    """
+    Function takes database connection object 'conn' and a album copy
+    creates a new album copy into the album copy table
+    """
+    sql = ''' INSERT INTO album_copy(album_id,isLoaned)
+              VALUES(?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, album)
+
 
 def close_connection(conn):
     """
@@ -201,25 +241,28 @@ def initializeAndFillDatabase(pathToDB):
     #FOREIGN KEY(book_id) REFERENCES book(id),
     sql_create_book_copy_table = """CREATE TABLE IF NOT EXISTS book_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    book_id INTEGER NOT NULL,
+                                    book_id INTEGER,
                                     isLoaned INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates magazine_copy table with columns/attributes
     sql_create_magazine_copy_table = """CREATE TABLE IF NOT EXISTS magazine_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    magazine_id INTEGER,
                                     isLoaned INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates movie_copy table with columns/attributes
     sql_create_movie_copy_table = """CREATE TABLE IF NOT EXISTS movie_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    movie_id INTEGER,
                                     isLoaned INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates album_copy table with columns/attributes
     sql_create_album_copy_table = """CREATE TABLE IF NOT EXISTS album_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    album_id INTEGER,
                                     isLoaned INTEGER NOT NULL
                                 );"""
 
@@ -277,29 +320,37 @@ def initializeAndFillDatabase(pathToDB):
             book = (
             f.name(), f.catch_phrase(), book_types[f.random_int() % len(book_types)], f.random_int() % MAX_BOOK_PAGES,
             f.last_name(), (f.random_int() % 100) + 1910, languages[f.random_int() % len(languages)], f.isbn10(),
-            f.isbn13(), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
+            f.isbn13(), 3, 3)
+            book_copy = (b+1, 0)
+            create_book(conn, book)
             # Create copies of the same book - also done for every record type below
             for cop in range(COPIES):
-                create_book(conn, book)
+                create_book_copy(conn, book_copy)
 
         for m in range(NUM_MAGAZINES):
             magazine = (f.word().upper(), f.last_name(), f.random_int() % 100 + 1910,
-                        languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13(), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
+                        languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13(), 3, 3)
+            magazine_copy = (m+1, 0)
+            create_magazine(conn, magazine)
             for cop in range(COPIES):
-                create_magazine(conn, magazine)
+                create_magazine_copy(conn, magazine_copy)
 
         for m in range(NUM_MOVIES):
             movie = (movie_name(), f.name(), names(), names(), languages[f.random_int() % len(languages)],
                      languages[f.random_int() % len(languages)], languages[f.random_int() % len(languages)], date(),
-                     60 + f.random_int() % (2 * 60), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
+                     60 + f.random_int() % (2 * 60), 3, 3)
+            movie_copy = (m+1, 0)
+            create_movie(conn, movie)
             for cop in range(COPIES):
-                create_movie(conn, movie)
+                create_movie_copy(conn, movie_copy)
 
         for a in range(NUM_ALBUMS):
             album = (
-            album_types[f.random_int() % len(album_types)], album_name(), f.name(), f.word().upper(), date(), asin(), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
+            album_types[f.random_int() % len(album_types)], album_name(), f.name(), f.word().upper(), date(), asin(), 3, 3)
+            album_copy = (a+1, 0)
+            create_album(conn, album)
             for cop in range(COPIES):
-                create_album(conn, album)
+                create_album_copy(conn, album_copy)
 
         for u in range(NUM_USERS):
             client = (
