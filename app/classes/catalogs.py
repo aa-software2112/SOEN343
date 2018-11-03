@@ -1,4 +1,5 @@
 import abc
+from app.common_definitions.helper_functions import convert_date_time_to_epoch as to_epoch
 
 
 class Catalog(abc.ABC):
@@ -105,7 +106,7 @@ class MovieCatalog(Catalog):
             insert_new_movie_query = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time)' \
                 'VALUES(?,?,?,?,?,?,?,?,?)'
             tuple_for_insert_query = (movie._title, movie._director, movie._producers, movie._actors,
-                                      movie._language, movie._subtitles, movie._dubbed, movie._release_date, movie._runtime)
+                                      movie._language, movie._subtitles, movie._dubbed, to_epoch(movie._release_date), movie._runtime)
 
             # getting the id of the last inserted movie
             new_movie_id = self.db.execute_query_write(
@@ -123,7 +124,7 @@ class MovieCatalog(Catalog):
         modify_movie_query = 'UPDATE movie SET title = ?, director = ?, producers = ?, actors = ?, language = ?, subtitles = ?' \
             ', dubbed = ?, release_date = ?, run_time = ? WHERE id = ?'
         tuple_for_modify_query = (modified_movie._title, modified_movie._director, modified_movie._producers, modified_movie._actors, modified_movie._language,
-                                  modified_movie._subtitles, modified_movie._dubbed, modified_movie._release_date, modified_movie._runtime, modified_movie._id)
+                                  modified_movie._subtitles, modified_movie._dubbed, to_epoch(modified_movie._release_date), modified_movie._runtime, modified_movie._id)
         self.db.execute_query_write(modify_movie_query, tuple_for_modify_query)
         self._movies[int(modified_movie.get_id())] = modified_movie
 
@@ -210,7 +211,7 @@ class AlbumCatalog(Catalog):
         if add_to_db is True:
             insert_new_album = 'INSERT INTO album(type, title, artist, label, release_date, asin) VALUES(?,?,?,?,?,?)'
             tuple_for_insert_query = (
-                album._type, album._title, album._artist, album._label, album._release_date, album._ASIN)
+                album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN)
 
             # getting the id of the last inserted album
             new_album_id = self.db.execute_query_write(
@@ -226,7 +227,7 @@ class AlbumCatalog(Catalog):
     def modify(self, modified_album):
         modify_album_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
         tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
-                                  modified_album._label, modified_album._release_date, modified_album._ASIN, int(modified_album._id))
+                                  modified_album._label, to_epoch(modified_album._release_date), modified_album._ASIN, int(modified_album._id))
         self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
         self._albums[int(modified_album.get_id())] = modified_album
 

@@ -10,7 +10,8 @@ class Magazine:
             self._id = 0
         self._title = arguments['title']
         self._publisher = arguments['publisher']
-        self._year_of_publication = arguments['year_of_publication']
+        # Make sure it is in integer format
+        self._year_of_publication = int(arguments['year_of_publication'])        
         self._language = arguments['language']
         self._ISBN10 = arguments['isbn_10']
         self._ISBN13 = arguments['isbn_13']
@@ -21,6 +22,6 @@ class Magazine:
 
     def __str__(self):
 
-        return "Magazine | ID: " + str(self._id) + " TITLE: " + self._title +  " PUBLISHER: " + self._publisher + " YEAR: " + self._year_of_publication + \
+        return "Magazine | ID: " + str(self._id) + " TITLE: " + self._title +  " PUBLISHER: " + self._publisher + " YEAR: " + str(self._year_of_publication) + \
             " LANGUAGE: " + self._language + " ISBN10: " + \
             self._ISBN10 + " ISBN13: " + self._ISBN13

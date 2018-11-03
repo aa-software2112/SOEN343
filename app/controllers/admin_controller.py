@@ -84,61 +84,34 @@ class AdminController(UserController):
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
 
-    def get_book_by_id(self, id):
-        return self._catalog_controller.get_book_by_id(id)
+    def get_catalog_entry_by_id(self,catalog_type, id):
+        return self._catalog_controller.get_catalog_entry_by_id(catalog_type, id)
 
-    def get_magazine_by_id(self, id):
-        return self._catalog_controller.get_magazine_by_id(id)
+    def add_entry_to_catalog(self, type, request_form):
+        if (type == self._catalog_controller.BOOK_TYPE):
+            return self._catalog_controller.add_entry_to_catalog(type, Book(request_form))
 
-    def get_album_by_id(self, id):
-        return self._catalog_controller.get_album_by_id(id)
+        elif (type == self._catalog_controller.MOVIE_TYPE):
+            return self._catalog_controller.add_entry_to_catalog(type, Movie(request_form))
 
-    def get_movie_by_id(self, id):
-        return self._catalog_controller.get_movie_by_id(id)
+        elif (type == self._catalog_controller.MAGAZINE_TYPE):
+            return self._catalog_controller.add_entry_to_catalog(type, Magazine(request_form))
 
-    def get_catalog_copies_by_id(self, id, type):
-        if (type == 1):
-            return self._catalog_controller.view_catalog_inventory(
-            )[self._catalog_controller.BOOK_TYPE].(id)
-
-        elif (type == 2):
-            return self._catalog_controller.get_movie_copies_by_id(id)
-
-        elif (type == 3):
-            return self._catalog_controller.get_magazine_copies_by_id(id)
-
-        elif (type == 4):
-            return self._catalog_controller.get_album_copies_by_id(id)
-
-    def add_new_catalog(self, type, request_form):
-        if (type == 1):
-            return self._catalog_controller.add_book_to_catalog(Book(request_form))
-
-        elif (type == 2):
-            return self._catalog_controller.add_movie_to_catalog(Movie(request_form))
-
-        elif (type == 3):
-            return self._catalog_controller.add_magazine_to_catalog(Magazine(request_form))
-
-        elif (type == 4):
-            return self._catalog_controller.add_album_to_catalog(Album(request_form))
+        elif (type == self._catalog_controller.ALBUM_TYPE):
+            return self._catalog_controller.add_entry_to_catalog(type, Album(request_form))
 
     def modify_catalog(self, type, request_form):
-        if (type == 1):
-            self._catalog_controller.view_catalog_inventory(
-            )[self._catalog_controller.BOOK_TYPE].modify(Book(request_form))
+        if (type == self._catalog_controller.BOOK_TYPE):
+            self._catalog_controller.modify_catalog_entry(type, Book(request_form))
 
-        elif (type == 2):
-            self._catalog_controller.view_catalog_inventory(
-            )[self._catalog_controller.MOVIE_TYPE].modify(Movie(request_form))
+        elif (type == self._catalog_controller.MOVIE_TYPE):
+            self._catalog_controller.modify_catalog_entry(type, Movie(request_form))
 
-        elif (type == 3):
-            self._catalog_controller.view_catalog_inventory(
-            )[self._catalog_controller.MAGAZINE_TYPE].modify(Magazine(request_form))
+        elif (type == self._catalog_controller.MAGAZINE_TYPE):
+            self._catalog_controller.modify_catalog_entry(type, Magazine(request_form))
 
-        elif (type == 4):
-            self._catalog_controller.view_catalog_inventory(
-            )[self._catalog_controller.ALBUM_TYPE].modify(Album(request_form))
+        elif (type == self._catalog_controller.ALBUM_TYPE):
+            self._catalog_controller.modify_catalog_entry(type, Album(request_form))
 
     def delete_catalog(self, id, type):
         self._catalog_controller.view_catalog_inventory()[type].remove(id)

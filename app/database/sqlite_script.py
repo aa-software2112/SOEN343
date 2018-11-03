@@ -132,7 +132,7 @@ def initializeAndFillDatabase(pathToDB):
                                     format TEXT NOT NULL,
                                     pages INTEGER NOT NULL,
                                     publisher TEXT NOT NULL,
-                                    year_of_publication TEXT NOT NULL,
+                                    year_of_publication INTEGER NOT NULL,
                                     language TEXT NOT NULL,
                                     isbn_10 TEXT NOT NULL,
                                     isbn_13 TEXT NOT NULL, 
@@ -144,7 +144,7 @@ def initializeAndFillDatabase(pathToDB):
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                                     title TEXT NOT NULL,
                                     publisher TEXT NOT NULL,
-                                    year_of_publication TEXT NOT NULL,
+                                    year_of_publication INTEGER NOT NULL,
                                     language TEXT NOT NULL,
                                     isbn_10 TEXT NOT NULL,
                                     isbn_13 TEXT NOT NULL
@@ -160,7 +160,7 @@ def initializeAndFillDatabase(pathToDB):
                                     language TEXT NOT NULL,
                                     subtitles TEXT NOT NULL,
                                     dubbed TEXT NOT NULL,
-                                    release_date TEXT NOT NULL,
+                                    release_date INTEGER NOT NULL,
                                     run_time INTEGER NOT NULL
                                 );"""
 
@@ -171,7 +171,7 @@ def initializeAndFillDatabase(pathToDB):
                                     title TEXT NOT NULL,
                                     artist TEXT NOT NULL,
                                     label TEXT NOT NULL,
-                                    release_date TEXT NOT NULL,
+                                    release_date INTEGER NOT NULL,
                                     asin TEXT NOT NULL
                                 );"""
 
@@ -207,12 +207,13 @@ def initializeAndFillDatabase(pathToDB):
 
     with conn:
 
-        NUM_BOOKS = 150
+        COPIES = 3
+        NUM_BOOKS = 50
         MAX_BOOK_PAGES = 1500
-        NUM_MAGAZINES = 175
-        NUM_MOVIES = 100
-        NUM_ALBUMS = 200
-        NUM_USERS = 300
+        NUM_MAGAZINES = 50
+        NUM_MOVIES = 50
+        NUM_ALBUMS = 50
+        NUM_USERS = 50
         book_types = ['Paperback', 'Hardcover', 'Graphic', 'Coffee Table Book', 'Textbook']
         languages = ['English', 'French', 'Italian', 'Spanish', 'Greek', 'Russian', 'German']
         album_types = ["Vinyl", "CD", "Cassette"]
@@ -220,7 +221,7 @@ def initializeAndFillDatabase(pathToDB):
         movie_name = lambda: "The " + f.job() if f.random_int() % 2 == 0 else " ".join(f.words()).capitalize()
         album_name = movie_name
         names = lambda: ", ".join([f.name() for x in range(1 + f.random_int() % 9)])
-        date = lambda: " ".join([f.month_name()[:3], f.day_of_month(), f.year()])
+        date = lambda: int(time.time() - f.random_int() * f.random_int())
         asin = lambda: "".join(
             [f.random_letter().upper() if f.random_int() % 2 == 0 else str(f.random_digit()) for x in range(10)])
         phone_number = lambda: "".join([str(f.random_digit()) for x in range(3)]) + "-" + "".join(
@@ -232,31 +233,37 @@ def initializeAndFillDatabase(pathToDB):
         for b in range(NUM_BOOKS):
             book = (
             f.name(), f.catch_phrase(), book_types[f.random_int() % len(book_types)], f.random_int() % MAX_BOOK_PAGES,
-            f.last_name(), str(f.random_int() % 100 + 1910), languages[f.random_int() % len(languages)], f.isbn10(),
-            f.isbn13(), f.quantity())
-            create_book(conn, book)
+            f.last_name(), (f.random_int() % 100) + 1910, languages[f.random_int() % len(languages)], f.isbn10(),
+            f.isbn13())
+            # Create copies of the same book - also done for every record type below
+            for cop in range(COPIES):
+                create_book(conn, book)
 
         for m in range(NUM_MAGAZINES):
-            magazine = (f.word().upper(), f.last_name(), str(f.random_int() % 100 + 1910),
+            magazine = (f.word().upper(), f.last_name(), f.random_int() % 100 + 1910,
                         languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13())
-            create_magazine(conn, magazine)
+            for cop in range(COPIES):
+                create_magazine(conn, magazine)
 
         for m in range(NUM_MOVIES):
             movie = (movie_name(), f.name(), names(), names(), languages[f.random_int() % len(languages)],
                      languages[f.random_int() % len(languages)], languages[f.random_int() % len(languages)], date(),
                      60 + f.random_int() % (2 * 60))
-            create_movie(conn, movie)
+            for cop in range(COPIES):
+                create_movie(conn, movie)
 
         for a in range(NUM_ALBUMS):
             album = (
             album_types[f.random_int() % len(album_types)], album_name(), f.name(), f.word().upper(), date(), asin())
-            create_album(conn, album)
+            for cop in range(COPIES):
+                create_album(conn, album)
 
         for u in range(NUM_USERS):
             client = (
             f.first_name(), f.last_name(), f.address().replace("\n", ", "), f.email(), phone_number(), f.user_name(),
             f.password(), f.random_int() % 2, f.random_int() % 2, int(time.time() - f.random_int() * f.random_int()))
-            create_client(conn, client)
+            for cop in range(COPIES):
+                create_client(conn, client)
 
         client1 = ('Aaron', 'Doe', '1451 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student1@hotmail.com',
                    '514-555-0001', 'antman', 'password1', 0, 1, 1537207100)
