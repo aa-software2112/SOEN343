@@ -157,6 +157,19 @@ def modify_catalog():
     flash("Entry modified succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
 
+@app.route('/adminView/deleteViewRecords', methods=['GET', 'POST'])
+def delete_view_catalog():
+   
+    type = int(request.form["type"])
+    id = request.form["id"]
+    if (type == 1):
+        return render_template('delete_record_modal.html', book=adminController.get_book_by_id(int(id)))
+    if (type == 2):
+        return render_template('delete_record_modal.html', movie=adminController.get_movie_by_id(int(id)))
+    if (type == 3):
+        return render_template('delete_record_modal.html', magazine=adminController.get_magazine_by_id(int(id)))
+    if (type == 4):
+        return render_template('delete_record_modal.html', album=adminController.get_album_by_id(int(id)))
 
 @app.route('/deleteCatalog', methods=['POST'])
 @login_required

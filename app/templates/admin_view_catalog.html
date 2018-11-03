@@ -7,9 +7,10 @@ Catalog Viewer
 
 <!-- Replace Content -->
 {% block content %}
+
 <div class="row">
     <div class="col-12">
-        <a href ="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info btn-lg btn-block" style="cursor:pointer">
+        <a href="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info btn-lg btn-block" style="cursor:pointer">
             Add Entry
         </a>
     </div>
@@ -29,6 +30,7 @@ Catalog Viewer
         <a class="nav-link" href="#Magazines" role="tab" data-toggle="tab"> Magazines </a>
     </li>
 </ul>
+
 <div class="tab-content">
     <div class="tab-pane active" role="tabpanel" id="Books">
         <table class="table table-hover">
@@ -64,16 +66,17 @@ Catalog Viewer
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="1">
-                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-info" style="cursor:pointer">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
                                 <i class="far fa-edit"></i>
                             </button>
                         </form>
                     </td>
                     <td class="pl-0">
-                        <form action="/deleteCatalog" method="post">
+                        <form action="/adminView/deleteViewRecords" method="post">
                             <input type="hidden" name="id" value="{{catalog_item._id}}">
                             <input type="hidden" name="type" value="1">
-                            <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
+                            <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
                                 <i class="far fa-trash-alt"></i>
                             </button>
                         </form>
@@ -117,7 +120,8 @@ Catalog Viewer
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="2">
-                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-info" style="cursor:pointer">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
                                 <i class="far fa-edit"></i>
                             </button>
                         </form>
@@ -164,7 +168,8 @@ Catalog Viewer
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="4">
-                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-info" style="cursor:pointer">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
                                 <i class="far fa-edit"></i>
                             </button>
                         </form>
@@ -211,7 +216,8 @@ Catalog Viewer
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="3">
-                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-info" style="cursor:pointer">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
                                 <i class="far fa-edit"></i>
                             </button>
                         </form>

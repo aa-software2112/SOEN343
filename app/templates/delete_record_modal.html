@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+
+{% block pageTitle %}
+Delete entry for {{ book._title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="card p-3">
+  <blockquote class="blockquote mb-0 card-body">
+    <div class="row">
+      <div class="col-md-11">
+        <p> {{ book._title }} </p>
+        <footer class="blockquote-footer">
+          <small class="text-muted">
+            <cite title="Source Title"> {{ book._author }} </cite>
+          </small>
+        </footer>
+      </div>
+      <div class="col-md-1">
+          <form action="/deleteCatalog" method="post">
+            <input type="hidden" name="id" value="{{book._id}}">
+            <input type="hidden" name="type" value="1">
+            <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
+                <i class="far fa-trash-alt"></i>
+            </button>
+      </div>
+    </div>
+  </blockquote>
+</div>
+
+{% endblock %}

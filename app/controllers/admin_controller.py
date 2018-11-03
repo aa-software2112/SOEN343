@@ -96,6 +96,10 @@ class AdminController(UserController):
     def get_movie_by_id(self, id):
         return self._catalog_controller.get_movie_by_id(id)
 
+    def get_catalog_copies_by_id(self, id, type, request_form):
+        if (type == 1):
+            return self.
+
     def add_new_catalog(self, type, request_form):
         if (type == 1):
             return self._catalog_controller.add_book_to_catalog(Book(request_form))

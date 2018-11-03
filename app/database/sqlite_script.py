@@ -51,8 +51,8 @@ def create_book(conn, book):
     Function takes database connection object 'conn' and a book
     creates a new book into the book table
     """
-    sql = ''' INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13)
-              VALUES(?,?,?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13, quantity)
+              VALUES(?,?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, book)
 
@@ -135,7 +135,8 @@ def initializeAndFillDatabase(pathToDB):
                                     year_of_publication TEXT NOT NULL,
                                     language TEXT NOT NULL,
                                     isbn_10 TEXT NOT NULL,
-                                    isbn_13 TEXT NOT NULL
+                                    isbn_13 TEXT NOT NULL, 
+                                    quantity INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates magazine table with columns/attributes
@@ -232,7 +233,7 @@ def initializeAndFillDatabase(pathToDB):
             book = (
             f.name(), f.catch_phrase(), book_types[f.random_int() % len(book_types)], f.random_int() % MAX_BOOK_PAGES,
             f.last_name(), str(f.random_int() % 100 + 1910), languages[f.random_int() % len(languages)], f.isbn10(),
-            f.isbn13())
+            f.isbn13(), f.quantity())
             create_book(conn, book)
 
         for m in range(NUM_MAGAZINES):
