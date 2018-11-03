@@ -90,3 +90,5 @@ class CatalogController(Controller):
 
     def get_movie_by_id(self, id):
         return self.get_all_catalogs()['movies'].get(id)
+
+    def get

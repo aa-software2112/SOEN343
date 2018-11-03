@@ -78,6 +78,9 @@ class BookCatalog(Catalog):
         self.db.execute_query_write(remove_book, (id,))
         return self._books.pop(id, None)
 
+    def return_copies(self, id):
+        return_records = 'SELECT * FROM book_copies WHERE id = ?'
+
     def display(self):
 
         for k, v in self._books.items():

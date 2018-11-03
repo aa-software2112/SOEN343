@@ -96,9 +96,19 @@ class AdminController(UserController):
     def get_movie_by_id(self, id):
         return self._catalog_controller.get_movie_by_id(id)
 
-    def get_catalog_copies_by_id(self, id, type, request_form):
+    def get_catalog_copies_by_id(self, id, type):
         if (type == 1):
-            return self.
+            return self._catalog_controller.view_catalog_inventory(
+            )[self._catalog_controller.BOOK_TYPE].(id)
+
+        elif (type == 2):
+            return self._catalog_controller.get_movie_copies_by_id(id)
+
+        elif (type == 3):
+            return self._catalog_controller.get_magazine_copies_by_id(id)
+
+        elif (type == 4):
+            return self._catalog_controller.get_album_copies_by_id(id)
 
     def add_new_catalog(self, type, request_form):
         if (type == 1):

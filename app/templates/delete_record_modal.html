@@ -6,6 +6,7 @@ Delete entry for {{ book._title }}
 
 {% block content %}
 
+{% for copy_of_record in catalog_record %}
 <div class="card p-3">
   <blockquote class="blockquote mb-0 card-body">
     <div class="row">
@@ -18,15 +19,16 @@ Delete entry for {{ book._title }}
         </footer>
       </div>
       <div class="col-md-1">
-          <form action="/deleteCatalog" method="post">
-            <input type="hidden" name="id" value="{{book._id}}">
-            <input type="hidden" name="type" value="1">
-            <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
-                <i class="far fa-trash-alt"></i>
-            </button>
+        <form action="/deleteCatalog" method="post">
+          <input type="hidden" name="id" value="{{book._id}}">
+          <input type="hidden" name="type" value="1">
+          <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
+            <i class="far fa-trash-alt"></i>
+          </button>
       </div>
     </div>
   </blockquote>
 </div>
+{% endfor %}
 
 {% endblock %}
