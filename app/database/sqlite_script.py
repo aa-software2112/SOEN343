@@ -51,8 +51,8 @@ def create_book(conn, book):
     Function takes database connection object 'conn' and a book
     creates a new book into the book table
     """
-    sql = ''' INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13)
-              VALUES(?,?,?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, book)
 
@@ -62,8 +62,8 @@ def create_magazine(conn, magazine):
     Function takes database connection object 'conn' and a magazine
     creates a new magazine into the magazine table
     """
-    sql = ''' INSERT INTO magazine(title,publisher,year_of_publication,language,isbn_10,isbn_13)
-              VALUES(?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO magazine(title,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)
+              VALUES(?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, magazine)
 
@@ -74,8 +74,8 @@ def create_movie(conn, movie):
     creates a new movie into the movie  table
     """
 
-    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,release_date,run_time)
-              VALUES(?,?,?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,release_date,run_time,total_quantity,quantity_available)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, movie)
 
@@ -85,8 +85,8 @@ def create_album(conn, music):
     Function takes database connection object 'conn' and a music 
     creates a new music into the music table
     """
-    sql = ''' INSERT INTO album(type,title,artist,label,release_date,asin)
-              VALUES(?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO album(type,title,artist,label,release_date,asin,total_quantity,quantity_available)
+              VALUES(?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, music)
 
@@ -135,7 +135,9 @@ def initializeAndFillDatabase(pathToDB):
                                     year_of_publication INTEGER NOT NULL,
                                     language TEXT NOT NULL,
                                     isbn_10 TEXT NOT NULL,
-                                    isbn_13 TEXT NOT NULL
+                                    isbn_13 TEXT NOT NULL,
+                                    total_quantity INTEGER NOT NULL,
+                                    quantity_available INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates magazine table with columns/attributes
@@ -146,7 +148,9 @@ def initializeAndFillDatabase(pathToDB):
                                     year_of_publication INTEGER NOT NULL,
                                     language TEXT NOT NULL,
                                     isbn_10 TEXT NOT NULL,
-                                    isbn_13 TEXT NOT NULL
+                                    isbn_13 TEXT NOT NULL,
+                                    total_quantity INTEGER NOT NULL,
+                                    quantity_available INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates movie table with columns/attributes
@@ -160,7 +164,9 @@ def initializeAndFillDatabase(pathToDB):
                                     subtitles TEXT NOT NULL,
                                     dubbed TEXT NOT NULL,
                                     release_date INTEGER NOT NULL,
-                                    run_time INTEGER NOT NULL
+                                    run_time INTEGER NOT NULL,
+                                    total_quantity INTEGER NOT NULL,
+                                    quantity_available INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates album table with columns/attributes
@@ -171,7 +177,9 @@ def initializeAndFillDatabase(pathToDB):
                                     artist TEXT NOT NULL,
                                     label TEXT NOT NULL,
                                     release_date INTEGER NOT NULL,
-                                    asin TEXT NOT NULL
+                                    asin TEXT NOT NULL,
+                                    total_quantity INTEGER NOT NULL,
+                                    quantity_available INTEGER NOT NULL
                                 );"""
 
     # initialized variable with query that creates client table with columns/attributes
@@ -189,6 +197,31 @@ def initializeAndFillDatabase(pathToDB):
                                     lastLogged INTEGER NOT NULL
                                 );"""
 
+    # initialized variable with query that creates book_copy table with columns/attributes
+    #FOREIGN KEY(book_id) REFERENCES book(id),
+    sql_create_book_copy_table = """CREATE TABLE IF NOT EXISTS book_copy (
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    isLoaned INTEGER NOT NULL
+                                );"""
+
+    # initialized variable with query that creates magazine_copy table with columns/attributes
+    sql_create_magazine_copy_table = """CREATE TABLE IF NOT EXISTS magazine_copy (
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    isLoaned INTEGER NOT NULL
+                                );"""
+
+    # initialized variable with query that creates movie_copy table with columns/attributes
+    sql_create_movie_copy_table = """CREATE TABLE IF NOT EXISTS movie_copy (
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    isLoaned INTEGER NOT NULL
+                                );"""
+
+    # initialized variable with query that creates album_copy table with columns/attributes
+    sql_create_album_copy_table = """CREATE TABLE IF NOT EXISTS album_copy (
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    isLoaned INTEGER NOT NULL
+                                );"""
+
     if conn is None:
         print("Error! cannot create the database connection.")
         return
@@ -203,6 +236,14 @@ def initializeAndFillDatabase(pathToDB):
     create_table(conn, sql_create_album_table)
     # create client table inside database
     create_table(conn, sql_create_client_table)
+    # create book copy table inside database
+    create_table(conn, sql_create_book_copy_table)
+    # create magazine copy table inside database
+    create_table(conn, sql_create_magazine_copy_table)
+    # create movie copy table inside database
+    create_table(conn, sql_create_movie_copy_table)
+    # create album copy table inside database
+    create_table(conn, sql_create_album_copy_table)
 
     with conn:
 
@@ -216,6 +257,8 @@ def initializeAndFillDatabase(pathToDB):
         book_types = ['Paperback', 'Hardcover', 'Graphic', 'Coffee Table Book', 'Textbook']
         languages = ['English', 'French', 'Italian', 'Spanish', 'Greek', 'Russian', 'German']
         album_types = ["Vinyl", "CD", "Cassette"]
+        MAX_QUANTITY = 10
+        MAX_TOTAL = 4
 
         movie_name = lambda: "The " + f.job() if f.random_int() % 2 == 0 else " ".join(f.words()).capitalize()
         album_name = movie_name
@@ -233,27 +276,27 @@ def initializeAndFillDatabase(pathToDB):
             book = (
             f.name(), f.catch_phrase(), book_types[f.random_int() % len(book_types)], f.random_int() % MAX_BOOK_PAGES,
             f.last_name(), (f.random_int() % 100) + 1910, languages[f.random_int() % len(languages)], f.isbn10(),
-            f.isbn13())
+            f.isbn13(), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
             # Create copies of the same book - also done for every record type below
             for cop in range(COPIES):
                 create_book(conn, book)
 
         for m in range(NUM_MAGAZINES):
             magazine = (f.word().upper(), f.last_name(), f.random_int() % 100 + 1910,
-                        languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13())
+                        languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13(), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
             for cop in range(COPIES):
                 create_magazine(conn, magazine)
 
         for m in range(NUM_MOVIES):
             movie = (movie_name(), f.name(), names(), names(), languages[f.random_int() % len(languages)],
                      languages[f.random_int() % len(languages)], languages[f.random_int() % len(languages)], date(),
-                     60 + f.random_int() % (2 * 60))
+                     60 + f.random_int() % (2 * 60), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
             for cop in range(COPIES):
                 create_movie(conn, movie)
 
         for a in range(NUM_ALBUMS):
             album = (
-            album_types[f.random_int() % len(album_types)], album_name(), f.name(), f.word().upper(), date(), asin())
+            album_types[f.random_int() % len(album_types)], album_name(), f.name(), f.word().upper(), date(), asin(), f.random_int() % MAX_QUANTITY, f.random_int() % MAX_TOTAL)
             for cop in range(COPIES):
                 create_album(conn, album)
 
