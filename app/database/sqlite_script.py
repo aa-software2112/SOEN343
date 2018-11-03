@@ -241,29 +241,33 @@ def initializeAndFillDatabase(pathToDB):
     #FOREIGN KEY(book_id) REFERENCES book(id),
     sql_create_book_copy_table = """CREATE TABLE IF NOT EXISTS book_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    book_id INTEGER,
-                                    isLoaned INTEGER NOT NULL
+                                    book_id INTEGER NOT NULL,
+                                    isLoaned INTEGER NOT NULL,
+                                    FOREIGN KEY(book_id) REFERENCES book(id)
                                 );"""
 
     # initialized variable with query that creates magazine_copy table with columns/attributes
     sql_create_magazine_copy_table = """CREATE TABLE IF NOT EXISTS magazine_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    magazine_id INTEGER,
-                                    isLoaned INTEGER NOT NULL
+                                    magazine_id INTEGER NOT NULL,
+                                    isLoaned INTEGER NOT NULL,
+                                    FOREIGN KEY(magazine_id) REFERENCES magazine(id)
                                 );"""
 
     # initialized variable with query that creates movie_copy table with columns/attributes
     sql_create_movie_copy_table = """CREATE TABLE IF NOT EXISTS movie_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    movie_id INTEGER,
-                                    isLoaned INTEGER NOT NULL
+                                    movie_id INTEGER NOT NULL,
+                                    isLoaned INTEGER NOT NULL,
+                                    FOREIGN KEY(movie_id) REFERENCES movie(id)
                                 );"""
 
     # initialized variable with query that creates album_copy table with columns/attributes
     sql_create_album_copy_table = """CREATE TABLE IF NOT EXISTS album_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                                    album_id INTEGER,
-                                    isLoaned INTEGER NOT NULL
+                                    album_id INTEGER NOT NULL,
+                                    isLoaned INTEGER NOT NULL,
+                                    FOREIGN KEY(album_id) REFERENCES album(id)
                                 );"""
 
     if conn is None:
