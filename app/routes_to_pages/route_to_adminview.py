@@ -163,14 +163,20 @@ def delete_view_catalog():
    
     type = int(request.form["type"])
     id = request.form["id"]
+
     if (type == 1):
-        return render_template('delete_record_modal.html', book=adminController.get_book_by_id(int(id)))
-    if (type == 2):
-        return render_template('delete_record_modal.html', movie=adminController.get_movie_by_id(int(id)))
-    if (type == 3):
-        return render_template('delete_record_modal.html', magazine=adminController.get_magazine_by_id(int(id)))
-    if (type == 4):
-        return render_template('delete_record_modal.html', album=adminController.get_album_by_id(int(id)))
+        catalog_type = CatalogController.BOOK_TYPE
+    elif (type == 2):
+        catalog_type = CatalogController.MOVIE_TYPE
+    elif (type == 3):
+        catalog_type = CatalogController.MAGAZINE_TYPE
+    elif (type == 4):
+        catalog_type = CatalogController.ALBUM_TYPE
+
+    catalog_entry = adminController.get_catalog_entry_by_id(catalog_type, int(id))
+    catalog_entry_copy = adminController.get_catalog_copies_by_id(catalog_type, int(id))
+
+    return render_template('delete_record_modal.html', catalog_entry = catalog_entry, catalog_entry_copy = catalog_entry_copy)
 
 @app.route('/deleteCatalog', methods=['POST'])
 @login_required

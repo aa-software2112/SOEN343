@@ -1,34 +1,39 @@
 {% extends "index.html" %}
 
 {% block pageTitle %}
-Delete entry for {{ book._title }}
+Delete entry for {{ catalog_entry._title }}
 {% endblock %}
 
 {% block content %}
 
-{% for copy_of_record in catalog_record %}
-<div class="card p-3">
-  <blockquote class="blockquote mb-0 card-body">
-    <div class="row">
-      <div class="col-md-11">
-        <p> {{ book._title }} </p>
-        <footer class="blockquote-footer">
-          <small class="text-muted">
-            <cite title="Source Title"> {{ book._author }} </cite>
-          </small>
-        </footer>
+{% for entry_number in catalog_entry_copy %}
+<div class="card p-3 m-3">
+    <blockquote class="blockquote mb-0 card-body">
+      <div class="row">
+        <div class="col-md-1">
+            <button type="button" class="btn btn-info disabled">{{ entry_number[0] }}</button>
+        </div>
+        <div class="col-md-10">
+          <p> {{ catalog_entry._title }} </p>
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              <cite title="Source Title"> Copyright © {{ catalog_entry._year_of_publication }} by {{ catalog_entry._author }} <br>
+                ISBN{{ catalog_entry._ISBN13 }} ({{ catalog_entry._format}}) <br>
+              </cite>
+            </small>
+          </footer>
+        </div>
+        <div class="col-md-1">
+          <form action="/deleteCatalog" method="post">
+            <input type="hidden" name="id" value="{{catalog_entry._id}}">
+            <input type="hidden" name="type" value="1">
+            <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
+              <i class="far fa-trash-alt"></i>
+            </button>
+        </div>
       </div>
-      <div class="col-md-1">
-        <form action="/deleteCatalog" method="post">
-          <input type="hidden" name="id" value="{{book._id}}">
-          <input type="hidden" name="type" value="1">
-          <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
-            <i class="far fa-trash-alt"></i>
-          </button>
-      </div>
-    </div>
-  </blockquote>
-</div>
+    </blockquote>
+  </div>
 {% endfor %}
 
 {% endblock %}

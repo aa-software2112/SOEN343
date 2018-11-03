@@ -75,3 +75,6 @@ class CatalogController(Controller):
 
     def get_catalog_entry_by_id(self,catalog_type, id):
         return self.view_catalog_inventory()[catalog_type].get(id)
+
+    def get_catalog_entry_copies_by_id(self, catalog_type, id):
+        return self.view_catalog_inventory()[catalog_type].get_copies(id)
