@@ -24,6 +24,6 @@ class Book:
 
     def __str__(self):
 
-        return "Book | ID: " + str(self._id) + " TITLE: " + self._title + " AUTHOR: " + self._author + " FORMAT: " + self._format + " PAGES: " + str(self._pages) + " PUBLISHER: " + self._publisher + " YEAR: " + self._year_of_publication + \
+        return "Book | ID: " + str(self._id) + " TITLE: " + self._title + " AUTHOR: " + self._author + " FORMAT: " + self._format + " PAGES: " + str(self._pages) + " PUBLISHER: " + self._publisher + " YEAR: " + str(self._year_of_publication) + \
             " LANGUAGE: " + self._language + " ISBN10: " + \
             self._ISBN10 + " ISBN13: " + self._ISBN13
