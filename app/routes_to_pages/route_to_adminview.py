@@ -90,8 +90,8 @@ def adminViewAddToCatalog():
 @admin_required
 def adminViewAddBook():
     if request.method == 'POST':
-        type = int(request.form["type"])
-        adminController.add_new_catalog(type, request.form)
+        type = request.form["type"]
+        adminController.add_entry_to_catalog(type, request.form)
         flash("Book entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_book.html')
@@ -102,8 +102,8 @@ def adminViewAddBook():
 @admin_required
 def adminViewAddMovie():
     if request.method == 'POST':
-        type = int(request.form["type"])
-        adminController.add_new_catalog(type, request.form)
+        type = request.form["type"]
+        adminController.add_entry_to_catalog(type, request.form)
         flash("Movie entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_movie.html')
@@ -114,8 +114,8 @@ def adminViewAddMovie():
 @admin_required
 def adminViewAddMagazine():
     if request.method == 'POST':
-        type = int(request.form["type"])
-        adminController.add_new_catalog(type, request.form)
+        type = request.form["type"]
+        adminController.add_entry_to_catalog(type, request.form)
         flash("Magazine entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_magazine.html')
@@ -127,7 +127,7 @@ def adminViewAddMagazine():
 def adminViewAddAlbum():
     if request.method == 'POST':
         type = int(request.form["type"])
-        adminController.add_new_catalog(type, request.form)
+        adminController.add_entry_to_catalog(type, request.form)
         flash("Album entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_album.html')
@@ -153,7 +153,7 @@ def modify_catalog_form():
 @login_required
 @admin_required
 def modify_catalog():
-    type = int(request.form["type"])
+    type = request.form["type"]
     adminController.modify_catalog(type, request.form)
     flash("Entry modified succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
