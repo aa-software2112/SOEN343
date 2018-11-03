@@ -30,30 +30,30 @@ class CatalogController(Controller):
         if not (self._db_loaded):
             self._db_loaded = True
 
-            # Add all objects form database into catalogs
-            queries = {CatalogController.BOOK_TYPE: """ SELECT * FROM book; """,
-                       CatalogController.MOVIE_TYPE: """ SELECT * FROM movie; """,
-                       CatalogController.MAGAZINE_TYPE: """ SELECT * FROM magazine; """,
-                       CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """
-                       }
+        # Add all objects form database into catalogs
+        queries = {CatalogController.BOOK_TYPE: """ SELECT * FROM book; """,
+                   CatalogController.MOVIE_TYPE: """ SELECT * FROM movie; """,
+                   CatalogController.MAGAZINE_TYPE: """ SELECT * FROM magazine; """,
+                   CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """
+                   }
 
-            # Iterate over all queries
-            for catalog_type, query in queries.items():
+        # Iterate over all queries
+        for catalog_type, query in queries.items():
 
-                all_rows = self.db.execute_query(query).fetchall()
+            all_rows = self.db.execute_query(query).fetchall()
 
-                catalog = self._inventory[catalog_type]
+            catalog = self._inventory[catalog_type]
 
-                constructor = self._constructors[catalog_type]
+            constructor = self._constructors[catalog_type]
 
-                # Create an object for each row
-                for row in all_rows:
-                    #	print(type(constructor(row)._id))
-                    catalog.add(constructor(row), False)
+            # Create an object for each row
+            for row in all_rows:
+                #	print(type(constructor(row)._id))
+                catalog.add(constructor(row), False)
 
         # Uncomment these two lines to see all objects in all catalogs
-        # for k, v in self._inventory.items():
-        #	v.display()
+        #for k, v in self._inventory.items():
+        #    v.display()
 
     def get_all_catalogs(self):
 

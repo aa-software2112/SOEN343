@@ -1,3 +1,5 @@
+from app.common_definitions.helper_functions import convert_epoch_to_datetime as to_datetime
+
 class Movie:
 
     def __init__(self, arguments):
@@ -16,6 +18,10 @@ class Movie:
         self._subtitles = arguments['subtitles']
         self._dubbed = arguments['dubbed']
         self._release_date = arguments['release_date']
+        # If the passed release date is a string (datetime format), do nothing
+        if not (type(arguments['release_date']) == type(" ")):
+            # Get the dd/mm/yyyy only
+            self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
         self._runtime = arguments['run_time']
 
     def get_id(self):
