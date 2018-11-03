@@ -1,6 +1,7 @@
 from flask import render_template, g, session, redirect, request, flash
 from app import app
 from app import userController, adminController
+from app.controllers.catalog_controller import CatalogController
 from app import databaseObject as db
 from app.classes.book import Book
 from app.classes.magazine import Magazine
@@ -139,13 +140,13 @@ def modify_catalog_form():
     type = int(request.form["type"])
     id = request.form['modify_catalog']
     if (type == 1):
-        return render_template('modify_book.html', book=adminController.get_book_by_id(int(id)))
+        return render_template('modify_book.html', book=adminController.get_catalog_entry_by_id(CatalogController.BOOK_TYPE, int(id)))
     if (type == 2):
-        return render_template('modify_movie.html', movie=adminController.get_movie_by_id(int(id)))
+        return render_template('modify_movie.html', movie=adminController.get_catalog_entry_by_id(CatalogController.MOVIE_TYPE, int(id)))
     if (type == 3):
-        return render_template('modify_magazine.html', magazine=adminController.get_magazine_by_id(int(id)))
+        return render_template('modify_magazine.html', magazine=adminController.get_catalog_entry_by_id(CatalogController.MAGAZINE_TYPE, int(id)))
     if (type == 4):
-        return render_template('modify_album.html', album=adminController.get_album_by_id(int(id)))
+        return render_template('modify_album.html', album=adminController.get_catalog_entry_by_id(CatalogController.ALBUM_TYPE, int(id)))
 
 
 @app.route('/modifyCatalog', methods=['POST'])
