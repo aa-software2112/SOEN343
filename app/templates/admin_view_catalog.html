@@ -60,11 +60,20 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
-                    <td>
+                    <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="1">
-                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-outline-info" style="cursor:pointer">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}} class="btn btn-info" style="cursor:pointer">
                                 <i class="far fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="pl-0">
+                        <form action="/deleteCatalog" method="post">
+                            <input type="hidden" name="id" value="{{catalog_item._id}}">
+                            <input type="hidden" name="type" value="1">
+                            <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
+                                <i class="far fa-trash-alt"></i>
                             </button>
                         </form>
                     </td>
