@@ -127,10 +127,10 @@ Catalog Viewer
                         </form>
                     </td>
                     <td class="pl-0">
-                        <form action="/deleteCatalog" method="post">
+                        <form action="/adminView/deleteViewRecords" method="post">
                             <input type="hidden" name="id" value="{{catalog_item._id}}">
                             <input type="hidden" name="type" value="2">
-                            <button type="submit" name="delete" class="btn btn-outline-info" style="cursor: pointer">
+                            <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
                                 <i class="far fa-trash-alt"></i>
                             </button>
                         </form>

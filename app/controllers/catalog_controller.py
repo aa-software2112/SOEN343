@@ -78,3 +78,6 @@ class CatalogController(Controller):
 
     def get_catalog_entry_copies_by_id(self, catalog_type, id):
         return self.view_catalog_inventory()[catalog_type].get_copies(id)
+
+    def delete_catalog_entry_copy(self, catalog_type, id):
+        self.view_catalog_inventory()[catalog_type].remove_copy(id)

@@ -118,3 +118,6 @@ class AdminController(UserController):
 
     def delete_catalog(self, id, type):
         self._catalog_controller.view_catalog_inventory()[type].remove(id)
+
+    def delete_catalog_copy_entry(self, catalog_type, id):
+        return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)

@@ -184,8 +184,8 @@ def delete_view_catalog():
 def delete_catalog():
 
     id = request.form["id"]
-    type = request.form["type"]
-    adminController.delete_catalog(int(id), type)
+    catalog_type = request.form["type"]
+    adminController.delete_catalog_copy_entry(catalog_type, int(id))
 
     flash("Entry deleted succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
