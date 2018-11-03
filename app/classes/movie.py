@@ -23,6 +23,8 @@ class Movie:
             # Get the dd/mm/yyyy only
             self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
         self._runtime = arguments['run_time']
+        self._total_quantity = 1
+        self._quantity_available = 1
 
     def get_id(self):
         """Returns the id of the object"""
@@ -33,4 +35,4 @@ class Movie:
         return "Movie | ID: " + str(self._id) + " TITLE: " + self._title +  " DIRECTOR: " + self._director + " PRODUCERS: " + self._producers + " ACTORS: " + self._actors + \
             " LANGUAGE: " + self._language + " SUBTITLES: " + self._subtitles + " DUBBED: " + \
             self._dubbed + " RELEASE_DATE: " + self._release_date + \
-            " RUNTIME: " + str(self._runtime)
+            " RUNTIME: " + str(self._runtime) + " TOTAL_QUANTITY: " + str(self._total_quantity) + " QUANTITY_AVAILABLE: " + str(self._quantity_available)

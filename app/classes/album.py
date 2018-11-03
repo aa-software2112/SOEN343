@@ -21,7 +21,9 @@ class Album:
             self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
             
         self._ASIN = arguments['asin']
-
+        self._total_quantity = 1
+        self._quantity_available = 1
+        
     def get_id(self):
         """Returns the id of the object"""
         return self._id
@@ -29,4 +31,5 @@ class Album:
     def __str__(self):
 
         return "Album | ID: " + str(self._id) + " TITLE: " + self._title + " ARTIST: " + self._artist + " TYPE: " + self._type + " LABEL: " + self._label + " RELEASE_DATE: " + str(self._release_date) + \
-            " ASIN: " + str(self._ASIN)
+            " ASIN: " + str(self._ASIN) + " TOTAL_QUANTITY: " + str(self._total_quantity) + " QUANTITY_AVAILABLE: " + str(self._quantity_available)
+
