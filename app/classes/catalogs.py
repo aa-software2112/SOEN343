@@ -57,33 +57,41 @@ class BookCatalog(Catalog):
     def add(self, book, add_to_db):
 
         if add_to_db is True:
-            # verify if added book title already exist and store True or False 
+            # verify if added book title already exist and store + find id of book if exist 
         
-            #delete this variable below once you make the commented code work
-            verify_if_book_exist = 0
-            '''
-            select_boolean_query = 'SELECT EXISTS(SELECT 1 FROM book WHERE book.title = ?)'
-            tuple_for_select_query = (book._title)
-            verify_if_book_exist = self.db.execute_query(
-                select_boolean_query, tuple_for_select_query) '''
+            #gets the id of the book through its title in main table     
+            select_id_query = 'SELECT id FROM book WHERE book.title = ?'
+            tuple_for_get_id = (book._title,)
+            existing_book_id_cursor = self.db.execute_query(
+            select_id_query, tuple_for_get_id)
+        
+            existing_book_id_fetched = existing_book_id_cursor.fetchmany(1)
+            existing_book_id_list = []
+
+            for row in existing_book_id_fetched :
+                existing_book_id_list.append(BookCatalog(row))
+
+            if existing_book_id_fetched  == []:
+                verify_if_book_exist = 0
+                print("There are no books with given title")
+            else:
+                verify_if_book_exist = 1
+                existing_book_id = int(existing_book_id_list[0])
+                print("id of book with given title is " + existing_book_id)
 
             #if already exist, add new book in second table and update quantity of first table
            
             if verify_if_book_exist is 1:
-
-                #gets the id of the book through its title in main table     
-                select_id_query = 'SELECT id FROM book WHERE book.title = ?'
-                existing_book_id = self.db.execute_query(
-                select_id_query, book._title)
-                         
+               
                 #insert book into book_copy table
                 insert_new_book_copy_query = 'INSERT INTO book_copy(book_id, isLoaned)' \
                 'VALUES(?,?)'
-                tuple_for_insert_copy_query = (existing_book_id, 0)
+                tuple_for_insert_copy_query =(existing_book_id, 0)
                 self.db.execute_query_write(insert_new_book_copy_query, tuple_for_insert_copy_query)
                 
+                '''
                  #gets the total_quantity of the book through its title in main table     
-                select_total_quantity_query = 'SELECT total_quantity FROM book WHERE book.id = ?'
+                select_total_quantity_query = 'SELECT total_quantity FROM book WHERE book.title = ?'
                 existing_book_total_quantity = self.db.execute_query(
                 select_id_query, existing_book_id)
 
@@ -101,7 +109,7 @@ class BookCatalog(Catalog):
                 tuple_for_updated_quantity_query = (book._total_quantity, book._quantity_available, existing_book_id)
                 update_book_quantity = self.db.execute_query_write(
                 update_new_book_quantity_query, tuple_for_updated_quantity_query)
-
+                '''
             else:
                 #insert book into book table
                 insert_new_book_query = 'INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)' \
