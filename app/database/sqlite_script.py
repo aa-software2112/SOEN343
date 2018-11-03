@@ -201,6 +201,7 @@ def initializeAndFillDatabase(pathToDB):
     #FOREIGN KEY(book_id) REFERENCES book(id),
     sql_create_book_copy_table = """CREATE TABLE IF NOT EXISTS book_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    book_id INTEGER NOT NULL,
                                     isLoaned INTEGER NOT NULL
                                 );"""
 
