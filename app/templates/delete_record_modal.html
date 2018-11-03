@@ -1,25 +1,25 @@
 {% extends "index.html" %}
 
 {% block pageTitle %}
-Copies found for {{ catalog_entry._title }}
+Copies found for {{ catalog_record._title }}
 {% endblock %}
 
 {% block content %}
 
-{% for entry_number in catalog_entry_copy %}
+{% for record_copy in catalog_record_copy %}
 <div class="card p-3 m-3">
   <blockquote class="blockquote mb-0 card-body">
     <div class="row">
       <div class="col-md-1">
-        <button type="button" class="btn btn-outline-info disabled btn-sm"> ID - {{ entry_number[0] }}</button>
+        <button type="button" class="btn btn-outline-info disabled btn-sm"> ID - {{ record_copy._id }}</button>
       </div>
       <div class="col-md-10">
-        <p> {{ catalog_entry._title }} </p>
+        <p> {{ record_copy._title }} </p>
         <footer class="blockquote-footer">
           <small class="text-muted">
-            <cite title="Source Title"> Copyright © {{ catalog_entry._year_of_publication }} by {{
-              catalog_entry._author }} <br>
-              ISBN{{ catalog_entry._ISBN13 }} ({{ catalog_entry._format}}) <br>
+            <cite title="Source Title"> Copyright © {{ record_copy._year_of_publication }} by {{
+                record_copy._author }} <br>
+              ISBN{{ record_copy._ISBN13 }} ({{ record_copy._format}}) <br>
             </cite>
           </small>
         </footer>
@@ -27,7 +27,7 @@ Copies found for {{ catalog_entry._title }}
   
       <div class="col-md-1">
         <form action="/deleteCatalog" method="post">
-          <input type="hidden" name="id" value="{{ entry_number[0] }}">
+          <input type="hidden" name="id" value="{{ record_copy._id }}">
           <input type="hidden" name="type" value="1">
           <button type="submit" name="delete" class="btn btn-info" style="cursor: pointer">
             <i class="far fa-trash-alt"></i>

@@ -81,13 +81,18 @@ class BookCatalog(Catalog):
         return self._books.pop(id, None)
 
     def get_copies(self, id):
-        get_copy_records_query = """ SELECT book_copy.id, book_copy.isLoaned, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book, book_copy WHERE book_copy.book_id = ? AND book.id = book_copy.book_id"""
+
+        found_copies = []
+
+        get_copy_records_query = """ SELECT book_copy.id, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book, book_copy WHERE book_copy.book_id = ? AND book.id = book_copy.book_id"""
         get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
 
         copy_records = get_copies_cursor.fetchall()
 
-        print("get records", copy_records)
-        return copy_records
+        for row in copy_records:
+            found_copies.append(Book(row))
+
+        return found_copies
 
     def remove_copy(self, id):
         remove_book_copy = """ DELETE FROM book_copy WHERE id = ? """
