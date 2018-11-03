@@ -14,7 +14,12 @@ class Album:
         self._title = arguments['title']
         self._artist = arguments['artist']
         self._label = arguments['label']
-        self._release_date = to_datetime(arguments['release_date'])
+        
+        self._release_date = arguments['release_date']
+        if not (type(arguments['release_date']) == type(" ")):
+            # Get the dd/mm/yyyy only
+            self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
+            
         self._ASIN = arguments['asin']
 
     def get_id(self):

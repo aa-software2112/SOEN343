@@ -10,7 +10,8 @@ class Magazine:
             self._id = 0
         self._title = arguments['title']
         self._publisher = arguments['publisher']
-        self._year_of_publication = arguments['year_of_publication']
+        # Make sure it is in integer format
+        self._year_of_publication = int(arguments['year_of_publication'])        
         self._language = arguments['language']
         self._ISBN10 = arguments['isbn_10']
         self._ISBN13 = arguments['isbn_13']

@@ -13,7 +13,8 @@ class Book:
         self._format = attributes['format']
         self._pages = attributes['pages']
         self._publisher = attributes['publisher']
-        self._year_of_publication = attributes['year_of_publication']
+        # Make sure it is in integer format
+        self._year_of_publication = int(attributes['year_of_publication'])
         self._language = attributes['language']
         self._ISBN10 = attributes['isbn_10']
         self._ISBN13 = attributes['isbn_13']
