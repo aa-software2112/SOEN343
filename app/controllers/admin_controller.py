@@ -1,18 +1,26 @@
-from app.controllers.user_controller import UserController
-from app.classes.client_container import Client
+from app.controllers.controller import Controller
+from app.controllers.user_controller import ClientController
+from app.classes.user import Admin
 from app.classes.album import Album
 from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
+from app.classes.catalogs import UserCatalog
 import app.common_definitions.helper_functions as helper_functions
 
 
-class AdminController(UserController):
+class AdminController(Controller):
 
     def __init__(self, database, catalog_controller):
-        UserController.__init__(self, database)
+        Controller.__init__(self, database)
+
         # Admin Controller should have an instance of catalog controller
         self._catalog_controller = catalog_controller
+
+        # Admin Controller contains a catalog of admin users
+        self._admin_catalog = UserCatalog(database)
+
+        self._db_loaded = False
 
     def example_admin_controller_function(self):
         print("Admin Controller")
@@ -47,39 +55,87 @@ class AdminController(UserController):
         # Here you would return a list of objects
         return
 
-    # Function to get a list of all logged clients to send to
-    # UserResgitryViewer
-    def get_all_logged_client(self):
 
-        # instantiating the returning list
-        allLoggedClientList = []
-        getAllLoggedClientQuery = '''SELECT * FROM client WHERE isLogged=1 '''
-        getClientCursor = self.db.execute_query(getAllLoggedClientQuery)
-        loggedClients = getClientCursor.fetchall()
+    def get_all_logged_admins(self):
 
-        # loggedClients contains a list with the attributes that the cursor reads from a row in ONE SINGLE string, so something like loggedClients[0].id does not work
-        # instead loggedClients[0] returns a DICTIONARY of all the attributes
-        # it found on the first ROW in the table
-        for row in loggedClients:
-            # Appending a Client object from the rows obtained by the SQL query
-            client = Client(row)
-            # convert to a readable timestamp
-            client.lastLogged = helper_functions.convert_epoch_to_datetime(
-                client.lastLogged)
-            print(client)
-            allLoggedClientList.append(client)
+        return list(self._admin_catalog.get_all().values())
 
-        print()
-        return allLoggedClientList
+    def load_database_into_memory(self):
+
+        # Database cannot be loaded into RAM more than once
+        if not (self._db_loaded):
+            self._db_loaded = True
+
+        # Add all objects form database into catalogs
+        sql_query = """ SELECT * FROM client WHERE isAdmin = 1 """
+
+
+        all_rows = self.db.execute_query(sql_query).fetchall()
+
+        # Create an object for each row
+        for row in all_rows:
+            self._admin_catalog.add(Admin(row), False)
+
+        # Uncomment these two lines to see all objects in all catalogs
+        #for k, v in self._admin_catalog.get_all().items():
+        #    print(v)
+
 
     # Creates admin using create_client method in UserController.
-    def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isAdmin,
-                     isLogged, lastLogged):
-        if isAdmin == 1:
-            UserController.create_client(self, firstName, lastName, physicalAddress, email, phoneNumber, username,
-                                         password, isAdmin, isLogged, lastLogged)
-        else:
-            print("When creating admin, make sure you call this function with a value of 1 for the attribute isAdmin.")
+    def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isLogged, lastLogged):
+
+        attributesDict = {"firstName": firstName, "lastName": lastName, "physicalAddress":physicalAddress,
+                          "email": email, "phoneNumber": phoneNumber, "username": username, "password": password,
+                          "isAdmin":1, "isLogged":isLogged, "lastLogged": lastLogged}
+
+        self._admin_catalog.add(Admin(attributesDict), True)
+
+
+    def get_admin_by_username(self, username):
+
+        found_admin = []
+
+        admins = self._admin_catalog.get_all()
+
+        for id, adminObj in admins.items():
+
+            if adminObj._username == username:
+                found_admin.append(adminObj)
+
+        return found_admin
+
+        # function takes self and a string "email" to get the user from the client table.
+        # returns list with client information or emptylist if client doesn't
+        # exist in database
+    def get_admin_by_email(self, email):
+        found_admin = []
+
+        admins = self._admin_catalog.get_all()
+
+        for id, adminObj in admins.items():
+
+            if adminObj._email == email:
+                found_admin.append(adminObj)
+
+        return found_admin
+
+        # function takes self and a string "username" & "password" to get the client from the client table.
+        # if client exits, returns list with client information and updates value
+        # in attribute isLogged to 1. Returns emptylist if client doesn't exist in
+        # database
+
+    def get_admin_by_password(self, username, password):
+
+        found_admin = []
+
+        admins = self._admin_catalog.get_all()
+
+        for id, adminObj in admins.items():
+
+            if adminObj._username == username and adminObj._password == password:
+                found_admin.append(adminObj)
+
+        return found_admin
 
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
