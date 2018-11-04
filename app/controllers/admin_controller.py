@@ -87,6 +87,9 @@ class AdminController(UserController):
     def get_catalog_entry_by_id(self,catalog_type, id):
         return self._catalog_controller.get_catalog_entry_by_id(catalog_type, id)
 
+    def get_catalog_copies_by_id(self, catalog_type, id):
+        return self._catalog_controller.get_catalog_entry_copies_by_id(catalog_type, id)
+
     def add_entry_to_catalog(self, type, request_form):
     
         if (type == self._catalog_controller.BOOK_TYPE):
@@ -116,3 +119,6 @@ class AdminController(UserController):
 
     def delete_catalog(self, id, type):
         self._catalog_controller.view_catalog_inventory()[type].remove(id)
+
+    def delete_catalog_copy_entry(self, catalog_type, id):
+        return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)

@@ -154,6 +154,25 @@ def modify_catalog():
     flash("Entry modified succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
 
+@app.route('/adminView/deleteViewRecords', methods=['GET', 'POST'])
+def delete_view_catalog():
+   
+    type = int(request.form["type"])
+    id = request.form["id"]
+
+    if (type == 1):
+        catalog_type = CatalogController.BOOK_TYPE
+    elif (type == 2):
+        catalog_type = CatalogController.MOVIE_TYPE
+    elif (type == 3):
+        catalog_type = CatalogController.MAGAZINE_TYPE
+    elif (type == 4):
+        catalog_type = CatalogController.ALBUM_TYPE
+        
+    catalog_record = adminController.get_catalog_entry_by_id(catalog_type, int(id))
+    catalog_record_copy = adminController.get_catalog_copies_by_id(catalog_type, int(id))
+
+    return render_template('delete_record_modal.html', catalog_type = int(catalog_type), catalog_record = catalog_record, catalog_record_copy = catalog_record_copy)
 
 @app.route('/deleteCatalog', methods=['POST'])
 @login_required
@@ -161,8 +180,9 @@ def modify_catalog():
 def delete_catalog():
 
     id = request.form["id"]
-    type = request.form["type"]
-    adminController.delete_catalog(int(id), type)
+    catalog_type = request.form["type"]
+    print("Backend ID: " + id)
+    adminController.delete_catalog_copy_entry(catalog_type, int(id))
 
     flash("Entry deleted succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
