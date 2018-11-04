@@ -90,8 +90,7 @@ def adminViewAddToCatalog():
 @admin_required
 def adminViewAddBook():
     if request.method == 'POST':
-        type = request.form["type"]
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.BOOK_TYPE, request.form)
         flash("Book entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_book.html')
@@ -102,8 +101,7 @@ def adminViewAddBook():
 @admin_required
 def adminViewAddMovie():
     if request.method == 'POST':
-        type = request.form["type"]
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.MOVIE_TYPE, request.form)
         flash("Movie entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_movie.html')
@@ -114,8 +112,7 @@ def adminViewAddMovie():
 @admin_required
 def adminViewAddMagazine():
     if request.method == 'POST':
-        type = request.form["type"]
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.MAGAZINE_TYPE, request.form)
         flash("Magazine entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_magazine.html')
@@ -126,8 +123,7 @@ def adminViewAddMagazine():
 @admin_required
 def adminViewAddAlbum():
     if request.method == 'POST':
-        type = int(request.form["type"])
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.ALBUM_TYPE, request.form)
         flash("Album entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_album.html')
@@ -158,6 +154,25 @@ def modify_catalog():
     flash("Entry modified succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
 
+@app.route('/adminView/deleteViewRecords', methods=['GET', 'POST'])
+def delete_view_catalog():
+   
+    type = int(request.form["type"])
+    id = request.form["id"]
+
+    if (type == 1):
+        catalog_type = CatalogController.BOOK_TYPE
+    elif (type == 2):
+        catalog_type = CatalogController.MOVIE_TYPE
+    elif (type == 3):
+        catalog_type = CatalogController.MAGAZINE_TYPE
+    elif (type == 4):
+        catalog_type = CatalogController.ALBUM_TYPE
+        
+    catalog_record = adminController.get_catalog_entry_by_id(catalog_type, int(id))
+    catalog_record_copy = adminController.get_catalog_copies_by_id(catalog_type, int(id))
+
+    return render_template('delete_record_modal.html', catalog_type = int(catalog_type), catalog_record = catalog_record, catalog_record_copy = catalog_record_copy)
 
 @app.route('/deleteCatalog', methods=['POST'])
 @login_required
@@ -165,8 +180,9 @@ def modify_catalog():
 def delete_catalog():
 
     id = request.form["id"]
-    type = request.form["type"]
-    adminController.delete_catalog(int(id), type)
+    catalog_type = request.form["type"]
+    print("Backend ID: " + id)
+    adminController.delete_catalog_copy_entry(catalog_type, int(id))
 
     flash("Entry deleted succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
