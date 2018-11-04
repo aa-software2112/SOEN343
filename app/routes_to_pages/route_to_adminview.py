@@ -181,6 +181,7 @@ def delete_catalog():
 
     id = request.form["id"]
     catalog_type = request.form["type"]
+    print("Backend ID: " + id)
     adminController.delete_catalog_copy_entry(catalog_type, int(id))
 
     flash("Entry deleted succesfully.", 'success')
