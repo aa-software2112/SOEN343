@@ -88,6 +88,7 @@ class AdminController(UserController):
         return self._catalog_controller.get_catalog_entry_by_id(catalog_type, id)
 
     def add_entry_to_catalog(self, type, request_form):
+    
         if (type == self._catalog_controller.BOOK_TYPE):
             return self._catalog_controller.add_entry_to_catalog(type, Book(request_form))
 

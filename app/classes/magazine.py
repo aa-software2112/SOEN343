@@ -15,6 +15,8 @@ class Magazine:
         self._language = arguments['language']
         self._ISBN10 = arguments['isbn_10']
         self._ISBN13 = arguments['isbn_13']
+        self._total_quantity = 1
+        self._quantity_available = 1
 
     def get_id(self):
         """Returns the id of the object"""
@@ -24,4 +26,4 @@ class Magazine:
 
         return "Magazine | ID: " + str(self._id) + " TITLE: " + self._title +  " PUBLISHER: " + self._publisher + " YEAR: " + str(self._year_of_publication) + \
             " LANGUAGE: " + self._language + " ISBN10: " + \
-            self._ISBN10 + " ISBN13: " + self._ISBN13
+            self._ISBN10 + " ISBN13: " + self._ISBN13 + " TOTAL_QUANTITY: " + str(self._total_quantity) + " QUANTITY_AVAILABLE: " + str(self._quantity_available)
