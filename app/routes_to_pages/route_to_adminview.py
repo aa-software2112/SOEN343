@@ -172,11 +172,11 @@ def delete_view_catalog():
         catalog_type = CatalogController.MAGAZINE_TYPE
     elif (type == 4):
         catalog_type = CatalogController.ALBUM_TYPE
-
+    print("CatalogType", catalog_type)
     catalog_record = adminController.get_catalog_entry_by_id(catalog_type, int(id))
     catalog_record_copy = adminController.get_catalog_copies_by_id(catalog_type, int(id))
 
-    return render_template('delete_record_modal.html', catalog_record = catalog_record, catalog_record_copy = catalog_record_copy)
+    return render_template('delete_record_modal.html', catalog_type = int(catalog_type), catalog_record = catalog_record, catalog_record_copy = catalog_record_copy)
 
 @app.route('/deleteCatalog', methods=['POST'])
 @login_required

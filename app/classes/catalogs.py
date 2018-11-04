@@ -1,7 +1,9 @@
 import abc
 from app.common_definitions.helper_functions import convert_date_time_to_epoch as to_epoch
 from app.classes.book import Book
-
+from app.classes.movie import Movie
+from app.classes.magazine import Magazine
+from app.classes.album import Album
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -144,6 +146,20 @@ class MovieCatalog(Catalog):
                                   modified_movie._subtitles, modified_movie._dubbed, to_epoch(modified_movie._release_date), modified_movie._runtime, modified_movie._id)
         self.db.execute_query_write(modify_movie_query, tuple_for_modify_query)
         self._movies[int(modified_movie.get_id())] = modified_movie
+        
+    def get_copies(self, id):
+
+        found_copies = []
+
+        get_copy_records_query = """ SELECT movie_copy.id, movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.run_time FROM movie, movie_copy WHERE movie_copy.movie_id = ? AND movie.id = movie_copy.movie_id"""
+        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
+
+        copy_records = get_copies_cursor.fetchall()
+
+        for row in copy_records:
+            found_copies.append(Movie(row))
+
+        return found_copies
 
     def remove(self, id):
         remove_movie = 'DELETE FROM movie WHERE id = ?'
@@ -151,6 +167,11 @@ class MovieCatalog(Catalog):
         # only tuples as second parameters
         self.db.execute_query_write(remove_movie, (id,))
         return self._movies.pop(id, None)
+
+    def remove_copy(self, id):
+        remove_movie_copy = """ DELETE FROM movie_copy WHERE id = ? """
+
+        self.db.execute_query_write(remove_movie_copy, (id,))
 
     def display(self):
 
@@ -198,12 +219,31 @@ class MagazineCatalog(Catalog):
             modify_magazine_query, tuple_for_modify_query)
         self._magazines[int(modified_magazine.get_id())] = modified_magazine
 
+    def get_copies(self, id):
+
+        found_copies = []
+
+        get_copy_records_query = """ SELECT magazine_copy.id, magazine.title, magazine.publisher, magazine.year_of_publication, magazine.language, magazine.isbn_10, magazine.isbn_13 FROM magazine, magazine_copy WHERE magazine_copy.magazine_id = ? AND magazine.id = magazine_copy.magazine_id"""
+        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
+
+        copy_records = get_copies_cursor.fetchall()
+
+        for row in copy_records:
+            found_copies.append(Magazine(row))
+
+        return found_copies
+
     def remove(self, id):
         remove_magazine = 'DELETE FROM magazine WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_magazine, (id,))
         return self._magazines.pop(id, None)
+
+    def remove_copy(self, id):
+        remove_magazine_copy = """ DELETE FROM magazine_copy WHERE id = ? """
+
+        self.db.execute_query_write(remove_magazine_copy, (id,))
 
     def display(self):
 
@@ -248,12 +288,31 @@ class AlbumCatalog(Catalog):
         self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
         self._albums[int(modified_album.get_id())] = modified_album
 
+    def get_copies(self, id):
+
+        found_copies = []
+
+        get_copy_records_query = """ SELECT album_copy.id, album.type, album.title, album.artist, album.label, album.release_date, album.asin FROM album, album_copy WHERE album_copy.album_id = ? AND album.id = album_copy.album_id"""
+        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
+
+        copy_records = get_copies_cursor.fetchall()
+
+        for row in copy_records:
+            found_copies.append(Album(row))
+
+        return found_copies
+
     def remove(self, id):
         remove_album = 'DELETE FROM album WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_album, (id,))
         return self._albums.pop(id, None)
+
+    def remove_copy(self, id):
+        remove_album_copy = """ DELETE FROM album_copy WHERE id = ? """
+
+        self.db.execute_query_write(remove_album_copy, (id,))
 
     def display(self):
 
