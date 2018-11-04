@@ -57,53 +57,20 @@ class BookCatalog(Catalog):
     def add(self, book, add_to_db):
 
         if add_to_db is True:
-            # verify if added book title already exist and store True or False 
+                 
+            #If book exist, gets cursor that holds id, total_quantity & quantity_available of a book from book table, by quering title and year of publication of the added book.
+            #If book doesn't exist, use the None value returned to add new book (operation found below).
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM book WHERE book.title = ? AND book.year_of_publication = ?'
+            tuple_for_get_id = (book._title, book._year_of_publication)
+            existing_book_id_cursor = self.db.execute_query(
+            select_id_query, tuple_for_get_id)
         
-            #delete this variable below once you make the commented code work
-            verify_if_book_exist = 0
-            '''
-            select_boolean_query = 'SELECT EXISTS(SELECT 1 FROM book WHERE book.title = ?)'
-            tuple_for_select_query = (book._title)
-            verify_if_book_exist = self.db.execute_query(
-                select_boolean_query, tuple_for_select_query) '''
+            existing_book_id_fetched = existing_book_id_cursor.fetchone()
+          
 
-            #if already exist, add new book in second table and update quantity of first table
-           
-            if verify_if_book_exist is 1:
-
-                #gets the id of the book through its title in main table     
-                select_id_query = 'SELECT id FROM book WHERE book.title = ?'
-                existing_book_id = self.db.execute_query(
-                select_id_query, book._title)
-                         
-                #insert book into book_copy table
-                insert_new_book_copy_query = 'INSERT INTO book_copy(book_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query = (existing_book_id, 0)
-                self.db.execute_query_write(insert_new_book_copy_query, tuple_for_insert_copy_query)
-                
-                 #gets the total_quantity of the book through its title in main table     
-                select_total_quantity_query = 'SELECT total_quantity FROM book WHERE book.id = ?'
-                existing_book_total_quantity = self.db.execute_query(
-                select_id_query, existing_book_id)
-
-                #gets the quantity_available of the book through its title in main table     
-                select_quantity_available_query = 'SELECT total_quantity FROM book WHERE book.id = ?'
-                existing_book_quantity_available = self.db.execute_query(
-                select_id_query, existing_book_id)
-        
-                #update book quantity of book in object
-                book._total_quantity = book._total_quantity + 1
-                book._quantity_available = book._quantity_available + 1
-                
-                #update book quantity of book in database
-                update_new_book_quantity_query = 'UPDATE book SET total_quantity = ?, quantity_available = ? WHERE book_id = ?'
-                tuple_for_updated_quantity_query = (book._total_quantity, book._quantity_available, existing_book_id)
-                update_book_quantity = self.db.execute_query_write(
-                update_new_book_quantity_query, tuple_for_updated_quantity_query)
-
-            else:
-                #insert book into book table
+            #if already exist, add new book in first and second table
+            if existing_book_id_fetched is None:
+               #insert book into book table
                 insert_new_book_query = 'INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)' \
                 'VALUES(?,?,?,?,?,?,?,?,?,?,?)'
                 tuple_for_insert_query = (book._author, book._title, book._format, book._pages,
@@ -122,7 +89,28 @@ class BookCatalog(Catalog):
                 'VALUES(?,?)'
                 tuple_for_insert_copy_query = (new_book_id, 0)
                 self.db.execute_query_write(insert_new_book_copy_query, tuple_for_insert_copy_query)
-            
+
+            #else doesn't already exist. Need to add new book in second table and update quantity of first table
+            else:
+                
+                #get id and get and increment total_quantity and quantity_available
+                book._id = existing_book_id_fetched[0]
+                book._total_quantity = existing_book_id_fetched[1] + 1
+                book._quantity_available = existing_book_id_fetched[2] + 1
+                print(book._id , book._total_quantity, book._quantity_available)
+         
+
+                #insert book into book_copy table
+                insert_new_book_copy_query = 'INSERT INTO book_copy(book_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query =(book._id, 0)
+                self.db.execute_query_write(insert_new_book_copy_query, tuple_for_insert_copy_query)
+                
+                #update book quantity in database
+                update_new_book_quantity_query = 'UPDATE book SET total_quantity = ?, quantity_available = ? WHERE id = ?'
+                tuple_for_updated_quantity_query = (book._total_quantity, book._quantity_available, book._id)
+                update_book_quantity = self.db.execute_query_write(
+                update_new_book_quantity_query, tuple_for_updated_quantity_query)
 
         else:
             self._books[book._id] = book
@@ -155,24 +143,69 @@ class MovieCatalog(Catalog):
     def get(self, id):
         return self._movies[id]
 
+
     def add(self, movie, add_to_db):
 
         if add_to_db is True:
-            insert_new_movie_query = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time)' \
-                'VALUES(?,?,?,?,?,?,?,?,?)'
-            tuple_for_insert_query = (movie._title, movie._director, movie._producers, movie._actors,
-                                      movie._language, movie._subtitles, movie._dubbed, to_epoch(movie._release_date), movie._runtime)
+                 
+            #If movie exist, gets cursor that holds id, total_quantity & quantity_available of a movie from movie table, by quering title and year of publication of the added movie.
+            #If movie doesn't exist, use the None value returned to add new movie (operation found below).
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM movie WHERE movie.title = ? AND run_time = ?'
+            tuple_for_get_id = (movie._title, movie._runtime)
+            existing_movie_id_cursor = self.db.execute_query(
+            select_id_query, tuple_for_get_id)
+        
+            existing_movie_id_fetched = existing_movie_id_cursor.fetchone()
+          
 
-            # getting the id of the last inserted movie
-            new_movie_id = self.db.execute_query_write(
+            #if movie doesn't already exist in first table, add new movie in first and second table
+            if existing_movie_id_fetched is None:
+               #insert movie into movie table
+                insert_new_movie_query = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time, total_quantity, quantity_available)' \
+                'VALUES(?,?,?,?,?,?,?,?,?,?,?)'
+                tuple_for_insert_query = (movie._title, movie._director, movie._producers, movie._actors,
+                                      movie._language, movie._subtitles, movie._dubbed, to_epoch(movie._release_date), movie._runtime, movie._total_quantity, movie._quantity_available)
+    
+                # getting the id of the last inserted movie
+                new_movie_id = self.db.execute_query_write(
                 insert_new_movie_query, tuple_for_insert_query).lastrowid
-            # since the object created has by default id = 0, we have to set
-            # its id to the id obtained above
-            movie._id = new_movie_id
-            self._movies[new_movie_id] = movie
+                # since the object created has by default id = 0, we have to set
+                # its id to the id obtained above
+                movie._id = new_movie_id
+                self._movies[new_movie_id] = movie
+                    
+                #insert movie into movie_copy table
+                insert_new_movie_copy_query = 'INSERT INTO movie_copy(movie_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query = (new_movie_id, 0)
+                self.db.execute_query_write(insert_new_movie_copy_query, tuple_for_insert_copy_query)
+
+            #else already exist. Need to add new movie in second table and update quantity of first table
+            else:
+                
+                #get id and get and increment total_quantity and quantity_available
+                movie._id = existing_movie_id_fetched[0]
+                movie._total_quantity = existing_movie_id_fetched[1] + 1
+                movie._quantity_available = existing_movie_id_fetched[2] + 1
+                print(movie._id , movie._total_quantity, movie._quantity_available)
+         
+
+                #insert movie into movie_copy table
+                insert_new_movie_copy_query = 'INSERT INTO movie_copy(movie_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query =(movie._id, 0)
+                self.db.execute_query_write(insert_new_movie_copy_query, tuple_for_insert_copy_query)
+                
+                #update movie quantity in database
+                update_new_movie_quantity_query = 'UPDATE movie SET total_quantity = ?, quantity_available = ? WHERE id = ?'
+                tuple_for_updated_quantity_query = (movie._total_quantity, movie._quantity_available, movie._id)
+                update_movie_quantity = self.db.execute_query_write(
+                update_new_movie_quantity_query, tuple_for_updated_quantity_query)
 
         else:
             self._movies[movie._id] = movie
+
+
 
     def modify(self, modified_movie):
 
@@ -207,25 +240,68 @@ class MagazineCatalog(Catalog):
 
     def get(self, id):
         return self._magazines[id]
-
+    
     def add(self, magazine, add_to_db):
+
         if add_to_db is True:
+                 
+            #If magazine exist, gets cursor that holds id, total_quantity & quantity_available of a magazine from magazine table, by quering title and year of publication of the added magazine.
+            #If magazine doesn't exist, use the None value returned to add new magazine (operation found below).
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM magazine WHERE magazine.title = ? AND magazine.year_of_publication = ?'
+            tuple_for_get_id = (magazine._title, magazine._year_of_publication)
+            existing_magazine_id_cursor = self.db.execute_query(
+            select_id_query, tuple_for_get_id)
+        
+            existing_magazine_id_fetched = existing_magazine_id_cursor.fetchone()
+          
 
-            insert_new_magazine_query = 'INSERT INTO magazine(title, publisher, year_of_publication, language, isbn_10, isbn_13)' \
-                'VALUES(?,?,?,?,?,?)'
-            tuple_for_insert_query = (magazine._title, magazine._publisher, magazine._year_of_publication,
-                                      magazine._language, magazine._ISBN10, magazine._ISBN13)
-
-            # getting the id of the last inserted magazine
-            new_magazine_id = self.db.execute_query_write(
+            #if doesn't exist, add new magazine in first and second table
+            if existing_magazine_id_fetched is None:
+               #insert magazine into magazine table
+                insert_new_magazine_query = 'INSERT INTO magazine(title, publisher, year_of_publication, language, isbn_10, isbn_13,total_quantity,quantity_available)' \
+                'VALUES(?,?,?,?,?,?,?,?)'
+                tuple_for_insert_query = (magazine._title, magazine._publisher, magazine._year_of_publication,
+                                      magazine._language, magazine._ISBN10, magazine._ISBN13, magazine._total_quantity, magazine._quantity_available)
+    
+                # getting the id of the last inserted magazine
+                new_magazine_id = self.db.execute_query_write(
                 insert_new_magazine_query, tuple_for_insert_query).lastrowid
-            # since the object created has by default id = 0, we have to set
-            # its id to the id obtained above
-            magazine._id = new_magazine_id
-            self._magazines[new_magazine_id] = magazine
+                # since the object created has by default id = 0, we have to set
+                # its id to the id obtained above
+                magazine._id = new_magazine_id
+                self._magazines[new_magazine_id] = magazine
+                    
+                #insert magazine into magazine_copy table
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query = (new_magazine_id, 0)
+                self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
+
+            #else already exist. Need to add new magazine in second table and update quantity of first table
+            else:
+                
+                #get id and get and increment total_quantity and quantity_available
+                magazine._id = existing_magazine_id_fetched[0]
+                magazine._total_quantity = existing_magazine_id_fetched[1] + 1
+                magazine._quantity_available = existing_magazine_id_fetched[2] + 1
+                print(magazine._id , magazine._total_quantity, magazine._quantity_available)
+         
+
+                #insert magazine into magazine_copy table
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query =(magazine._id, 0)
+                self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
+                
+                #update magazine quantity in database
+                update_new_magazine_quantity_query = 'UPDATE magazine SET total_quantity = ?, quantity_available = ? WHERE id = ?'
+                tuple_for_updated_quantity_query = (magazine._total_quantity, magazine._quantity_available, magazine._id)
+                update_magazine_quantity = self.db.execute_query_write(
+                update_new_magazine_quantity_query, tuple_for_updated_quantity_query)
 
         else:
             self._magazines[magazine._id] = magazine
+
 
     def modify(self, modified_magazine):
         modify_magazine_query = 'UPDATE magazine SET title = ?, publisher = ?, year_of_publication = ?, language = ?, isbn_10 = ?, isbn_13 = ?' \
@@ -264,21 +340,64 @@ class AlbumCatalog(Catalog):
     def add(self, album, add_to_db):
 
         if add_to_db is True:
-            insert_new_album = 'INSERT INTO album(type, title, artist, label, release_date, asin) VALUES(?,?,?,?,?,?)'
-            tuple_for_insert_query = (
-                album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN)
+                 
+            #If album exist, gets cursor that holds id, total_quantity & quantity_available of a album from album table, by quering title and asin of the added album.
+            #If album doesn't exist, use the None value returned to add new album (operation found below).
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM album WHERE album.title = ? AND album.ASIN = ?'
+            tuple_for_get_id = (album._title, album.ASIN)
+            existing_album_id_cursor = self.db.execute_query(
+            select_id_query, tuple_for_get_id)
+        
+            existing_album_id_fetched = existing_album_id_cursor.fetchone()
+          
 
-            # getting the id of the last inserted album
-            new_album_id = self.db.execute_query_write(
-                insert_new_album, tuple_for_insert_query).lastrowid
-            # since the object created has by default id = 0, we have to set
-            # its id to the id obtained above
-            album._id = new_album_id
-            self._albums[new_album_id] = album
+            #if doesn't exist, add new album in first and second table
+            if existing_album_id_fetched is None:
+                #insert album into album table
+                insert_new_album_query = 'INSERT INTO album(type, title, artist, label, release_date, asin, total_quantity, quantity_available)' \
+                'VALUES(?,?,?,?,?,?,?,?)'
+                tuple_for_insert_query = (album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN, album._total_quantity, album._quantity_available)
+
+                # getting the id of the last inserted album
+                new_album_id = self.db.execute_query_write(
+                insert_new_album_query, tuple_for_insert_query).lastrowid
+                # since the object created has by default id = 0, we have to set
+                # its id to the id obtained above
+                album._id = new_album_id
+                self._albums[new_album_id] = album
+                    
+                #insert album into album_copy table
+                insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query = (new_album_id, 0)
+                self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
+
+            #else already exist. Need to add new album in second table and update quantity of first table
+            else:
+                
+                #get id and get and increment total_quantity and quantity_available
+                album._id = existing_album_id_fetched[0]
+                album._total_quantity = existing_album_id_fetched[1] + 1
+                album._quantity_available = existing_album_id_fetched[2] + 1
+                print(album._id , album._total_quantity, album._quantity_available)
+         
+
+                #insert album into album_copy table
+                insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
+                'VALUES(?,?)'
+                tuple_for_insert_copy_query =(album._id, 0)
+                self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
+                
+                #update album quantity in database
+                update_new_album_quantity_query = 'UPDATE album SET total_quantity = ?, quantity_available = ? WHERE id = ?'
+                tuple_for_updated_quantity_query = (album._total_quantity, album._quantity_available, album._id)
+                update_album_quantity = self.db.execute_query_write(
+                update_new_album_quantity_query, tuple_for_updated_quantity_query)
 
         else:
             self._albums[album._id] = album
-
+    
+    
     def modify(self, modified_album):
         modify_album_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
         tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
