@@ -1,4 +1,4 @@
-{% import '/includes/description_macro.html' as forms %}
+{% import '/includes/description_macro.html' as description %}
 {% extends "index.html" %}
 
 {% block pageTitle %}
@@ -23,24 +23,23 @@ Copies found for {{ catalog_record._title }}
         <hr>
 
         <!-- Load the right catalog format -->
-        
+
         {% if (catalog_type == 1) %}
-        {{ forms.book('book', format= record_copy._format, year_of_publication = record_copy._year_of_publication,
-        author = record_copy._author, isbn13 = record_copy._ISBN13 )}}
+          {{ description.book('book', format= record_copy._format, year_of_publication = record_copy._year_of_publication,
+          author = record_copy._author, isbn13 = record_copy._ISBN13 )}}
 
         {% elif (catalog_type == 2) %}
-          {{ forms.movie('movie', director = record_copy._director, producers = record_copy._producers, 
+          {{ description.movie('movie', director = record_copy._director, producers = record_copy._producers, 
           actors = record_copy._actors, release_date = record_copy._release_date,
           language = record_copy._language )}}
 
         {% elif (catalog_type == 3) %}
-          {{ forms.magazine('magazine', publisher = record_copy._publisher, year_of_publication =record_copy._year_of_publication, 
+          {{ description.magazine('magazine', publisher = record_copy._publisher, year_of_publication =record_copy._year_of_publication, 
           isbn13 = record_copy._ISBN13, language = record_copy._language)}}
 
         {% elif (catalog_type == 4) %}
-          {{ forms.album('album', artist = record_copy._artist, release_date = record_copy._release_date, 
-          asin = record_copy._ASIN, type = record_copy._type,
-          label = record_copy._label )}}
+          {{ description.album('album', artist = record_copy._artist, release_date = record_copy._release_date, 
+          asin = record_copy._ASIN, type = record_copy._type, label = record_copy._label )}}
         {% endif %}
 
       </div>
@@ -49,7 +48,7 @@ Copies found for {{ catalog_record._title }}
         <form action="/deleteCatalog" method="post">
           <input type="hidden" name="id" value="{{ record_copy._id }}">
           <input type="hidden" name="type" value="{{ catalog_type }}">
-          <button type="submit" name="delete" class="btn btn-info" style="cursor: pointer">
+          <button type="submit" class="btn btn-info" style="cursor: pointer">
             <i class="far fa-trash-alt"></i>
           </button>
       </div>

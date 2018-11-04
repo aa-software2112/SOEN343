@@ -86,7 +86,7 @@ class BookCatalog(Catalog):
 
         found_copies = []
 
-        get_copy_records_query = """ SELECT book_copy.id, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book, book_copy WHERE book_copy.book_id = ? AND book.id = book_copy.book_id"""
+        get_copy_records_query = """ SELECT book_copy.id, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book, book_copy WHERE book.id = ? AND book.id = book_copy.book_id"""
         get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
 
         copy_records = get_copies_cursor.fetchall()
@@ -151,7 +151,7 @@ class MovieCatalog(Catalog):
 
         found_copies = []
 
-        get_copy_records_query = """ SELECT movie_copy.id, movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.run_time FROM movie, movie_copy WHERE movie_copy.movie_id = ? AND movie.id = movie_copy.movie_id"""
+        get_copy_records_query = """ SELECT movie_copy.id, movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.run_time FROM movie, movie_copy WHERE movie.id = ? AND movie.id = movie_copy.movie_id"""
         get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
 
         copy_records = get_copies_cursor.fetchall()
@@ -223,7 +223,7 @@ class MagazineCatalog(Catalog):
 
         found_copies = []
 
-        get_copy_records_query = """ SELECT magazine_copy.id, magazine.title, magazine.publisher, magazine.year_of_publication, magazine.language, magazine.isbn_10, magazine.isbn_13 FROM magazine, magazine_copy WHERE magazine_copy.magazine_id = ? AND magazine.id = magazine_copy.magazine_id"""
+        get_copy_records_query = """ SELECT magazine_copy.id, magazine.title, magazine.publisher, magazine.year_of_publication, magazine.language, magazine.isbn_10, magazine.isbn_13 FROM magazine, magazine_copy WHERE magazine.id = ? AND magazine.id = magazine_copy.magazine_id"""
         get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
 
         copy_records = get_copies_cursor.fetchall()
@@ -292,7 +292,7 @@ class AlbumCatalog(Catalog):
 
         found_copies = []
 
-        get_copy_records_query = """ SELECT album_copy.id, album.type, album.title, album.artist, album.label, album.release_date, album.asin FROM album, album_copy WHERE album_copy.album_id = ? AND album.id = album_copy.album_id"""
+        get_copy_records_query = """ SELECT album_copy.id, album.type, album.title, album.artist, album.label, album.release_date, album.asin FROM album, album_copy WHERE album.id = ? AND album.id = album_copy.album_id"""
         get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
 
         copy_records = get_copies_cursor.fetchall()
