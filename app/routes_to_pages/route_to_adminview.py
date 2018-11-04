@@ -90,8 +90,7 @@ def adminViewAddToCatalog():
 @admin_required
 def adminViewAddBook():
     if request.method == 'POST':
-        type = request.form["type"]
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.BOOK_TYPE, request.form)
         flash("Book entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_book.html')
@@ -102,8 +101,7 @@ def adminViewAddBook():
 @admin_required
 def adminViewAddMovie():
     if request.method == 'POST':
-        type = request.form["type"]
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.MOVIE_TYPE, request.form)
         flash("Movie entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_movie.html')
@@ -114,8 +112,7 @@ def adminViewAddMovie():
 @admin_required
 def adminViewAddMagazine():
     if request.method == 'POST':
-        type = request.form["type"]
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.MAGAZINE_TYPE, request.form)
         flash("Magazine entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_magazine.html')
@@ -126,8 +123,7 @@ def adminViewAddMagazine():
 @admin_required
 def adminViewAddAlbum():
     if request.method == 'POST':
-        type = int(request.form["type"])
-        adminController.add_entry_to_catalog(type, request.form)
+        adminController.add_entry_to_catalog(CatalogController.ALBUM_TYPE, request.form)
         flash("Album entry created successfully.", 'success')
         return redirect('/adminView/adminViewCatalog')
     return render_template('add_album.html')

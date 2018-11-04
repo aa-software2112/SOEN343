@@ -52,16 +52,14 @@ class BookCatalog(Catalog):
         self.db.execute_query_write(modify_book_query, tuple_for_modify_query)
         self._books[int(modified_book.get_id())] = modified_book
  
- 
-
     def add(self, book, add_to_db):
 
         if add_to_db is True:
                  
             #If book exist, gets cursor that holds id, total_quantity & quantity_available of a book from book table, by quering title and year of publication of the added book.
             #If book doesn't exist, use the None value returned to add new book (operation found below).
-            select_id_query = 'SELECT id, total_quantity, quantity_available FROM book WHERE book.title = ? AND book.year_of_publication = ?'
-            tuple_for_get_id = (book._title, book._year_of_publication)
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM book WHERE book.title = ? AND book.author = ?'
+            tuple_for_get_id = (book._title, book._author)
             existing_book_id_cursor = self.db.execute_query(
             select_id_query, tuple_for_get_id)
         
@@ -150,7 +148,7 @@ class MovieCatalog(Catalog):
                  
             #If movie exist, gets cursor that holds id, total_quantity & quantity_available of a movie from movie table, by quering title and year of publication of the added movie.
             #If movie doesn't exist, use the None value returned to add new movie (operation found below).
-            select_id_query = 'SELECT id, total_quantity, quantity_available FROM movie WHERE movie.title = ? AND run_time = ?'
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM movie WHERE movie.title = ? AND movie.run_time = ?'
             tuple_for_get_id = (movie._title, movie._runtime)
             existing_movie_id_cursor = self.db.execute_query(
             select_id_query, tuple_for_get_id)
@@ -343,8 +341,8 @@ class AlbumCatalog(Catalog):
                  
             #If album exist, gets cursor that holds id, total_quantity & quantity_available of a album from album table, by quering title and asin of the added album.
             #If album doesn't exist, use the None value returned to add new album (operation found below).
-            select_id_query = 'SELECT id, total_quantity, quantity_available FROM album WHERE album.title = ? AND album.ASIN = ?'
-            tuple_for_get_id = (album._title, album.ASIN)
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM album WHERE album.title = ? AND album.artist = ?'
+            tuple_for_get_id = (album._title, album._artist)
             existing_album_id_cursor = self.db.execute_query(
             select_id_query, tuple_for_get_id)
         
