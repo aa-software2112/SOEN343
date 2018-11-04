@@ -10,42 +10,39 @@ Modify an Album Type
 </div>
 {% endif %}
 <div class="card">
-   <div class="card-body">
-      <form action="/modifyCatalog" method="post">
-        <input type="hidden" name="type" value="4">
-         <div class="form-group">
-            <label for="type">Type</label>
-            <input type="hidden" name="id" value="{{album._id}}">
-            <input type="text" class="form-control" name="type" value='{{album._type}}' >
-         </div>
-         <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" name="title" value='{{album._title}}' >
-         </div>
-         <div class="form-group">
-            <label for="artist">Artist</label>
-            <input type="text" class="form-control" name="artist" value='{{album._artist}}' >
-         </div>
-         <div class="form-group">
-            <label for="label">Label</label>
-            <input type="text" class="form-control" name="label" value='{{album._label}}' >
-         </div>
-         <div class="form-group">
-            <label for="realese_date">Release Date</label>
-            <input type="text" class="form-control" name="release_date" value='{{album._release_date}}' >
-         </div>
-         <div class="form-group">
-            <label for="asin">ASIN</label>
-            <input type="text" class="form-control" name="asin" value='{{album._ASIN}}' >
-         </div>
-         <button type="submit" name="save" value="save" class="btn btn-primary">Save</button>
-      </form> <br>
-      <form action="/deleteCatalog" method="post">
-         <input type="hidden" name="id" value="{{album._id}}">
-         <input type="hidden" name="type" value="4">
-         <button type="submit" name="delete" value="" class="btn btn-danger">Delete</button>
-         <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-info">Cancel</a>
-      </form>
-   </div>
+  <div class="card-body">
+    <form action="/modifyCatalog" method="post">
+      <input type="hidden" name="type" value="4">
+      <div class="form-group">
+        <label for="type">Type</label>
+        <input type="hidden" name="id" value="{{album._id}}">
+        <input type="text" class="form-control" name="type" value='{{album._type}}'>
+      </div>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" name="title" value='{{album._title}}'>
+      </div>
+      <div class="form-group">
+        <label for="artist">Artist</label>
+        <input type="text" class="form-control" name="artist" value='{{album._artist}}'>
+      </div>
+      <div class="form-group">
+        <label for="label">Label</label>
+        <input type="text" class="form-control" name="label" value='{{album._label}}'>
+      </div>
+      <div class="form-group">
+        <label for="realese_date">Release Date</label>
+        <input type="text" class="form-control" name="release_date" value='{{album._release_date}}'>
+      </div>
+      <div class="form-group">
+        <label for="asin">ASIN</label>
+        <input type="text" class="form-control" name="asin" value='{{album._ASIN}}'>
+      </div>
+      <div class="float-right mt-4">
+        <button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
+        <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

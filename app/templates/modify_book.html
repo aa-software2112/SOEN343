@@ -52,13 +52,10 @@ Modify a Book
 		    <label for="isbn_13">ISBN 13</label>
 		    <input type="text" class="form-control" name="isbn_13" value='{{book._ISBN13}}'>
 		  </div>
-		  <button type="submit" name="save" value="save" class="btn btn-primary">Save</button>
-      </form> <br>
-      <form action="/deleteCatalog" method="post">
-         <input type="hidden" name="id" value="{{book._id}}">
-         <input type="hidden" name="type" value="1">
-         <button type="submit" name="delete" value="" class="btn btn-danger">Delete</button>
-         <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-info">Cancel</a>
+			<div class="float-right mt-4">
+				<button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
+				<a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+			</div>
       </form>
     </div>
 </div>

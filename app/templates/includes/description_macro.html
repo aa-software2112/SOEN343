@@ -1,0 +1,42 @@
+<!-- Macro are similar to functions -->
+
+{%- macro book(name, author='', format='', pages='', publisher='', year_of_publication='', language='', isbn10='',
+isbn13='') -%}
+<footer class="blockquote-footer">
+    <cite class="text-monospace"> Copyright © {{ year_of_publication }} by {{author }} </cite>
+    <p></p>
+    <small class="text-muted">
+        <p>ISBN{{ isbn13 }} ({{ format}}) <br></p>
+    </small>
+</footer>
+{%- endmacro %}
+
+{%- macro movie(name, director='', producers='', actors='', language='', subtitle='', dubbed='', release_date='',
+run_time='') -%}
+<footer class="blockquote-footer">
+    <cite class="text-monospace"> {{ release_date }} by {{director }} </cite>
+    <p></p>
+    <small class="text-muted">
+        <p><b>Producers:</b> {{ producers }} </p>
+        <p><b>Actors:</b> {{actors }}</p> <br>
+    </small>
+</footer>
+{%- endmacro %}
+
+{%- macro magazine(name, publisher='', year_of_publication='', language='', isbn10='', isbn13='') -%}
+<footer class="blockquote-footer">
+    <cite class="text-monospace"> Copyright © {{ year_of_publication }} by {{ publisher }} </cite>
+    <small class="text-muted">
+        <p>ISBN{{ isbn13 }} ({{ language }}) </p>
+    </small>
+</footer>
+{%- endmacro %}
+
+{%- macro album(name, type='', artist='', label='', release_date='', asin='') -%}
+<footer class="blockquote-footer">
+    <cite class="text-monospace"> Copyright © {{ release_date }} by {{ artist }} </cite>
+    <small class="text-muted">
+        <p> ASIN{{ asin }} ({{ type }} - {{ label }}) </p>
+    </small>
+</footer>
+{%- endmacro %}

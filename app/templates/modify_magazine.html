@@ -10,42 +10,40 @@ Modify a Magazine
 </div>
 {% endif %}
 <div class="card">
-   <div class="card-body">
-      <form action="/modifyCatalog" method="post">
-        <input type="hidden" name="type" value="3">
-         <div class="form-group">
-            <label for="title">Title</label>
-            <input type="hidden" name="id" value="{{magazine._id}}">
-            <input type="text" class="form-control" name="title" value='{{magazine._title}}' >
-         </div>
-         <div class="form-group">
-            <label for="publisher">Publisher</label>
-            <input type="text" class="form-control" name="publisher" value='{{magazine._publisher}}'>
-         </div>
-         <div class="form-group">
-            <label for="year_of_publication">Year of Publication</label>
-            <input type="text" class="form-control" name="year_of_publication" value='{{magazine._year_of_publication}}' pattern=".{4,}" title="Please use 4 numbers">
-         </div>
-         <div class="form-group">
-            <label for="language">Language</label>
-            <input type="text" class="form-control" name="language" value='{{magazine._language}}'>
-         </div>
-         <div class="form-group">
-            <label for="isbn_10">ISBN 10</label>
-            <input type="text" class="form-control" name="isbn_10" value='{{magazine._ISBN10}}'>
-         </div>
-         <div class="form-group">
-            <label for="isbn_13">ISBN 13</label>
-            <input type="text" class="form-control" name="isbn_13" value='{{magazine._ISBN13}}'>
-         </div>
-         <button type="submit" name="save" value="save" class="btn btn-primary">Save</button>
-      </form> <br>
-      <form action="/deleteCatalog" method="post">
-         <input type="hidden" name="id" value="{{magazine._id}}">
-         <input type="hidden" name="type" value="3">
-         <button type="submit" name="delete" value="" class="btn btn-danger">Delete</button>
-         <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-info">Cancel</a>
-      </form>
-   </div>
+  <div class="card-body">
+    <form action="/modifyCatalog" method="post">
+      <input type="hidden" name="type" value="3">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="hidden" name="id" value="{{magazine._id}}">
+        <input type="text" class="form-control" name="title" value='{{magazine._title}}'>
+      </div>
+      <div class="form-group">
+        <label for="publisher">Publisher</label>
+        <input type="text" class="form-control" name="publisher" value='{{magazine._publisher}}'>
+      </div>
+      <div class="form-group">
+        <label for="year_of_publication">Year of Publication</label>
+        <input type="text" class="form-control" name="year_of_publication" value='{{magazine._year_of_publication}}'
+          pattern=".{4,}" title="Please use 4 numbers">
+      </div>
+      <div class="form-group">
+        <label for="language">Language</label>
+        <input type="text" class="form-control" name="language" value='{{magazine._language}}'>
+      </div>
+      <div class="form-group">
+        <label for="isbn_10">ISBN 10</label>
+        <input type="text" class="form-control" name="isbn_10" value='{{magazine._ISBN10}}'>
+      </div>
+      <div class="form-group">
+        <label for="isbn_13">ISBN 13</label>
+        <input type="text" class="form-control" name="isbn_13" value='{{magazine._ISBN13}}'>
+      </div>
+      <div class="float-right mt-4">
+        <button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
+        <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

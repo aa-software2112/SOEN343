@@ -50,14 +50,11 @@ Modify a Movie
             <label for="run_time">Runtime</label>
             <input type="text" class="form-control" name="run_time" value='{{movie._runtime}}'>
          </div>
-         <button type="submit" name="save" value="save" class="btn btn-primary">Save</button>
-      </form> <br>
-      <form action="/deleteCatalog" method="post">
-         <input type="hidden" name="id" value="{{movie._id}}">
-         <input type="hidden" name="type" value="2">
-         <button type="submit" name="delete" value="" class="btn btn-danger">Delete</button>
-         <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-info">Cancel</a>
-      </form>
+         <div class="float-right mt-4">
+            <button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
+            <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+        </div>
+      </form> 
    </div>
 </div>
 {% endblock %}
