@@ -360,8 +360,7 @@ def initializeAndFillDatabase(pathToDB):
             client = (
             f.first_name(), f.last_name(), f.address().replace("\n", ", "), f.email(), phone_number(), f.user_name(),
             f.password(), f.random_int() % 2, f.random_int() % 2, int(time.time() - f.random_int() * f.random_int()))
-            for cop in range(COPIES):
-                create_client(conn, client)
+            create_client(conn, client)
 
         client1 = ('Aaron', 'Doe', '1451 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student1@hotmail.com',
                    '514-555-0001', 'antman', 'password1', 0, 1, 1537207100)

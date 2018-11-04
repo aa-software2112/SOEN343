@@ -23,7 +23,7 @@ with open('app/routes.py', 'w') as file:
 from app.classes.database_container import DatabaseContainer
 from app.common_definitions.common_paths import PATH_TO_DATABASE
 from app.database import sqlite_script
-from app.controllers.user_controller import UserController
+from app.controllers.user_controller import ClientController
 from app.controllers.admin_controller import AdminController
 from app.controllers.catalog_controller import CatalogController
 
@@ -37,7 +37,10 @@ databaseObject = DatabaseContainer(PATH_TO_DATABASE)
 catalog_controller = CatalogController(databaseObject)
 catalog_controller.load_database_into_memory()
 
-userController = UserController(databaseObject)
+clientController = ClientController(databaseObject)
+clientController.load_database_into_memory()
+
 adminController = AdminController(databaseObject, catalog_controller)
+adminController.load_database_into_memory()
 
 from app import routes

@@ -19,7 +19,7 @@ class Catalog(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def add(self, object):
+    def add(self, object, add_to_db):
         """This method adds a single object to a collection"""
         pass
 
@@ -33,28 +33,60 @@ class Catalog(abc.ABC):
         """This method removes an object from the collection, the object is returned"""
         pass
 
-class AdminCatalog(Catalog):
+# Can be used to store either administrators or clients
+class UserCatalog(Catalog):
     
     def __init__(self, database):
         self.db = database
-        self._admins = {}
+        self._users = {}
         
     def get_all(self):
-        return self._admins
+        return self._users
         
     def get(self, id):
-        return self._admins[id]
+        return self._users[id]
         
-    def modify(self, modified_admin):
-        modify_book_query = 'UPDATE client SET firstName = ?, lastName = ?, physicalAddress = ?, email = ?, phoneNumber = ?, username = ?' \
-            ', password = ?, isAdmin = ?, isLogged = ?, lastLogged = ? WHERE id = ?'
-        tuple_for_modify_query = (modified_book._author, modified_book._title, modified_book._format, modified_book._pages, modified_book._publisher,
-                                  modified_book._year_of_publication, modified_book._language, modified_book._ISBN10, modified_book._ISBN13, modified_book._id)
-        self.db.execute_query_write(modify_book_query, tuple_for_modify_query)
-        self._books[int(modified_book.get_id())] = modified_book
+    def modify(self, modified_user):
 
-        
-        
+        modify_user_query = 'UPDATE client SET firstName = ?, lastName = ?, physicalAddress = ?, email = ?, phoneNumber = ?, username = ?' \
+            ', password = ?, isAdmin = ?, isLogged = ?, lastLogged = ? WHERE id = ?'
+        tuple_for_modify_query = (modified_user._first_name, modified_user._last_name, modified_user._physical_address,
+                                  modified_user._phone_number, modified_user._email, modified_user._username, modified_user._password,
+                                  modified_user._is_admin, modified_user._is_logged, modified_user._last_logged,
+                                  modified_user._id)
+
+        self.db.execute_query_write(modify_user_query, tuple_for_modify_query)
+        self._users[int(modified_user.get_id())] = modified_user
+
+    def add(self, user, add_to_db):
+
+        if add_to_db is True:
+
+           
+                insert_new_user_query = 'INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)' \
+                                        'VALUES(?,?,?,?,?,?,?,?,?,?)'
+                tuple_for_insert_query = (user._first_name, user._last_name, user._physical_address,
+                                  user._email, user._phone_number,  user._username, user._password,
+                                  user._is_admin, user._is_logged, user._last_logged)
+
+                # getting the id of the last inserted book
+                new_book_id = self.db.execute_query_write(insert_new_user_query, tuple_for_insert_query).lastrowid
+                # since the object created has by default id = 0, we have to set
+                # its id to the id obtained above
+                user._id = new_book_id
+                self._users[new_book_id] = user
+
+        else:
+            self._users[user._id] = user
+
+    def remove(self, id):
+        remove_user = 'DELETE FROM client WHERE id = ?'
+        # the comma after id is because the execute query from sqlite takes
+        # only tuples as second parameters
+        self.db.execute_query_write(remove_user, (id,))
+        return self._users.pop(id, None)
+
+
 class BookCatalog(Catalog):
 
     def __init__(self, database):

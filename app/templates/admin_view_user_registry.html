@@ -19,10 +19,10 @@ Registry of Active Users
     <tbody>
         {% for client in allLoggedClients %}
         <tr>
-            <td>{{client.id}}</td>
-            <td>{{client.username}}</td>
-            <td>{{client.lastLogged}}</td>
-            {% if client.isAdmin == 1 %}
+            <td>{{client._id}}</td>
+            <td>{{client._username}}</td>
+            <td>{{client._last_logged}}</td>
+            {% if client._is_admin == 1 %}
             <td>Yes</td>
             {% else %}
             <td>No</td>

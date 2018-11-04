@@ -1,6 +1,6 @@
 from flask import render_template, g, session, redirect, request, flash
 from app import app
-from app import userController, adminController
+from app import clientController, adminController
 from app.controllers.catalog_controller import CatalogController
 from app import databaseObject as db
 from app.classes.book import Book
@@ -30,7 +30,7 @@ def userCreator():
 @admin_required
 def adminViewUserRegistry():
 
-    return render_template('admin_view_user_registry.html', allLoggedClients=adminController.get_all_logged_client())
+    return render_template('admin_view_user_registry.html', allLoggedClients=adminController.get_all_logged_admins() + clientController.get_all_logged_clients())
 
 
 @app.route('/adminView/adminViewCatalog', methods=['GET', 'POST'])
@@ -53,6 +53,7 @@ def adminViewCatalog():
 @login_required
 @admin_required
 def registerUser():
+
     firstname = request.form["firstname"]
     lastname = request.form["lastname"]
     phonenumber = request.form["phonenumber"]
@@ -62,14 +63,25 @@ def registerUser():
     address = request.form["address"]
     typeofclient = request.form["isadmin"]
 
-    emaillist = userController.get_client_by_email(email)
-    usernamelist = userController.get_client_by_username(username)
+    # Cannot create a new user if it exists as either client or administrator
+    emaillist = clientController.get_client_by_email(email) + adminController.get_admin_by_email(email)
+    usernamelist = clientController.get_client_by_username(username) + adminController.get_admin_by_username(username)
 
     if (len(usernamelist) == 0) & (len(emaillist) == 0):
 
-        userController.create_client(
-            firstname, lastname, address, email, phonenumber, username, password, typeofclient, 0, 0)
-        flash("User created successfully.", 'success')
+        # Create an administrator
+        if int(typeofclient) == 1:
+
+            adminController.create_admin(firstname, lastname, address, email, phonenumber, username, password, 0, 0)
+
+            flash("User created successfully.", 'success')
+
+        # Create a client
+        else:
+
+            clientController.create_client(firstname, lastname, address, email, phonenumber, username, password, 0, 0)
+
+            flash("User created successfully.", 'success')
 
         return redirect("/")
     else:
