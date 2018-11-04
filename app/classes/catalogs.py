@@ -30,7 +30,28 @@ class Catalog(abc.ABC):
         """This method removes an object from the collection, the object is returned"""
         pass
 
+class AdminCatalog(Catalog):
+    
+    def __init__(self, database):
+        self.db = database
+        self._admins = {}
+        
+    def get_all(self):
+        return self._admins
+        
+    def get(self, id):
+        return self._admins[id]
+        
+    def modify(self, modified_admin):
+        modify_book_query = 'UPDATE client SET firstName = ?, lastName = ?, physicalAddress = ?, email = ?, phoneNumber = ?, username = ?' \
+            ', password = ?, isAdmin = ?, isLogged = ?, lastLogged = ? WHERE id = ?'
+        tuple_for_modify_query = (modified_book._author, modified_book._title, modified_book._format, modified_book._pages, modified_book._publisher,
+                                  modified_book._year_of_publication, modified_book._language, modified_book._ISBN10, modified_book._ISBN13, modified_book._id)
+        self.db.execute_query_write(modify_book_query, tuple_for_modify_query)
+        self._books[int(modified_book.get_id())] = modified_book
 
+        
+        
 class BookCatalog(Catalog):
 
     def __init__(self, database):
