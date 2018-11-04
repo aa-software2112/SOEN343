@@ -158,7 +158,7 @@ class MovieCatalog(Catalog):
             existing_movie_id_fetched = existing_movie_id_cursor.fetchone()
           
 
-            #if already exist, add new movie in first and second table
+            #if movie doesn't already exist in first table, add new movie in first and second table
             if existing_movie_id_fetched is None:
                #insert movie into movie table
                 insert_new_movie_query = 'INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, run_time, total_quantity, quantity_available)' \
@@ -180,7 +180,7 @@ class MovieCatalog(Catalog):
                 tuple_for_insert_copy_query = (new_movie_id, 0)
                 self.db.execute_query_write(insert_new_movie_copy_query, tuple_for_insert_copy_query)
 
-            #else doesn't already exist. Need to add new movie in second table and update quantity of first table
+            #else already exist. Need to add new movie in second table and update quantity of first table
             else:
                 
                 #get id and get and increment total_quantity and quantity_available
@@ -255,7 +255,7 @@ class MagazineCatalog(Catalog):
             existing_magazine_id_fetched = existing_magazine_id_cursor.fetchone()
           
 
-            #if already exist, add new magazine in first and second table
+            #if doesn't exist, add new magazine in first and second table
             if existing_magazine_id_fetched is None:
                #insert magazine into magazine table
                 insert_new_magazine_query = 'INSERT INTO magazine(title, publisher, year_of_publication, language, isbn_10, isbn_13,total_quantity,quantity_available)' \
@@ -277,7 +277,7 @@ class MagazineCatalog(Catalog):
                 tuple_for_insert_copy_query = (new_magazine_id, 0)
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
-            #else doesn't already exist. Need to add new magazine in second table and update quantity of first table
+            #else already exist. Need to add new magazine in second table and update quantity of first table
             else:
                 
                 #get id and get and increment total_quantity and quantity_available
@@ -343,20 +343,20 @@ class AlbumCatalog(Catalog):
                  
             #If album exist, gets cursor that holds id, total_quantity & quantity_available of a album from album table, by quering title and asin of the added album.
             #If album doesn't exist, use the None value returned to add new album (operation found below).
-            select_id_query = 'SELECT id, total_quantity, quantity_available FROM album WHERE album.title = ?'
-            tuple_for_get_id = (album._title,)
+            select_id_query = 'SELECT id, total_quantity, quantity_available FROM album WHERE album.title = ? AND album.ASIN = ?'
+            tuple_for_get_id = (album._title, album.ASIN)
             existing_album_id_cursor = self.db.execute_query(
             select_id_query, tuple_for_get_id)
         
             existing_album_id_fetched = existing_album_id_cursor.fetchone()
           
 
-            #if already exist, add new album in first and second table
+            #if doesn't exist, add new album in first and second table
             if existing_album_id_fetched is None:
                 #insert album into album table
-                insert_new_album_query = 'INSERT INTO album(type, title, artist, label, release_date, asin, total_quantity, quantity_available) VALUES(?,?,?,?,?,?,?,?)'
-                tuple_for_insert_query = (
-                    album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN, album._total_quantity, album._quantity_available)
+                insert_new_album_query = 'INSERT INTO album(type, title, artist, label, release_date, asin, total_quantity, quantity_available)' \
+                'VALUES(?,?,?,?,?,?,?,?)'
+                tuple_for_insert_query = (album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN, album._total_quantity, album._quantity_available)
 
                 # getting the id of the last inserted album
                 new_album_id = self.db.execute_query_write(
@@ -372,7 +372,7 @@ class AlbumCatalog(Catalog):
                 tuple_for_insert_copy_query = (new_album_id, 0)
                 self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
 
-            #else doesn't already exist. Need to add new album in second table and update quantity of first table
+            #else already exist. Need to add new album in second table and update quantity of first table
             else:
                 
                 #get id and get and increment total_quantity and quantity_available
