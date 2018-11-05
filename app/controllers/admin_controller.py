@@ -80,6 +80,16 @@ class AdminController(Controller):
         #for k, v in self._admin_catalog.get_all().items():
         #    print(v)
 
+    def logout_admin(self, username):
+        admin = self.get_admin_by_username(username)
+
+        # Mark admin as logged out
+        if len(admin) == 1:
+            admin = admin[0]
+            admin._is_logged = 0
+            self._admin_catalog.modify(admin)
+
+        print("Admin has been logged out.")
 
     # Creates admin using create_client method in UserController.
     def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isLogged, lastLogged):

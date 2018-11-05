@@ -52,6 +52,7 @@ def login():
 @app.before_request
 def remember_user():
     user = session.get('user')
+
     if user is None:
         g.user = None
     else:
