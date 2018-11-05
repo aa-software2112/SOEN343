@@ -16,8 +16,6 @@ def login():
 
     # import from Classes/forms
     form = LoginForm()
-    # Declaring variable
-    client_response = ""
 
     if form.validate_on_submit():
 
