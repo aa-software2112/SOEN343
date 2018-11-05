@@ -1,12 +1,12 @@
 from flask import render_template
 from app import app
-from app import userController, adminController
+from app import clientController, adminController
 from app import databaseObject as db
 import random 
 
 @app.route('/example')
 def showObject():
-	userController.example_user_controller_function()
+	clientController.example_user_controller_function()
 	adminController.example_admin_controller_function()
 	adminController.example_admin_sql_call()
 	#this is the object that is going to be sent to the front end

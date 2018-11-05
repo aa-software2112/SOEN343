@@ -17,12 +17,12 @@ Registry of Active Users
         </tr>
     </thead>
     <tbody>
-        {% for client in allLoggedClients %}
+        {% for client in list_of_clients %}
         <tr>
-            <td>{{client.id}}</td>
-            <td>{{client.username}}</td>
-            <td>{{client.lastLogged}}</td>
-            {% if client.isAdmin == 1 %}
+            <td>{{ client._id }}</td>
+            <td>{{ client._username }}</td>
+            <td>{{ convert_epoch_to_datetime(client._last_logged | int) }}</td>
+            {% if client._is_admin == 1 %}
             <td>Yes</td>
             {% else %}
             <td>No</td>
