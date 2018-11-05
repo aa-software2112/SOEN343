@@ -122,7 +122,7 @@ class BookCatalog(Catalog):
             existing_book_id_fetched = existing_book_id_cursor.fetchone()
           
 
-            #if already exist, add new book in first and second table
+            #if book doesn't exist, add new book in first and second table
             if existing_book_id_fetched is None:
                #insert book into book table
                 insert_new_book_query = 'INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)' \
@@ -144,7 +144,7 @@ class BookCatalog(Catalog):
                 tuple_for_insert_copy_query = (new_book_id, 0)
                 self.db.execute_query_write(insert_new_book_copy_query, tuple_for_insert_copy_query)
 
-            #else doesn't already exist. Need to add new book in second table and update quantity of first table
+            #else already exist. Need to add new book in second table and update quantity of first table
             else:
                 
                 #get id and get and increment total_quantity and quantity_available
