@@ -48,7 +48,7 @@ def admin_required(f):
     def admin_check(*args, **kwargs):
         # if the user isn't an admin, redirect to the home page, else the
         # function has access to g.user
-        if g.user["isAdmin"]:
+        if g.user["_is_admin"]:
             return f(*args, **kwargs)
         else:
             flash('Unauthorized Access!', 'danger')
