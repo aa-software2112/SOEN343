@@ -169,8 +169,23 @@ class BookCatalog(Catalog):
         else:
             self._books[book._id] = book
 
+    def get_copies(self, id):
 
+        # get all copies of a selected book by ID. The query looks for all copies by referencing the book_id from the book-copy table to the id from book table.
+        # Each copy is stored in a book object and has the same attributes as the original book (main table) with its own id as an exception, 'book_copy.id'.
+        found_records = []
+        get_book_records_by_id_tuple = (id,)
+        get_book_records_query = """ SELECT book_copy.id, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book_copy INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.book_id = ?"""
+        get_records_cursor = self.db.execute_query(get_book_records_query, get_book_records_by_id_tuple)
 
+        all_records = get_records_cursor.fetchall()
+
+        for row in all_records:
+            found_records.append(Book(row))
+
+        return found_records
+
+    # 05/10/18 - This should probably be removed.
     def remove(self, id):
         remove_book = 'DELETE FROM book WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
@@ -178,26 +193,30 @@ class BookCatalog(Catalog):
         self.db.execute_query_write(remove_book, (id,))
         return self._books.pop(id, None)
 
-    def get_copies(self, id):
-
-        found_copies = []
-
-        #get_copy_records_query = """ SELECT book_copy.id, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book, book_copy WHERE book.id = ? AND book.id = book_copy.book_id"""
-        get_copy_records_query = """ SELECT book_copy.id, book.author, book.title, book.format, book.pages, book.publisher, book.year_of_publication, book.language, book.isbn_10, book.isbn_13 FROM book_copy INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.book_id = ?"""
-        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
-
-        copy_records = get_copies_cursor.fetchall()
-
-        for row in copy_records:
-            found_copies.append(Book(row))
-
-        return found_copies
-
     def remove_copy(self, id):
-        remove_book_copy = """ DELETE FROM book_copy WHERE id = ? """
+        fetched_book = []
+        get_id_tuple = (id,)
 
-        print("Deleting book with ID: " + str(id))
-        self.db.execute_query_write(remove_book_copy, (id,))
+        # The ID from the paramater is a book copy ID. The JOIN statement in the query looks for the original book ID from the main table.
+        # The query returns the original book ID, total quantity and the available quantuty.
+        get_book_by_id_query = """ SELECT book.id, book.total_quantity, book.quantity_available FROM book_copy INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ? """
+        book_cursor = self.db.execute_query(get_book_by_id_query, get_id_tuple)
+        fetched_book = book_cursor.fetchone()
+
+        # Decrement the total_quantity and available_quantity by 1.
+        # [Important] available_quantity is temporary. A restriction should handle the case where the quantity reaches 0.
+        _id = fetched_book[0]
+        _total_quantity = fetched_book[1] - 1
+        _available_quantity = fetched_book[2] - 1
+
+        # Remove the selected book from the book_copy table
+        remove_book_query = """ DELETE FROM book_copy WHERE id = ? """
+        self.db.execute_query_write(remove_book_query, get_id_tuple)
+
+        # Update the total_quantity and available_quantity in the book table.
+        update_book_quantity_query = """ UPDATE book SET total_quantity = ?, quantity_available = ? WHERE id = ? """
+        update_book_quantity_tuple = (_total_quantity, _available_quantity, _id)
+        self.db.execute_query_write(update_book_quantity_query, update_book_quantity_tuple)
 
     def display(self):
 
@@ -293,17 +312,19 @@ class MovieCatalog(Catalog):
         
     def get_copies(self, id):
 
-        found_copies = []
+        # get all copies of a selected movie by ID. The query looks for all copies by referencing the movie_id from the movie-copy table to the id from movie table.
+        # Each copy is stored in a movie object and has the same attributes as the original movie (main table) with its own id as an exception, 'movie_copy.id'.
+        found_records = []
+        get_movie_records_by_id_tuple = (id,)
+        get_movie_records_query = """ SELECT movie_copy.id, movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.run_time FROM movie_copy INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.movie_id = ? """
+        get_records_cursor = self.db.execute_query(get_movie_records_query, get_movie_records_by_id_tuple)
 
-        get_copy_records_query = """ SELECT movie_copy.id, movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.run_time FROM movie, movie_copy WHERE movie.id = ? AND movie.id = movie_copy.movie_id"""
-        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
+        all_records = get_records_cursor.fetchall()
 
-        copy_records = get_copies_cursor.fetchall()
+        for row in all_records:
+            found_records.append(Movie(row))
 
-        for row in copy_records:
-            found_copies.append(Movie(row))
-
-        return found_copies
+        return found_records
 
     def remove(self, id):
         remove_movie = 'DELETE FROM movie WHERE id = ?'
@@ -313,9 +334,29 @@ class MovieCatalog(Catalog):
         return self._movies.pop(id, None)
 
     def remove_copy(self, id):
-        remove_movie_copy = """ DELETE FROM movie_copy WHERE id = ? """
+        fetched_movie = []
+        get_id_tuple = (id,)
 
-        self.db.execute_query_write(remove_movie_copy, (id,))
+        # The ID from the paramater is a movie copy ID. The JOIN statement in the query looks for the original movie ID from the main table.
+        # The query returns the original movie ID, total quantity and the available quantity.
+        get_movie_by_id_query = """ SELECT movie.id, movie.total_quantity, movie.quantity_available FROM movie_copy INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ? """
+        movie_cursor = self.db.execute_query(get_movie_by_id_query, get_id_tuple)
+        fetched_movie = movie_cursor.fetchone()
+
+        # Decrement the total_quantity and available_quantity by 1.
+        _id = fetched_movie[0]
+        _total_quantity = fetched_movie[1] - 1
+        _available_quantity = fetched_movie[2] - 1
+        
+        # Remove the selected movie from the movie_copy table
+        remove_movie_copy_query = """ DELETE FROM movie_copy WHERE id = ? """
+        self.db.execute_query_write(remove_movie_copy_query, get_id_tuple)
+
+        # Update the total_quantity and available_quantity in the movie table.
+        update_movie_quantity_query = """ UPDATE movie SET total_quantity = ?, quantity_available = ? WHERE id = ? """
+        update_movie_quantity_tuple = (_total_quantity, _available_quantity, _id)
+
+        self.db.execute_query_write(update_movie_quantity_query, update_movie_quantity_tuple)
 
     def display(self):
 
@@ -408,17 +449,17 @@ class MagazineCatalog(Catalog):
 
     def get_copies(self, id):
 
-        found_copies = []
+        found_records = []
+        get_magazine_records_by_id_tuple = (id,)
+        get_magazine_records_query = """ SELECT magazine_copy.id, magazine.title, magazine.publisher, magazine.year_of_publication, magazine.language, magazine.isbn_10, magazine.isbn_13 FROM magazine_copy INNER JOIN magazine ON magazine.id = magazine_copy.magazine_id WHERE magazine_copy.magazine_id = ? """
+        get_records_cursor = self.db.execute_query(get_magazine_records_query, get_magazine_records_by_id_tuple)
 
-        get_copy_records_query = """ SELECT magazine_copy.id, magazine.title, magazine.publisher, magazine.year_of_publication, magazine.language, magazine.isbn_10, magazine.isbn_13 FROM magazine, magazine_copy WHERE magazine.id = ? AND magazine.id = magazine_copy.magazine_id"""
-        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
+        all_records = get_records_cursor.fetchall()
 
-        copy_records = get_copies_cursor.fetchall()
+        for row in all_records:
+            found_records.append(Magazine(row))
 
-        for row in copy_records:
-            found_copies.append(Magazine(row))
-
-        return found_copies
+        return found_records
 
     def remove(self, id):
         remove_magazine = 'DELETE FROM magazine WHERE id = ?'
@@ -428,9 +469,29 @@ class MagazineCatalog(Catalog):
         return self._magazines.pop(id, None)
 
     def remove_copy(self, id):
-        remove_magazine_copy = """ DELETE FROM magazine_copy WHERE id = ? """
+        fetched_magazine = []
+        get_id_tuple = (id,)
 
-        self.db.execute_query_write(remove_magazine_copy, (id,))
+        # The ID from the paramater is a magazine copy ID. The JOIN statement in the query looks for the original magazine ID from the main table.
+        # The query returns the original magazine ID, total quantity and the available quantity.
+        get_magazine_by_id_query = """ SELECT magazine.id, magazine.total_quantity, magazine.quantity_available FROM magazine_copy INNER JOIN magazine ON magazine.id = magazine_copy.magazine_id WHERE magazine_copy.id = ? """
+        magazine_cursor = self.db.execute_query(get_magazine_by_id_query, get_id_tuple)
+        fetched_magazine = magazine_cursor.fetchone()
+
+        # Decrement the total_quantity and available_quantity by 1.
+        _id = fetched_magazine[0]
+        _total_quantity = fetched_magazine[1] - 1
+        _available_quantity = fetched_magazine[2] - 1
+        
+        # Remove the selected magazine from the movie_copy table
+        remove_magazine_copy_query = """ DELETE FROM magazine_copy WHERE id = ? """
+        self.db.execute_query_write(remove_magazine_copy_query, get_id_tuple)
+
+        # Update the total_quantity and available_quantity in the magazine table.
+        update_magazine_quantity_query = """ UPDATE magazine SET total_quantity = ?, quantity_available = ? WHERE id = ? """
+        update_magazine_quantity_tuple = (_total_quantity, _available_quantity, _id)
+
+        self.db.execute_query_write(update_magazine_quantity_query, update_magazine_quantity_tuple)
 
     def display(self):
 
@@ -520,17 +581,19 @@ class AlbumCatalog(Catalog):
 
     def get_copies(self, id):
 
-        found_copies = []
+        # get all copies of a selected album by ID. The query looks for all copies by referencing the album_id from the album-copy table to the id from album table.
+        # Each copy is stored in a album object and has the same attributes as the original album (main table) with its own id as an exception, 'album_copy.id'.
+        found_records = []
+        get_album_records_by_id_tuple = (id,)
+        get_album_records_query = """ SELECT album_copy.id, album.type, album.title, album.artist, album.label, album.release_date, album.asin FROM album, album_copy WHERE album.id = ? AND album.id = album_copy.album_id"""
+        get_copies_cursor = self.db.execute_query(get_album_records_query, get_album_records_by_id_tuple)
 
-        get_copy_records_query = """ SELECT album_copy.id, album.type, album.title, album.artist, album.label, album.release_date, album.asin FROM album, album_copy WHERE album.id = ? AND album.id = album_copy.album_id"""
-        get_copies_cursor = self.db.execute_query(get_copy_records_query, (id,))
+        all_records = get_copies_cursor.fetchall()
 
-        copy_records = get_copies_cursor.fetchall()
+        for row in all_records:
+            found_records.append(Album(row))
 
-        for row in copy_records:
-            found_copies.append(Album(row))
-
-        return found_copies
+        return found_records
 
     def remove(self, id):
         remove_album = 'DELETE FROM album WHERE id = ?'
@@ -540,9 +603,29 @@ class AlbumCatalog(Catalog):
         return self._albums.pop(id, None)
 
     def remove_copy(self, id):
-        remove_album_copy = """ DELETE FROM album_copy WHERE id = ? """
+        fetched_album = []
+        get_id_tuple = (id,)
 
-        self.db.execute_query_write(remove_album_copy, (id,))
+        # The ID from the paramater is a album copy ID. The JOIN statement in the query looks for the original album ID from the main table.
+        # The query returns the original album ID, total quantity and the available quantity.
+        get_album_by_id_query = """ SELECT album.id, album.total_quantity, album.quantity_available FROM album_copy INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ? """
+        album_cursor = self.db.execute_query(get_album_by_id_query, get_id_tuple)
+        fetched_album = album_cursor.fetchone()
+
+        # Decrement the total_quantity and available_quantity by 1.
+        _id = fetched_album[0]
+        _total_quantity = fetched_album[1] - 1
+        _available_quantity = fetched_album[2] - 1
+        
+        # Remove the selected album from the movie_copy table
+        remove_album_copy_query = """ DELETE FROM album_copy WHERE id = ? """
+        self.db.execute_query_write(remove_album_copy_query, get_id_tuple)
+
+        # Update the total_quantity and available_quantity in the magazine table.
+        update_album_quantity_query = """ UPDATE album SET total_quantity = ?, quantity_available = ? WHERE id = ? """
+        update_album_quantity_tuple = (_total_quantity, _available_quantity, _id)
+
+        self.db.execute_query_write(update_album_quantity_query, update_album_quantity_tuple)
 
     def display(self):
 
