@@ -23,7 +23,7 @@ def login():
         get_password = form.password.data
         # Return query result
         user_response = clientController.get_client_by_password(
-            username=get_username, password=get_password) + adminController.get_admin_by_password(username=get_password,
+            username=get_username, password=get_password) + adminController.get_admin_by_password(username=get_username,
                                                                                                   password=get_password)
 
         if user_response == []:
