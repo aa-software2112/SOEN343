@@ -29,13 +29,9 @@ def userCreator():
 @login_required
 @admin_required
 def adminViewUserRegistry():
-    allLoggedClients = adminController.get_all_logged_admins() + clientController.get_all_logged_clients()
-    # This only needs to be run once
-    if type(allLoggedClients[0]._last_logged) is int:
-        for client in allLoggedClients:
-            client._last_logged = convert_epoch_to_datetime(client._last_logged)
+    list_of_clients = adminController.get_all_logged_admins() + clientController.get_all_logged_clients()
 
-    return render_template('admin_view_user_registry.html', allLoggedClients=allLoggedClients)
+    return render_template('admin_view_user_registry.html', list_of_clients=list_of_clients)
 
 
 @app.route('/adminView/adminViewCatalog', methods=['GET', 'POST'])
