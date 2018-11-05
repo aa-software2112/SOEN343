@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, session, flash, make_response, g, request, url_for
 from app import app
-from app import clientController
+from app import clientController, adminController
 from app.classes.forms import LoginForm
 from app.common_definitions.helper_functions import is_logged
 
@@ -24,15 +24,16 @@ def login():
         get_username = form.username.data
         get_password = form.password.data
         # Return query result
-        client_response = clientController.get_client_by_password(
-            username=get_username, password=get_password)
+        user_response = clientController.get_client_by_password(
+            username=get_username, password=get_password) + adminController.get_admin_by_password(username=get_password,
+                                                                                                  password=get_password)
 
-        if client_response == []:
+        if user_response == []:
             error = "Invalid login. Please check your username or password"
             return render_template('login.html', form=form, error=error)
 
         else:
-            client = client_response[0]
+            client = user_response[0]
 
             # Set session
             session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
