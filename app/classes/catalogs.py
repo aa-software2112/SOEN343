@@ -313,9 +313,26 @@ class MovieCatalog(Catalog):
         return self._movies.pop(id, None)
 
     def remove_copy(self, id):
-        remove_movie_copy = """ DELETE FROM movie_copy WHERE id = ? """
+        fetched_movie = []
+        get_id_tuple = (id,)
 
-        self.db.execute_query_write(remove_movie_copy, (id,))
+        select_id_query = """ SELECT movie.id, movie.total_quantity, movie.quantity_available FROM movie_copy INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ? """
+    
+        movie_cursor = self.db.execute_query(select_id_query, get_id_tuple)
+        fetched_movie = movie_cursor.fetchone()
+
+        _id = fetched_movie[0]
+        _total_quantity = fetched_movie[1] - 1
+        _available_quantity = fetched_movie[2] - 1
+
+        remove_movie_copy_query = """ DELETE FROM movie_copy WHERE id = ? """
+        self.db.execute_query_write(remove_movie_copy_query, get_id_tuple)
+
+        update_movie_quantity_query = """ UPDATE movie SET total_quantity = ?, quantity_available = ? WHERE id = ? """
+        update_movie_quantity_tuple = (_total_quantity, _available_quantity, _id)
+
+        self.db.execute_query_write(update_movie_quantity_query, update_movie_quantity_tuple)
+
 
     def display(self):
 
