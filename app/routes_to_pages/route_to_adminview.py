@@ -7,7 +7,7 @@ from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.album import Album
 from app.classes.movie import Movie
-from app.common_definitions.helper_functions import login_required, admin_required
+from app.common_definitions.helper_functions import login_required, admin_required, convert_epoch_to_datetime
 import random
 
 
@@ -29,8 +29,13 @@ def userCreator():
 @login_required
 @admin_required
 def adminViewUserRegistry():
+    allLoggedClients = adminController.get_all_logged_admins() + clientController.get_all_logged_clients()
+    # This only needs to be run once
+    if type(allLoggedClients[0]._last_logged) is int:
+        for client in allLoggedClients:
+            client._last_logged = convert_epoch_to_datetime(client._last_logged)
 
-    return render_template('admin_view_user_registry.html', allLoggedClients=adminController.get_all_logged_admins() + clientController.get_all_logged_clients())
+    return render_template('admin_view_user_registry.html', allLoggedClients=allLoggedClients)
 
 
 @app.route('/adminView/adminViewCatalog', methods=['GET', 'POST'])
