@@ -8,5 +8,6 @@ def logout():
     if g.user:
         clientController.logout_client(g.user["username"])
         session.clear()
+        g.user["username"] = None
         flash('Logged out!', 'success')
     return redirect(url_for('index'))
