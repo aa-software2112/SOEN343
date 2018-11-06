@@ -35,26 +35,22 @@ class User:
     def get_last_searched_list(self):
         return self._last_searched_list
 
-    def get_index(self):
+    def get_index_last_searched(self):
         return self._index_of_last_searched_list
 
     def set_last_searched_list(self, last_searched_list):
-        for search in last_searched_list:
-            self._last_searched_list.append(search)
+        self._last_searched_list=last_searched_list
 
-    def set_index(self, index_last_searched_list):
+    def set_index_last_searched(self, index_last_searched_list):
         self._index_of_last_searched_list=index_last_searched_list
 
-    def get_next_index(self):
-        if (len(self._last_searched_list)-1) == self._index_of_last_searched_list :
-            next_index=0
-            self._index_of_last_searched_list=next_index
-        else:
-            next_index= self.index_last_searched_list+1
-            self._index_of_last_searched_list=next_index
-
-        return next_index
-
+    #return next object in the list
+    def get_next_record_searched(self):
+        # return next record if list is not empty
+        if len(self._last_searched_list)!=0 :
+            self._index_of_last_searched_list = (self._index_of_last_searched_list +1)%len(self._last_searched_list)
+            return self._last_searched_list[self._index_of_last_searched_list]
+        
 class Admin(User):
 
     def __init__(self, arguments):
