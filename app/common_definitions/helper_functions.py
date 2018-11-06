@@ -54,3 +54,20 @@ def admin_required(f):
             flash('Unauthorized Access!', 'danger')
             return redirect(url_for('index'))
     return admin_check
+
+
+def search_catalog(catalog, search_string):
+    """ Performs a search on the catalog and returns a list of all the catalog 
+    items which contain the string inside their title (case insensitive)"""
+
+    lst = []
+
+    for k, v in catalog.items():
+        title = str(v.__dict__['_title'])
+        title_lower = title.lower()
+
+        if search_string in title_lower:
+            print("Match found! Title: " + title)
+            lst.append(v)
+
+    return lst
