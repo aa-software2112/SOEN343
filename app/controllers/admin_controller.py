@@ -209,7 +209,10 @@ class AdminController(Controller):
 
     def sort_by(self, catalog_type, sort_key_values, admin_id):
         usr = self._admin_catalog.get(admin_id)
-        last_searched_list = usr.get_last_searched_list
-        lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
-        usr.set_last_searched_list(lst)
-        return lst
+
+        #uncomment the following code after implenting get_last_searched_list() function in user class
+
+        #last_searched_list = usr.get_last_searched_list()
+        #lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
+        #usr.set_last_searched_list(lst)
+        #return lst
