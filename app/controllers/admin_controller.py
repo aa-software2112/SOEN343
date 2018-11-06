@@ -171,6 +171,7 @@ class AdminController(Controller):
             return self._catalog_controller.add_entry_to_catalog(type, Album(request_form))
 
     def modify_catalog(self, type, request_form):
+
         if (type == self._catalog_controller.BOOK_TYPE):
             self._catalog_controller.modify_catalog_entry(type, Book(request_form))
 
@@ -188,6 +189,21 @@ class AdminController(Controller):
 
     def delete_catalog_copy_entry(self, catalog_type, id):
         return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)
+      
+    def get_next_item(self, admin_id):
 
+        admin_performing_search = self._admin_catalog.get(admin_id)
+
+        # This function (below) should autoincrement the index when
+        # We get the next value
+        # return admin_performing_search.getNextSearchedItem()
+
+    def get_last_searched_list(self, admin_id):
+
+        admin_performing_search = self._admin_catalog.get(admin_id)
+
+        # return admin_performing_search.getLastSearchedList()
+        
     def search_from_catalog(self, catalog_type, search_string):
         return self._catalog_controller.search_from_catalog(catalog_type, search_string)
+      
