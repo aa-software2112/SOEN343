@@ -188,3 +188,6 @@ class AdminController(Controller):
 
     def delete_catalog_copy_entry(self, catalog_type, id):
         return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)
+
+    def search_from_catalog(self, catalog_type, search_string):
+        return self._catalog_controller.search_from_catalog(catalog_type, search_string)

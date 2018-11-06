@@ -1,5 +1,6 @@
 import abc
 from app.common_definitions.helper_functions import convert_date_time_to_epoch as to_epoch
+from app.common_definitions.helper_functions import search_catalog
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
@@ -32,6 +33,12 @@ class Catalog(abc.ABC):
     def remove(self, id):
         """This method removes an object from the collection, the object is returned"""
         pass
+
+    @abc.abstractmethod
+    def search(self, search_string):
+        """ This method searches for an object in the collection and returns a list of all matches """
+        pass
+
 
 # Can be used to store either administrators or clients
 class UserCatalog(Catalog):
@@ -86,6 +93,9 @@ class UserCatalog(Catalog):
         self.db.execute_query_write(remove_user, (id,))
         return self._users.pop(id, None)
 
+    def search(self, search_string):
+        
+        return search_catalog(self._users, search_string)
 
 class BookCatalog(Catalog):
 
@@ -223,6 +233,10 @@ class BookCatalog(Catalog):
         for k, v in self._books.items():
             print(v)
 
+
+    def search(self, search_string):
+
+        return search_catalog(self._books, search_string)
 
 
 class MovieCatalog(Catalog):
@@ -363,6 +377,9 @@ class MovieCatalog(Catalog):
         for k, v in self._movies.items():
             print(v)
 
+    def search(self, search_string):
+
+        return search_catalog(self._movies, search_string)
 
 class MagazineCatalog(Catalog):
 
@@ -498,6 +515,10 @@ class MagazineCatalog(Catalog):
         for k, v in self._magazines.items():
             print(v)
 
+    def search(self, search_string):
+
+        return search_catalog(self._magazines, search_string)
+
 
 class AlbumCatalog(Catalog):
 
@@ -631,3 +652,7 @@ class AlbumCatalog(Catalog):
 
         for k, v in self._albums.items():
             print(v)
+
+    def search(self, search_string):
+
+        return search_catalog(self._albums, search_string)

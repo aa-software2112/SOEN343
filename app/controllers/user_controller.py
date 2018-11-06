@@ -6,12 +6,14 @@ from app.classes.user_container import User
 
 class ClientController(Controller):
 
-    def __init__(self, database):
+    def __init__(self, database, catalog_controller):
         Controller.__init__(self, database)
 
         self._db_loaded = False
 
         self._client_catalog = UserCatalog(database)
+
+        self._catalog_controller = catalog_controller
 
     def load_database_into_memory(self):
 
@@ -86,7 +88,8 @@ class ClientController(Controller):
 
         return found_client
 
-
+    def view_inventory(self):
+        return self._catalog_controller.get_all_catalogs()
 
     # function takes self and username
     # updates value in attribute isLogged to 0.
