@@ -61,9 +61,6 @@ def admin_required(f):
 #last_searched_list = holds list of objects
 def sort_records(sort_key_values, last_searched_list):
 
-    print("Unsorted list")
-    print(last_searched_list)
-
     #gets the order to which it will be sorted (ascending or descending) from the sort_key_values criteria
     sort_order =  list(sort_key_values.keys())[0]
 
@@ -83,18 +80,13 @@ def sort_records(sort_key_values, last_searched_list):
     #Sorts the catalogs items by its value in reverse order or in order.
     #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
     #An example: https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
-    last_searched_list_sorted = sorted(last_searched_list, key=lambda kv: kv[sort_attribute], reverse=reverse_order)
+    last_searched_list_sorted = sorted(last_searched_list, key=lambda record: record.__dict__[sort_attribute], reverse=reverse_order)
 
     print("Sorted list")
-    print(last_searched_list_sorted)
+    for record in last_searched_list_sorted:
+        print(record.id) #since they all have the id attribute
+    
     return last_searched_list_sorted
-
-#4 lines below For testing sort_book, can be removed after review. To test, remove number sign to uncomment it.
-#sort_key_values_1 = {"ascending": "author"}
-#last_searched_list_sorted_1 = [{"title": 6, "author": "c", "type": "Hardcover"}, {"title": 3, "author": "f", "type": "Digital"}, {"title": 9, "author": "a", "type": "Paperback"},]
-#print("testing sort_book")
-#sort_records(sort_key_values_1, last_searched_list_sorted_1)
-
 
 
 def search_catalog(catalog, search_string):
