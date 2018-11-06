@@ -65,14 +65,17 @@ def admin_required(f):
 <<<<<<< HEAD
 
 def filter(criteria, catalog_records):
+    lst = []
     for k, v in catalog_records.items():
         for a, b in criteria.items():
             if v.catalog_records.__dic__[a] == b:
-                listofrecords = v
+                print("Match found! entering into the list")
+                lst.append(v)
+
 
                 break
 
-    return listofrecords
+    return lst
 
 
 
