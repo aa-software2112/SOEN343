@@ -18,6 +18,9 @@ class User:
         self._is_admin = arguments['isAdmin']
         self._is_logged = arguments['isLogged']
         self._last_logged = arguments['lastLogged']
+        
+        self.lastSearchedList=[]
+        self.index_last_searched_list=0
 
     def get_id(self):
         """Returns the id of the object"""
@@ -29,12 +32,65 @@ class User:
                " EMAIL: " + self._email + " PHONE_NUMBER: " + str(self._phone_number) + " USER_NAME: " + self._username + " PASSWORD: " + self._password + " IS_ADMIN: " + str(self._is_admin) + \
             " IS_LOGGED: " + str(self._is_logged) + " LAST_LOGGED: " + str(helper_functions.convert_epoch_to_datetime(self._last_logged))
 
+    def get_last_searched_list(self):
+        return self.lastSearchedList
+
+    def get_index(self):
+        return self.index_last_searched_list
+
+    def set_last_searched_list(self, last_searched_list):
+        for search in last_searched_list:
+            self.lastSearchedList.append(search)
+
+    def set_index(self, index_last_searched_list):
+        self.index_last_searched_list=index_last_searched_list
+
+    def get_next_index(self):
+        if (len(self.lastSearchedList)-1) == self.index_last_searched_list :
+            next_index=0
+            self.index_last_searched_list=next_index
+        else:
+            next_index= self.index_last_searched_list+1
+            self.index_last_searched_list=next_index
+
+        return next_index
+
 class Admin(User):
 
     def __init__(self, arguments):
         User.__init__(self, arguments)
 
+    def get_last_searched_list(self):
+        return User.get_last_searched_list(self)
+
+    def get_index(self):
+        return User.get_index(self)
+
+    def get_next_index(self):
+        return User.get_next_index(self)
+
+    def set_last_searched_list(self, last_searched_list):
+        User.set_last_searched_list(self, last_searched_list)
+
+    def set_index(self, index_last_searched_list):
+        User.set_index(self, index_last_searched_list)
+
 class Client(User):
 
     def __init__(self, arguments):
         User.__init__(self, arguments)
+
+    def get_last_searched_list(self):
+        return User.get_last_searched_list(self)
+
+    def get_index(self):
+        return User.get_index(self)
+
+    def get_next_index(self):
+        return User.get_next_index(self)
+
+    def set_last_searched_list(self, last_searched_list):
+        User.set_last_searched_list(self, last_searched_list)
+
+    def set_index(self, index_last_searched_list):
+        User.set_index(self, index_last_searched_list)
