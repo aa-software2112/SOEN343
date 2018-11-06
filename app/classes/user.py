@@ -59,5 +59,7 @@ d = {'id': 1, 'firstName':"Anthony",
 for i in range(10):
 
     l.append(User(d))
-    print(l[0].__dict__["_physical_address"])
+
+print(list(User.__dict__.keys()))
+print(list(l[0].__dict__.keys()))
 
