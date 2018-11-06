@@ -81,3 +81,6 @@ class CatalogController(Controller):
 
     def delete_catalog_entry_copy(self, catalog_type, id):
         self.view_catalog_inventory()[catalog_type].remove_copy(id)
+
+    def get_filters(self, catalog_type):
+        return sorted(list(self.view_catalog_inventory()[catalog_type].Filters.keys()))

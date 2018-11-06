@@ -38,28 +38,3 @@ class Client(User):
 
     def __init__(self, arguments):
         User.__init__(self, arguments)
-
-
-import time
-
-l = []
-
-d = {'id': 1, 'firstName':"Anthony",
-     "lastName":"Andreoli",
-     "physicalAddress":"7331",
-     "email":"a@a",
-     "phoneNumber":"555",
-     "username":"AA",
-     "password":"pw",
-     "isAdmin":1,
-     "isLogged":1,
-     "lastLogged":time.time()}
-
-
-for i in range(10):
-
-    l.append(User(d))
-
-print(list(User.__dict__.keys()))
-print(list(l[0].__dict__.keys()))
-
