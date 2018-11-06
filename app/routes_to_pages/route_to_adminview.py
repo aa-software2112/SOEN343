@@ -199,3 +199,10 @@ def delete_catalog():
 
     flash("Entry deleted succesfully.", 'success')
     return redirect('/adminView/adminViewCatalog')
+
+@app.route('/getSearchType', methods=['GET', 'POST'])
+def get_search_type():
+    type = int(request.form["catalog_type"])
+    print("Type", type)
+
+    return redirect('/adminView/adminViewCatalog')
