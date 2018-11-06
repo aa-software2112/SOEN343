@@ -7,7 +7,7 @@ Catalog Viewer
 
 <!-- Replace Content -->
 {% block content %}
-
+{% if g.user["_is_admin"] == 1 %}
 <div class="row">
     <div class="col-12">
         <a href="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info btn-lg btn-block" style="cursor:pointer">
@@ -15,6 +15,7 @@ Catalog Viewer
         </a>
     </div>
 </div>
+{% endif %}
 <br>
 <ul class="nav nav-tabs nav-justified">
     <li class="nav-item">
@@ -63,6 +64,7 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
+                    {% if g.user["_is_admin"] == 1 %}
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="1">
@@ -81,6 +83,7 @@ Catalog Viewer
                             </button>
                         </form>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -117,6 +120,7 @@ Catalog Viewer
                     <td>{{catalog_item._dubbed}}</td>
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._runtime}}</td>
+                    {% if g.user["_is_admin"] == 1 %}
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="2">
@@ -135,6 +139,7 @@ Catalog Viewer
                             </button>
                         </form>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -165,6 +170,7 @@ Catalog Viewer
                     <td>{{catalog_item._label}}</td>
                     <td>{{catalog_item._release_date}}</td>
                     <td>{{catalog_item._ASIN}}</td>
+                    {% if g.user["_is_admin"] == 1 %}
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="4">
@@ -183,6 +189,7 @@ Catalog Viewer
                             </button>
                         </form>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -213,6 +220,7 @@ Catalog Viewer
                     <td>{{catalog_item._language}}</td>
                     <td>{{catalog_item._ISBN10}}</td>
                     <td>{{catalog_item._ISBN13}}</td>
+                    {% if g.user["_is_admin"] == 1 %}
                     <td class="px-2">
                         <form action="/adminView/modifyCatalogForm" method="post">
                             <input type="hidden" name="type" value="3">
@@ -231,6 +239,7 @@ Catalog Viewer
                             </button>
                         </form>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
