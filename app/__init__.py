@@ -29,7 +29,7 @@ databaseObject = DatabaseContainer(PATH_TO_DATABASE)
 catalog_controller = CatalogController(databaseObject)
 catalog_controller.load_database_into_memory()
 
-clientController = ClientController(databaseObject)
+clientController = ClientController(databaseObject, catalog_controller)
 clientController.load_database_into_memory()
 
 adminController = AdminController(databaseObject, catalog_controller)
