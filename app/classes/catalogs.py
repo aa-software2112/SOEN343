@@ -378,6 +378,11 @@ class MovieCatalog(Catalog):
 
 class MagazineCatalog(Catalog):
 
+    Filters = {"Title": "_title",
+               "Publisher": "_publisher",
+               "Language": "_language"
+               }
+
     def __init__(self, database):
         self.db = database
         self._magazines = {}
@@ -512,6 +517,11 @@ class MagazineCatalog(Catalog):
 
 
 class AlbumCatalog(Catalog):
+
+    Filters = {"Title": "_title",
+               "Artist": "_artist",
+               "Label": "_label"
+               }
 
     def __init__(self, database):
         self.db = database
