@@ -17,7 +17,7 @@ def viewCatalog():
 
     return render_template('view_catalog.html', dict_of_catalogs=dict_of_catalogs)
 
-@app.route('/viewCatalog/getCatalogType', methods=['GET', 'POST'])
+@app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def getCatalogType():
     type = int(request.form["catalog_type"])
     print("CatalogType", type)
