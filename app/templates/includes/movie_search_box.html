@@ -3,7 +3,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="input-group mx-3">
-                        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
+                        <input type="text" class="form-control" placeholder="" aria-label="Recipient's username"
                             aria-describedby="button-addon2">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
@@ -14,18 +14,14 @@
                 <div class="row">
                     <div class="col-6">
                         <p class="text-monospace bold"> Filter Movies By</p>
+                        {% for movie_filter in movie_filters %}
                         <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-2 col-form-label text-monospace">Author</label>
+                            <label for="{{ movie_filter }}" class="col-md-3 col-form-label text-monospace">{{ movie_filter }}</label>
                             <div class="col-md-9">
-                                <input type="email" class="form-control form-control-sm" id="inputEmail3" placeholder="Email">
+                                <input type="text" class="form-control form-control-sm" id="{{ movie_filter }}" placeholder="">
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="inputEmail3" class="col-md-2 col-form-label text-monospace">Title</label>
-                            <div class="col-md-9">
-                                <input type="email" class="form-control form-control-sm" id="inputEmail3" placeholder="Email">
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     <div class="col-6">
                         <p class="text-monospace bold"> Sort Movies By</p>

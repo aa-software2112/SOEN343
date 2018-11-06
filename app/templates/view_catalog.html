@@ -19,16 +19,15 @@ Catalog Viewer
         </div>
         {% endif %}
         <br>
-
         {% include '/includes/view_catalog_nav.html' %}
 
         <div class="tab-content">
             <div class="tab-pane active" role="tabpanel" id="Books">
 
-                <div class="my-4">
-                    <button data-toggle="collapse" data-target="#book-search-box" class="btn btn-info btn-block">
-                        Search
-                    </button>
+                <div class="mt-1 mb-4">
+                        <button data-toggle="collapse" data-target="#book-search-box" class="btn btn-info btn-block">
+                            Search
+                        </button>
                     <div id="book-search-box" class="collapse">
                         {% include '/includes/book_search_box.html' %}
                     </div>
@@ -90,7 +89,7 @@ Catalog Viewer
                 </table>
             </div>
             <div class="tab-pane" role="tabpanel" id="Movies">
-                <div class="my-4">
+                <div class="mt-1 mb-4">
                     <button data-toggle="collapse" data-target="#movie-search-box" class="btn btn-info btn-block">
                         Search
                     </button>
