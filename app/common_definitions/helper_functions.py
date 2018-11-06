@@ -77,8 +77,8 @@ def sort_records(sort_key_values, last_searched_list):
         reverse_order = True
     else: 
         print("criteria value isn't properly defined in terms of ascending or descending")
-        emptylist = []
-        return emptylist
+        empty_list = []
+        return empty_list
 
     #Sorts the catalogs items by its value in reverse order or in order.
     #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
