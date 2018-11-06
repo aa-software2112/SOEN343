@@ -19,8 +19,8 @@ class User:
         self._is_logged = arguments['isLogged']
         self._last_logged = arguments['lastLogged']
         
-        self.lastSearchedList=[]
-        self.index_last_searched_list=0
+        self._last_searched_list = []
+        self._index_of_last_searched_list = 0
 
     def get_id(self):
         """Returns the id of the object"""
@@ -33,25 +33,25 @@ class User:
             " IS_LOGGED: " + str(self._is_logged) + " LAST_LOGGED: " + str(helper_functions.convert_epoch_to_datetime(self._last_logged))
 
     def get_last_searched_list(self):
-        return self.lastSearchedList
+        return self._last_searched_list
 
     def get_index(self):
-        return self.index_last_searched_list
+        return self._index_of_last_searched_list
 
     def set_last_searched_list(self, last_searched_list):
         for search in last_searched_list:
-            self.lastSearchedList.append(search)
+            self._last_searched_list.append(search)
 
     def set_index(self, index_last_searched_list):
-        self.index_last_searched_list=index_last_searched_list
+        self._index_of_last_searched_list=index_last_searched_list
 
     def get_next_index(self):
-        if (len(self.lastSearchedList)-1) == self.index_last_searched_list :
+        if (len(self._last_searched_list)-1) == self._index_of_last_searched_list :
             next_index=0
-            self.index_last_searched_list=next_index
+            self._index_of_last_searched_list=next_index
         else:
             next_index= self.index_last_searched_list+1
-            self.index_last_searched_list=next_index
+            self._index_of_last_searched_list=next_index
 
         return next_index
 
