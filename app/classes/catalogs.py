@@ -40,11 +40,6 @@ class Catalog(abc.ABC):
         """ This method searches for an object in the collection and returns a list of all matches """
         pass
 
-    @abc.abstractmethod
-    def sort(self, sort_key_values, last_searched_list):
-        """ This method sorts the collection and returns a sorted list """
-        pass
-
 
 # Can be used to store either administrators or clients
 class UserCatalog(Catalog):
@@ -102,25 +97,6 @@ class UserCatalog(Catalog):
     def search(self, search_string):
         
         return search_catalog(self._users, search_string)
-
-    def sort(self, sort_key_values, last_searched_list):
-        id = "1"
-        firstname = "2"
-        lastname = "3"
-        for k, v in sort_key_values.items():
-            sort_criteria_type = k
-            sort_criteria_user_input = v
-            break
-        if sort_criteria_user_input.lower() == "id":
-            sort_criteria_user_input = id
-        if sort_criteria_user_input.lower() == "firstname":
-            sort_criteria_user_input = firstname
-        if sort_criteria_user_input.lower() == "lastname":
-            sort_criteria_user_input = lastname
-        if sort_criteria_type.lower() == "ascending":
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input))
-        else:
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input), reverse=True)
 
 
 class BookCatalog(Catalog):
@@ -263,25 +239,6 @@ class BookCatalog(Catalog):
     def search(self, search_string):
 
         return search_catalog(self._books, search_string)
-
-    def sort(self, sort_key_values, last_searched_list):
-        id = "1"
-        author = "2"
-        title = "3"
-        for k, v in sort_key_values.items():
-            sort_criteria_type = k
-            sort_criteria_user_input = v
-            break
-        if sort_criteria_user_input.lower() == "id":
-            sort_criteria_user_input = id
-        if sort_criteria_user_input.lower() == "author":
-            sort_criteria_user_input = author
-        if sort_criteria_user_input.lower() == "title":
-            sort_criteria_user_input = title
-        if sort_criteria_type.lower() == "ascending":
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input))
-        else:
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input), reverse=True)
 
 
 class MovieCatalog(Catalog):
@@ -426,25 +383,6 @@ class MovieCatalog(Catalog):
 
         return search_catalog(self._movies, search_string)
 
-    def sort(self, sort_key_values, last_searched_list):
-        id = "1"
-        title = "2"
-        director = "3"
-        for k, v in sort_key_values.items():
-            sort_criteria_type = k
-            sort_criteria_user_input = v
-            break
-        if sort_criteria_user_input.lower() == "id":
-            sort_criteria_user_input = id
-        if sort_criteria_user_input.lower() == "title":
-            sort_criteria_user_input = title
-        if sort_criteria_user_input.lower() == "director":
-            sort_criteria_user_input = director
-        if sort_criteria_type.lower() == "ascending":
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input))
-        else:
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input), reverse=True)
-
 
 class MagazineCatalog(Catalog):
 
@@ -584,25 +522,6 @@ class MagazineCatalog(Catalog):
 
         return search_catalog(self._magazines, search_string)
 
-    def sort(self, sort_key_values, last_searched_list):
-        id = "1"
-        title = "2"
-        publisher = "3"
-        for k, v in sort_key_values.items():
-            sort_criteria_type = k
-            sort_criteria_user_input = v
-            break
-        if sort_criteria_user_input.lower() == "id":
-            sort_criteria_user_input = id
-        if sort_criteria_user_input.lower() == "title":
-            sort_criteria_user_input = title
-        if sort_criteria_user_input.lower() == "publisher":
-            sort_criteria_user_input = publisher
-        if sort_criteria_type.lower() == "ascending":
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input))
-        else:
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input), reverse=True)
-
 
 class AlbumCatalog(Catalog):
 
@@ -740,25 +659,3 @@ class AlbumCatalog(Catalog):
     def search(self, search_string):
 
         return search_catalog(self._albums, search_string)
-
-    def sort(self, sort_key_values, last_searched_list):
-        id = "1"
-        type = "2"
-        title = "3"
-        artist = "4"
-        for k, v in sort_key_values.items():
-            sort_criteria_type = k
-            sort_criteria_user_input = v
-            break
-        if sort_criteria_user_input.lower() == "id":
-            sort_criteria_user_input = id
-        if sort_criteria_user_input.lower() == "type":
-            sort_criteria_user_input = type
-        if sort_criteria_user_input.lower() == "title":
-            sort_criteria_user_input = title
-        if sort_criteria_user_input.lower() == "artist":
-            sort_criteria_user_input = artist
-        if sort_criteria_type.lower() == "ascending":
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input))
-        else:
-            return sorted(last_searched_list, key=itemgetter(sort_criteria_user_input), reverse=True)
