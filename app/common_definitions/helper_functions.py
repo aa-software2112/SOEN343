@@ -56,19 +56,19 @@ def admin_required(f):
     return admin_check
 
   
-#Sorts a list of dictionnary (i.e. lastSearchedList) based on criteria provided (i.e sorKeyValues)
-#sortKeyValues = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
-#lastSearchedList = holds list of objects dictionnary
-def sort_book(sortKeyValues, lastSearchedList):
+#Sorts a list of dictionnary (i.e. last_searched_list) based on criteria provided (i.e sort_key_values)
+#sort_key_values = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
+#last_searched_list = holds list of objects
+def sort_records(sort_key_values, last_searched_list):
 
     print("Unsorted list")
-    print(lastSearchedList)
+    print(last_searched_list)
 
-    #gets the order to which it will be sorted (ascending or descending) from the sortKeyValues criteria
-    sort_order =  list(sortKeyValues.keys())[0]
+    #gets the order to which it will be sorted (ascending or descending) from the sort_key_values criteria
+    sort_order =  list(sort_key_values.keys())[0]
 
-    #Gives the attributes to sort the book objects to. Taken from the sortKeyValues criteria
-    sort_attribute = list(sortKeyValues.values())[0]
+    #Gives the attributes to sort the book objects to. Taken from the sort_key_values criteria
+    sort_attribute = list(sort_key_values.values())[0]
 
     #Holds boolean which will be used to sort inorder or in reverse order   
     if sort_order is "ascending":
@@ -77,23 +77,23 @@ def sort_book(sortKeyValues, lastSearchedList):
         reverse_order = True
     else: 
         print("criteria value isn't properly defined in terms of ascending or descending")
-        reverse_order = None
-        return reverse_order
+        emptylist = []
+        return emptylist
 
     #Sorts the catalogs items by its value in reverse order or in order.
     #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
     #An example: https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
-    last_searched_list_sorted = sorted(lastSearchedList, key=lambda kv: kv[sort_attribute], reverse=reverse_order)
+    last_searched_list_sorted = sorted(last_searched_list, key=lambda kv: kv[sort_attribute], reverse=reverse_order)
 
     print("Sorted list")
     print(last_searched_list_sorted)
     return last_searched_list_sorted
 
 #4 lines below For testing sort_book, can be removed after review. To test, remove number sign to uncomment it.
-#sortKeyValues1 = {"descending": "author"}
-#lastSearchedList1 = [{"title": 6, "author": "c", "type": "Hardcover"}, {"title": 3, "author": "f", "type": "Digital"}, {"title": 9, "author": "a", "type": "Paperback"},]
-#rint("testing sort_book")
-#sort_book(sortKeyValues1, lastSearchedList1)
+#sort_key_values_1 = {"ascending": "author"}
+#last_searched_list_sorted_1 = [{"title": 6, "author": "c", "type": "Hardcover"}, {"title": 3, "author": "f", "type": "Digital"}, {"title": 9, "author": "a", "type": "Paperback"},]
+#print("testing sort_book")
+#sort_records(sort_key_values_1, last_searched_list_sorted_1)
 
 
 
