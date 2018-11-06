@@ -56,23 +56,26 @@ def admin_required(f):
     return admin_check
 
 
+#Sorts a list of dictionnary (i.e. lastSearchedList) based on criteria provided (i.e sorKeyValues)
+#sortKeyValues = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
+#lastSearchedList = holds list of objects dictionnary
+def sort_book(sortKeyValues, lastSearchedList):
 
-#Assuming sortKeyValues = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
-#Assuming lastSearchedList = holds id of object book and row of 1 object book as list.
-def sort_book(sortKeyValues, lastSearchedList)
+    print("Unsorted list")
+    print(lastSearchedList)
 
     #gets the order to which it will be sorted (ascending or descending) from the sortKeyValues criteria
     sort_order =  list(sortKeyValues.keys())[0]
 
     #Gives the attributes to sort the book objects to. Taken from the sortKeyValues criteria
-    sort_attribute = list(sortKeyValue.values())[0]
+    sort_attribute = list(sortKeyValues.values())[0]
 
-    #Holds boolean which will be used to sort inorder or in reverse order
-    if sort_order = "ascending"
+    #Holds boolean which will be used to sort inorder or in reverse order   
+    if sort_order is "ascending":
         reverse_order = False
-    else if sort_order = "descending"
+    elif sort_order is "descending":
         reverse_order = True
-    else 
+    else: 
         print("criteria value isn't properly defined in terms of ascending or descending")
         reverse_order = None
         return reverse_order
@@ -80,9 +83,17 @@ def sort_book(sortKeyValues, lastSearchedList)
     #Sorts the catalogs items by its value in reverse order or in order.
     #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
     #An example: https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
-    list_sorted = sorted(lastSearchedList.items(), key=lambda kv: kv[sort_attribute], reverse=reverse_order)
+    last_searched_list_sorted = sorted(lastSearchedList, key=lambda kv: kv[sort_attribute], reverse=reverse_order)
 
-    return list_sorted
+    print("Sorted list")
+    print(last_searched_list_sorted)
+    return last_searched_list_sorted
+
+#4 lines below For testing sort_book, can be removed after review. To test, remove number sign to uncomment it.
+#sortKeyValues1 = {"descending": "author"}
+#lastSearchedList1 = [{"title": 6, "author": "c", "type": "Hardcover"}, {"title": 3, "author": "f", "type": "Digital"}, {"title": 9, "author": "a", "type": "Paperback"},]
+#rint("testing sort_book")
+#sort_book(sortKeyValues1, lastSearchedList1)
 
 
 
