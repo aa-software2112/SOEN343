@@ -81,10 +81,6 @@ def sort_records(sort_key_values, last_searched_list):
     #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
     #An example: https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
     last_searched_list_sorted = sorted(last_searched_list, key=lambda record: record.__dict__[sort_attribute], reverse=reverse_order)
-
-    print("Sorted list")
-    for record in last_searched_list_sorted:
-        print(record.id) #since they all have the id attribute
     
     return last_searched_list_sorted
 
