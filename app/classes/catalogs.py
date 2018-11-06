@@ -101,6 +101,12 @@ class UserCatalog(Catalog):
 
 class BookCatalog(Catalog):
 
+    Filters = {"Author":"_author",
+                "Title":"_title",
+                "Publisher":"_publisher",
+                "Language":"_language"
+               }
+
     def __init__(self, database):
         self.db = database
         # private variable convention in python have '_' prefix
@@ -242,6 +248,12 @@ class BookCatalog(Catalog):
 
 
 class MovieCatalog(Catalog):
+
+    Filters = {"Director": "_director",
+               "Title": "_title",
+               "Producer": "_producers",
+               "Actor": "_actors"
+               }
 
     def __init__(self, database):
         self.db = database
@@ -386,6 +398,11 @@ class MovieCatalog(Catalog):
 
 class MagazineCatalog(Catalog):
 
+    Filters = {"Title": "_title",
+               "Publisher": "_publisher",
+               "Language": "_language"
+               }
+
     def __init__(self, database):
         self.db = database
         self._magazines = {}
@@ -524,6 +541,11 @@ class MagazineCatalog(Catalog):
 
 
 class AlbumCatalog(Catalog):
+
+    Filters = {"Title": "_title",
+               "Artist": "_artist",
+               "Label": "_label"
+               }
 
     def __init__(self, database):
         self.db = database
