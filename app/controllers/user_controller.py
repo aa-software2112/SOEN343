@@ -116,3 +116,17 @@ class ClientController(Controller):
                           "isAdmin": 0, "isLogged": isLogged, "lastLogged": lastLogged}
 
         self._client_catalog.add(Client(attributesDict), True)
+
+    def get_next_item(self, client_id):
+
+        client_performing_search = self._client_catalog.get(client_id)
+
+        # This function (below) should autoincrement the index when
+        # We get the next value
+        # return client_performing_search.getNextSearchedItem()
+
+    def get_last_searched_list(self, client_id):
+
+        client_performing_search = self._client_catalog.get(client_id)
+
+        # return client_performing_search.getLastSearchedList()
