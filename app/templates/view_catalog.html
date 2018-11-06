@@ -23,15 +23,24 @@ Catalog Viewer
 
         <div class="tab-content">
             <div class="tab-pane active" role="tabpanel" id="Books">
-
-                <div class="mt-1 mb-4">
-                        <button data-toggle="collapse" data-target="#book-search-box" class="btn btn-info btn-block">
-                            Search
-                        </button>
-                    <div id="book-search-box" class="collapse">
-                        {% include '/includes/book_search_box.html' %}
+                <form action="/viewCatalog/search" method="POST">
+                    <input type="hidden" name="catalog_type" value="1">
+                    <div class="my-4">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="" aria-label="book-search"
+                                aria-describedby="book-search-btn">
+                            <div class="input-group-prepend" id="book-search-btn">
+                                <button class="btn btn-outline-info" type="button">Search</button>
+                                <button class="btn btn-info" data-toggle="collapse" data-target="#book-search-box" type="button">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="book-search-box" class="collapse">
+                            {% include '/includes/book_search_box.html' %}
+                        </div>
                     </div>
-                </div>
+                </form>
 
                 <table class="table table-hover">
                     <thead>
@@ -89,14 +98,25 @@ Catalog Viewer
                 </table>
             </div>
             <div class="tab-pane" role="tabpanel" id="Movies">
-                <div class="mt-1 mb-4">
-                    <button data-toggle="collapse" data-target="#movie-search-box" class="btn btn-info btn-block">
-                        Search
-                    </button>
-                    <div id="movie-search-box" class="collapse">
-                        {% include '/includes/movie_search_box.html' %}
+                <form action="/viewCatalog/search" method="POST">
+                    <input type="hidden" name="catalog_type" value="2">
+                    <div class="my-4">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="" aria-label="movie-search"
+                                aria-describedby="movie-search-btn">
+                            <div class="input-group-prepend" id="movie-search-btn">
+                                <button class="btn btn-outline-info" type="button">Search</button>
+                                <button class="btn btn-info" data-toggle="collapse" data-target="#movie-search-box"
+                                    type="button">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="movie-search-box" class="collapse">
+                            {% include '/includes/movie_search_box.html' %}
+                        </div>
                     </div>
-                </div>
+                </form>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -153,6 +173,25 @@ Catalog Viewer
                 </table>
             </div>
             <div class="tab-pane" role="tabpanel" id="Albums">
+                <form action="/viewCatalog/search" method="POST">
+                    <input type="hidden" name="catalog_type" value="4">
+                    <div class="my-4">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="" aria-label="album-search"
+                                aria-describedby="album-search-btn">
+                            <div class="input-group-prepend" id="album-search-btn">
+                                <button class="btn btn-outline-info" type="button">Search</button>
+                                <button class="btn btn-info" data-toggle="collapse" data-target="#album-search-box"
+                                    type="button">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="album-search-box" class="collapse">
+                            {% include '/includes/album_search_box.html' %}
+                        </div>
+                    </div>
+                </form>
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -203,6 +242,25 @@ Catalog Viewer
                 </table>
             </div>
             <div class="tab-pane" role="tabpanel" id="Magazines">
+                <form action="/viewCatalog/search" method="POST">
+                    <input type="hidden" name="catalog_type" value="3">
+                    <div class="my-4">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="" aria-label="magazine-search"
+                                aria-describedby="magazine-search-btn">
+                            <div class="input-group-prepend" id="magazine-search-btn">
+                                <button class="btn btn-outline-info" type="button">Search</button>
+                                <button class="btn btn-info" data-toggle="collapse" data-target="#magazine-search-box"
+                                    type="button">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="magazine-search-box" class="collapse">
+                            {% include '/includes/magazine_search_box.html' %}
+                        </div>
+                    </div>
+                </form>
                 <table class="table table-hover">
                     <thead>
                         <tr>

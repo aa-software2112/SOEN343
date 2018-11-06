@@ -32,10 +32,8 @@ def viewCatalog():
         album_filters = album_filters
     )
 
-# @app.route('/viewCatalog/getSearchFilters', methods=['GET', 'POST'])
-# def getCatalogType():
-#     type = int(request.form["catalog_type"])
-#     print("CatalogType", type)
-#     test = "Testing"
-#     render_template('includes/book_search_box.html', test=test)
-#     return redirect('viewCatalog')
+@app.route('/viewCatalog/search', methods=['GET', 'POST'])
+def getCatalogType():
+    type = int(request.form["catalog_type"])
+    print("CatalogType", type)
+    return redirect('viewCatalog')

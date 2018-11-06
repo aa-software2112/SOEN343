@@ -1,46 +1,41 @@
-<form class="form">
-        <div class="card" style="width: 100%">
-            <div class="card-body">
-                <div class="row">
-                    <div class="input-group mx-3">
-                        <input type="text" class="form-control" placeholder="" aria-label="Recipient's username"
-                            aria-describedby="button-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+<div>
+    <div class="card" style="width: 100%">
+        <div class="card-body">
+            <h5 class="text-info font-weight-light text-center ">Advanced Search</h5>
+            <hr>
+            <div class="row">
+                <div class="col-6">
+                    <p class="text-monospace bold"> Filter Movies By</p>
+                    {% for movie_filter in movie_filters %}
+                    <div class="form-group row">
+                        <label for="{{ movie_filter }}" class="col-md-3 col-form-label text-monospace">
+                            {{ movie_filter }}
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control form-control-sm" id="{{ movie_filter }}" placeholder="">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-6">
+                    <p class="text-monospace bold"> Sort Movies By</p>
+                    <div class="btn-group dropright">
+                        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-6">
-                        <p class="text-monospace bold"> Filter Movies By</p>
-                        {% for movie_filter in movie_filters %}
-                        <div class="form-group row">
-                            <label for="{{ movie_filter }}" class="col-md-3 col-form-label text-monospace">{{ movie_filter }}</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control form-control-sm" id="{{ movie_filter }}" placeholder="">
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-6">
-                        <p class="text-monospace bold"> Sort Movies By</p>
-                        <div class="btn-group dropright">
-                            <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Select
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="m-4">
-                <button type="submit" class="btn btn-outline-info float-right">Submit</button>
             </div>
         </div>
-    </form>
+        <hr>
+        <div class="mb-3 mr-3 mt-0">
+            <button type="submit" class="btn btn-outline-info float-right">Submit</button>
+        </div>
+    </div>
+</div>

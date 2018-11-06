@@ -5,19 +5,20 @@
             <hr>
             <div class="row">
                 <div class="col-6">
-                    <p class="text-monospace bold"> Filter Books By</p>
-                    {% for book_filter in book_filters %}
+                    <p class="text-monospace bold"> Filter Albums By</p>
+                    {% for album_filter in album_filters %}
                     <div class="form-group row">
-                        <label for="{{ book_filter }}" class="col-md-3 col-form-label text-monospace">{{
-                            book_filter }}</label>
+                        <label for="{{ album_filter }}" class="col-md-3 col-form-label text-monospace">
+                            {{ album_filter }}
+                        </label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control form-control-sm" id="{{ book_filter }}" placeholder="">
+                            <input type="text" class="form-control form-control-sm" id="{{ album_filter }}" placeholder="">
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 <div class="col-6">
-                    <p class="text-monospace bold"> Sort Books By</p>
+                    <p class="text-monospace bold"> Sort Albums By</p>
                     <div class="btn-group dropright">
                         <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -33,8 +34,9 @@
             </div>
         </div>
         <hr>
-        <div class="mb-3 mr-3 mt-0">
+        <div  class="mb-3 mr-3 mt-0">
             <button type="submit" class="btn btn-outline-info float-right">Submit</button>
         </div>
     </div>
+    </form>
 </div>
