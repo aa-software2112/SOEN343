@@ -60,37 +60,9 @@ class Admin(User):
     def __init__(self, arguments):
         User.__init__(self, arguments)
 
-    def get_last_searched_list(self):
-        return User.get_last_searched_list(self)
-
-    def get_index(self):
-        return User.get_index(self)
-
-    def get_next_index(self):
-        return User.get_next_index(self)
-
-    def set_last_searched_list(self, last_searched_list):
-        User.set_last_searched_list(self, last_searched_list)
-
-    def set_index(self, index_last_searched_list):
-        User.set_index(self, index_last_searched_list)
 
 class Client(User):
 
     def __init__(self, arguments):
         User.__init__(self, arguments)
-
-    def get_last_searched_list(self):
-        return User.get_last_searched_list(self)
-
-    def get_index(self):
-        return User.get_index(self)
-
-    def get_next_index(self):
-        return User.get_next_index(self)
-
-    def set_last_searched_list(self, last_searched_list):
-        User.set_last_searched_list(self, last_searched_list)
-
-    def set_index(self, index_last_searched_list):
-        User.set_index(self, index_last_searched_list)
+    
