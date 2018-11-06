@@ -84,3 +84,6 @@ class CatalogController(Controller):
 
     def search_from_catalog(self, catalog_type, search_string):
         return self.view_catalog_inventory()[catalog_type].search(search_string)
+
+    def sort_by(self, catalog_type, sort_key_values, last_searched_list):
+        return self.view_catalog_inventory()[catalog_type].sort(sort_key_values, last_searched_list)
