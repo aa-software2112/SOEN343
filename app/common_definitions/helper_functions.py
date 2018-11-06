@@ -62,7 +62,7 @@ def admin_required(f):
 
     return admin_check
 
-<<<<<<< HEAD
+
 
 def filter(criteria, catalog_records):
     lst = []
@@ -79,7 +79,7 @@ def filter(criteria, catalog_records):
 
 
 
-=======
+
   
 #Sorts a list of dictionnary (i.e. last_searched_list) based on criteria provided (i.e sort_key_values)
 #sort_key_values = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
@@ -125,4 +125,4 @@ def search_catalog(catalog, search_string):
             lst.append(v)
 
     return lst
->>>>>>> Iteration5-Implementations
+
