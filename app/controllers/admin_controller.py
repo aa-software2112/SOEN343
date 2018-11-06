@@ -189,7 +189,7 @@ class AdminController(Controller):
 
     def delete_catalog_copy_entry(self, catalog_type, id):
         return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)
-
+      
     def get_next_item(self, admin_id):
 
         admin_performing_search = self._admin_catalog.get(admin_id)
@@ -203,3 +203,7 @@ class AdminController(Controller):
         admin_performing_search = self._admin_catalog.get(admin_id)
 
         # return admin_performing_search.getLastSearchedList()
+        
+    def search_from_catalog(self, catalog_type, search_string):
+        return self._catalog_controller.search_from_catalog(catalog_type, search_string)
+      
