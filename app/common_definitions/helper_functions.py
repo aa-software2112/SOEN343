@@ -54,3 +54,52 @@ def admin_required(f):
             flash('Unauthorized Access!', 'danger')
             return redirect(url_for('index'))
     return admin_check
+
+
+
+#Assuming sortKeyValues = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
+#Assuming lastSearchedList = holds id of object book and row of 1 object book as list.
+def sort_book(sortKeyValues, lastSearchedList)
+
+    #gets the order to which it will be sorted (ascending or descending) from the sortKeyValues criteria
+    sort_order =  list(sortKeyValues.keys())[0]
+
+    #Gives the attributes to sort the book objects to. Taken from the sortKeyValues criteria
+    sort_attribute = list(sortKeyValue.values())[0]
+
+    #Holds boolean which will be used to sort inorder or in reverse order
+    if sort_order = "ascending"
+        reverse_order = False
+    else if sort_order = "descending"
+        reverse_order = True
+    else 
+        print("criteria value isn't properly defined in terms of ascending or descending")
+        reverse_order = None
+        return reverse_order
+
+    #Sorts the catalogs items by its value in reverse order or in order.
+    #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
+    #An example: https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
+    list_sorted = sorted(lastSearchedList.items(), key=lambda kv: kv[sort_attribute], reverse=reverse_order)
+
+    return list_sorted
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
