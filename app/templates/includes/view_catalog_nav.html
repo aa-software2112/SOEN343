@@ -1,18 +1,25 @@
-<ul class="nav nav-tabs nav-justified">
-    <form action="/viewCatalog/viewCatalogTab" method="POST">
-        <li class="nav-item">
-            <input type="hidden" name="catalog_type" value="1">
-            <button type="submit" class="nav-link active"> <h5 class="text-info font-weight-light ">Books</h5> </a>
-        </li>
-    </form>
-    <li class="nav-item">
-        <a class="nav-link" href="#Movies"> <h5 class="text-info font-weight-light ">Movies</h5> </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#Albums" role="tab" data-toggle="tab"> <h5 class="text-info font-weight-light ">Albums</h5> </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#Magazines" role="tab" data-toggle="tab"> <h5 class="text-info font-weight-light ">Magazines</h5> </a>
-    </li>
-</ul>
+<form action="/viewCatalog/viewCatalogTab" method="POST">
 
+    <ul class="nav nav-tabs nav-justified">
+        <li class="nav-item">
+            <button type="submit" name="catalog_type" value="1" class="nav-link active">
+                <h5 class="text-info font-weight-light ">Books</h5> </a>
+        </li>
+        <li class="nav-item">
+            <button type="submit" name="catalog_type" value="2" class="nav-link active">
+                <h5 class="text-info font-weight-light ">Movies</h5>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button type="submit" name="catalog_type" value="4" class="nav-link active">
+                <h5 class="text-info font-weight-light ">Albums</h5>
+            </button>
+        </li>
+        <li class="nav-item">
+            <button type="submit" name="catalog_type" value="3" class="nav-link active">
+                <h5 class="text-info font-weight-light ">Magazines</h5>
+            </button>
+        </li>
+
+    </ul>
+</form>

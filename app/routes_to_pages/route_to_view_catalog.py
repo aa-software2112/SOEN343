@@ -40,7 +40,22 @@ def viewCatalogTab():
         book_filters = catalog_controller.get_filters(CatalogController.BOOK_TYPE)
         all_records = catalog_controller.get_records_by_catalog(CatalogController.BOOK_TYPE)
         return render_template('view_books.html', books = all_records, book_filters = book_filters)
-   
+
+    elif (type == 2):
+        movie_filters = catalog_controller.get_filters(CatalogController.MOVIE_TYPE)
+        all_records = catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE)
+        return render_template('view_movies.html', movies = all_records, movie_filters = movie_filters)
+
+    elif (type == 3):
+        magazine_filters = catalog_controller.get_filters(CatalogController.MAGAZINE_TYPE)
+        all_records = catalog_controller.get_records_by_catalog(CatalogController.MAGAZINE_TYPE)
+        return render_template('view_magazines.html', magazines = all_records, magazine_filters = magazine_filters)
+
+    elif (type == 4):
+        album_filters = catalog_controller.get_filters(CatalogController.ALBUM_TYPE)
+        all_records = catalog_controller.get_records_by_catalog(CatalogController.ALBUM_TYPE)
+        return render_template('view_albums.html', albums = all_records, album_filters = album_filters)
+
 
 # To-do
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
