@@ -56,7 +56,6 @@ def viewCatalogTab():
         all_records = catalog_controller.get_records_by_catalog(CatalogController.ALBUM_TYPE)
         return render_template('view_albums.html', albums = all_records, album_filters = album_filters)
 
-
 # To-do
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():
