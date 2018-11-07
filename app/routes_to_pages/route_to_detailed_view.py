@@ -27,3 +27,16 @@ def nextDetailedView():
 
     #uncomment  when template for detailed view is defined
     #return render_template('detailed_view.html', next_catalog_entry=next_catalog_entry)
+
+@app.route('/backToLIST', methods=['GET', 'POST'])
+@login_required
+def backToList():
+    # get the user id
+    id = request.form["id"]
+    if g.user["_is_admin"] == 1:
+        last_searched_list = adminController.get_last_searched_list(int(id))
+    else:
+        last_searched_list = clientController.get_last_searched_list(int(id))
+
+    #uncomment  when template for back view is defined
+    #return render_template('searched_list_view.html', last_searched_list=last_searched_list)
