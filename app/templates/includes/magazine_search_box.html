@@ -1,6 +1,9 @@
 <div>
     <div class="card" style="width: 100%">
         <div class="card-body">
+            <button type="button" class="close" aria-label="Close" data-toggle="collapse" data-target="#magazine-search-box">
+                <span aria-hidden="true">&times;</span>
+            </button>
             <h5 class="text-info font-weight-light text-center ">Advanced Search</h5>
             <hr>
             <div class="row">
@@ -8,10 +11,10 @@
                     <p class="text-monospace bold"> Filter Magazines By</p>
                     {% for magazine_filter in magazine_filters %}
                     <div class="form-group row">
-                        <label for="{{ magazine_filter }}" class="col-md-3 col-form-label text-monospace">
+                        <label for="{{ magazine_filter }}" class="col-md-3 offset-md-1 col-form-label text-monospace">
                             {{ magazine_filter }}
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <input type="text" class="form-control form-control-sm" id="{{ magazine_filter }}"
                                 placeholder="">
                         </div>

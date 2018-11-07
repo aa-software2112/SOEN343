@@ -1,6 +1,9 @@
 <div>
     <div class="card" style="width: 100%">
         <div class="card-body">
+            <button type="button" class="close" aria-label="Close" data-toggle="collapse" data-target="#album-search-box">
+                <span aria-hidden="true">&times;</span>
+            </button>
             <h5 class="text-info font-weight-light text-center ">Advanced Search</h5>
             <hr>
             <div class="row">
@@ -8,10 +11,10 @@
                     <p class="text-monospace bold"> Filter Albums By</p>
                     {% for album_filter in album_filters %}
                     <div class="form-group row">
-                        <label for="{{ album_filter }}" class="col-md-3 col-form-label text-monospace">
+                        <label for="{{ album_filter }}" class="col-md-3 offset-md-1 col-form-label text-monospace">
                             {{ album_filter }}
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <input type="text" class="form-control form-control-sm" id="{{ album_filter }}" placeholder="">
                         </div>
                     </div>
