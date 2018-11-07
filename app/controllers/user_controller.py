@@ -6,12 +6,14 @@ from app.classes.user_container import User
 
 class ClientController(Controller):
 
-    def __init__(self, database):
+    def __init__(self, database, catalog_controller):
         Controller.__init__(self, database)
 
         self._db_loaded = False
 
         self._client_catalog = UserCatalog(database)
+
+        self._catalog_controller = catalog_controller
 
     def load_database_into_memory(self):
 
@@ -86,7 +88,8 @@ class ClientController(Controller):
 
         return found_client
 
-
+    def view_inventory(self):
+        return self._catalog_controller.get_all_catalogs()
 
     # function takes self and username
     # updates value in attribute isLogged to 0.
@@ -116,3 +119,33 @@ class ClientController(Controller):
                           "isAdmin": 0, "isLogged": isLogged, "lastLogged": lastLogged}
 
         self._client_catalog.add(Client(attributesDict), True)
+
+    def get_next_item(self, client_id):
+
+        client_performing_search = self._client_catalog.get(client_id)
+
+        # This function (below) should autoincrement the index when
+        # We get the next value
+        # return client_performing_search.getNextSearchedItem()
+
+    def get_last_searched_list(self, client_id):
+
+        client_performing_search = self._client_catalog.get(client_id)
+
+        # return client_performing_search.getLastSearchedList()
+
+    def filter_by(self, catalog_type, filter_key_values, client_id):
+      
+        usr = self._client_catalog.get(client_id)
+        last_searched_list = usr.get_last_searched_list()
+        
+        lst = self._catalog_controller.filter_by(catalog_type, filter_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+      
+    def search_from(self, catalog_type, search_value, client_id):
+      
+        lst = self._catalog_controller.search_from(catalog_type, search_value)
+        usr = self._client_catalog.get(client_id)
+        usr.set_last_searched_list(lst)
+        return lst
