@@ -194,16 +194,30 @@ class AdminController(Controller):
 
         admin_performing_search = self._admin_catalog.get(admin_id)
 
-        # This function (below) should autoincrement the index when
-        # We get the next value
-        # return admin_performing_search.getNextSearchedItem()
+        return admin_performing_search.get_next_record_searched()
 
     def get_last_searched_list(self, admin_id):
 
         admin_performing_search = self._admin_catalog.get(admin_id)
 
-        # return admin_performing_search.getLastSearchedList()
-        
-    def search_from_catalog(self, catalog_type, search_string):
-        return self._catalog_controller.search_from_catalog(catalog_type, search_string)
+        return admin_performing_search.get_last_searched_list()
+  
+    def filter_by(self, catalog_type, filter_key_values, admin_id):
       
+        usr = self._admin_catalog.get(admin_id)
+        last_searched_list = usr.get_last_searched_list()
+
+    def sort_by(self, catalog_type, sort_key_values, admin_id):
+      
+        usr = self._admin_catalog.get(admin_id)
+        last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+
+    def search_from(self, catalog_type, search_value, admin_id):
+      
+        lst = self._catalog_controller.search_from(catalog_type, search_value)
+        usr = self._admin_catalog.get(admin_id)
+        usr.set_last_searched_list(lst)
+        return lst
