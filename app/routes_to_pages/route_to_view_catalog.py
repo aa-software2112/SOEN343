@@ -33,7 +33,25 @@ def viewCatalog():
     )
 
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
-def getCatalogType():
+def search():
     type = int(request.form["catalog_type"])
     print("CatalogType", type)
     return redirect('viewCatalog')
+
+@app.route('/viewCatalog/viewDetails', methods=['GET', 'POST'])
+def viewDetails():
+    type = int(request.form["catalog_type"])
+    id = request.form["id"]
+
+    if (type == 1):
+        catalog_type = CatalogController.BOOK_TYPE
+    elif (type == 2):
+        catalog_type = CatalogController.MOVIE_TYPE
+    elif (type == 3):
+        catalog_type = CatalogController.MAGAZINE_TYPE
+    elif (type == 4):
+        catalog_type = CatalogController.ALBUM_TYPE
+
+    selected_record = catalog_controller.get_catalog_entry_by_id(catalog_type, int(id))
+    print("selected record", selected_record)
+    return render_template('view_record_details.html', catalog_type = int(catalog_type), record = selected_record)

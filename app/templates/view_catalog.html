@@ -45,6 +45,7 @@ Catalog Viewer
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th></th>
                             <th scope="col"> ID </th>
                             <th scope="col"> Author </th>
                             <th scope="col"> Title </th>
@@ -61,17 +62,28 @@ Catalog Viewer
                     </thead>
                     <tbody>
                         {% for key, catalog_item in dict_of_catalogs["books"].items() %}
+
                         <tr>
-                            <td>{{catalog_item._id}}</td>
-                            <td>{{catalog_item._author}}</td>
-                            <td>{{catalog_item._title}}</td>
-                            <td>{{catalog_item._format}}</td>
-                            <td>{{catalog_item._pages}}</td>
-                            <td>{{catalog_item._publisher}}</td>
-                            <td>{{catalog_item._year_of_publication}}</td>
-                            <td>{{catalog_item._language}}</td>
-                            <td>{{catalog_item._ISBN10}}</td>
-                            <td>{{catalog_item._ISBN13}}</td>
+                            <form action="/viewCatalog/viewDetails" method="POST" id="record-tab">
+                                <input type="hidden" name="catalog_type" value="1">
+                                <input type="hidden" name="id" value="{{catalog_item._id}}">
+                                <td>
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm" title="More Information">
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                </td>
+                                <td>{{catalog_item._id}}</td>
+                                <td>{{catalog_item._author}}</td>
+                                <td>{{catalog_item._title}}</td>
+                                <td>{{catalog_item._format}}</td>
+                                <td>{{catalog_item._pages}}</td>
+                                <td>{{catalog_item._publisher}}</td>
+                                <td>{{catalog_item._year_of_publication}}</td>
+                                <td>{{catalog_item._language}}</td>
+                                <td>{{catalog_item._ISBN10}}</td>
+                                <td>{{catalog_item._ISBN13}}</td>
+                            </form>
+
                             {% if g.user["_is_admin"] == 1 %}
                             <td class="px-2">
                                 <form action="/adminView/modifyCatalogForm" method="post">
@@ -120,6 +132,7 @@ Catalog Viewer
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th></th>
                             <th scope="col"> ID </th>
                             <th scope="col"> Title </th>
                             <th scope="col"> Director </th>
@@ -137,16 +150,25 @@ Catalog Viewer
                     <tbody>
                         {% for key, catalog_item in dict_of_catalogs["movies"].items() %}
                         <tr>
-                            <td>{{catalog_item._id}}</td>
-                            <td>{{catalog_item._title}}</td>
-                            <td>{{catalog_item._director}}</td>
-                            <td>{{catalog_item._producers}}</td>
-                            <td>{{catalog_item._actors}}</td>
-                            <td>{{catalog_item._language}}</td>
-                            <td>{{catalog_item._subtitles}}</td>
-                            <td>{{catalog_item._dubbed}}</td>
-                            <td>{{catalog_item._release_date}}</td>
-                            <td>{{catalog_item._runtime}}</td>
+                            <form action="/viewCatalog/viewDetails" method="POST" id="record-tab">
+                                <input type="hidden" name="catalog_type" value="2">
+                                <input type="hidden" name="id" value="{{catalog_item._id}}">
+                                <td>
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm" title="More Information">
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                </td>
+                                <td>{{catalog_item._id}}</td>
+                                <td>{{catalog_item._title}}</td>
+                                <td>{{catalog_item._director}}</td>
+                                <td>{{catalog_item._producers}}</td>
+                                <td>{{catalog_item._actors}}</td>
+                                <td>{{catalog_item._language}}</td>
+                                <td>{{catalog_item._subtitles}}</td>
+                                <td>{{catalog_item._dubbed}}</td>
+                                <td>{{catalog_item._release_date}}</td>
+                                <td>{{catalog_item._runtime}}</td>
+                            </form>
                             {% if g.user["_is_admin"] == 1 %}
                             <td class="px-2">
                                 <form action="/adminView/modifyCatalogForm" method="post">
@@ -313,4 +335,9 @@ Catalog Viewer
         </div>
     </div>
 </div>
+<script>
+    function getRecordDetails() {
+        document.getElementById("record-tab").submit();
+    }
+</script>
 {% endblock %}
