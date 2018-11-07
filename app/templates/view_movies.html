@@ -39,7 +39,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for key, catalog_item in movies.items() %}
+        {% for catalog_item in records %}
         <tr>
             <form action="/viewCatalog/viewDetails" method="POST" id="record-tab">
                 <input type="hidden" name="catalog_type" value="2">
