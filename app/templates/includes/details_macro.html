@@ -73,7 +73,10 @@ ISBN10='', ISBN13='') -%}
     <div class="col-8 offset-2">
         <div class="title text-monospace text-info"> {{ title }} </div>
         <hr>
-        <div class="font-1 text-monospace"> {{ publisher }} </div>
+        <div>
+            <p class="text-monospace text-center"> Published by </p>
+            <p class="font-1 text-monospace">{{ publisher }}</p>
+        </div>
     </div>
 </div>
 <div class="row">
