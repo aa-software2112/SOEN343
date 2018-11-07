@@ -55,6 +55,35 @@ def admin_required(f):
             return redirect(url_for('index'))
     return admin_check
 
+  
+#Sorts a list of dictionnary (i.e. last_searched_list) based on criteria provided (i.e sort_key_values)
+#sort_key_values = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
+#last_searched_list = holds list of objects
+def sort_records(sort_key_values, last_searched_list):
+
+    #gets the order to which it will be sorted (ascending or descending) from the sort_key_values criteria
+    sort_order =  list(sort_key_values.keys())[0]
+
+    #Gives the attributes to sort the book objects to. Taken from the sort_key_values criteria
+    sort_attribute = list(sort_key_values.values())[0]
+
+    #Holds boolean which will be used to sort inorder or in reverse order   
+    if sort_order is "ascending":
+        reverse_order = False
+    elif sort_order is "descending":
+        reverse_order = True
+    else: 
+        print("criteria value isn't properly defined in terms of ascending or descending")
+        empty_list = []
+        return empty_list
+
+    #Sorts the catalogs items by its value in reverse order or in order.
+    #Note: since python3 doesn't allow unpacking: https://www.python.org/dev/peps/pep-3113/
+    #An example: https://stackoverflow.com/questions/72899/how-do-i-sort-a-list-of-dictionaries-by-a-value-of-the-dictionary
+    last_searched_list_sorted = sorted(last_searched_list, key=lambda record: record.__dict__[sort_attribute], reverse=reverse_order)
+    
+    return last_searched_list_sorted
+
 
 def search_catalog(catalog, search_string):
     """ Performs a search on the catalog and returns a list of all the catalog 
