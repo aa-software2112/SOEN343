@@ -120,6 +120,13 @@ class ClientController(Controller):
 
         self._client_catalog.add(Client(attributesDict), True)
 
+    def sort_by(self, catalog_type, sort_key_values, client_id):
+        usr = self._client_catalog.get(client_id)
+        last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+
     def get_next_item(self, client_id):
 
         client_performing_search = self._client_catalog.get(client_id)
@@ -133,12 +140,11 @@ class ClientController(Controller):
         client_performing_search = self._client_catalog.get(client_id)
 
         # return client_performing_search.getLastSearchedList()
-
+        
     def filter_by(self, catalog_type, filter_key_values, client_id):
       
         usr = self._client_catalog.get(client_id)
         last_searched_list = usr.get_last_searched_list()
-        
         lst = self._catalog_controller.filter_by(catalog_type, filter_key_values, last_searched_list)
         usr.set_last_searched_list(lst)
         return lst
