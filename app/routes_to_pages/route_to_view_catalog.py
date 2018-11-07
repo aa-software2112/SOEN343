@@ -25,12 +25,22 @@ def viewCatalog():
     album_filters = catalog_controller.get_filters(CatalogController.ALBUM_TYPE)
 
     return render_template('view_catalog.html', 
-        dict_of_catalogs=dict_of_catalogs, 
+        # dict_of_catalogs=dict_of_catalogs, 
         book_filters = book_filters,
         movie_filters = movie_filters,
         magazine_filters = magazine_filters,
         album_filters = album_filters
     )
+
+# Separate the singular view catalog page into its respective page
+@app.route('/viewCatalog/viewCatalogTab', methods=['GET', 'POST'])
+def viewCatalogTab():
+    type = int(request.form["catalog_type"])
+    if (type == 1):
+        book_filters = catalog_controller.get_filters(CatalogController.BOOK_TYPE)
+        all_records = catalog_controller.get_records_by_catalog(CatalogController.BOOK_TYPE)
+        return render_template('view_books.html', books = all_records, book_filters = book_filters)
+   
 
 # To-do
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
