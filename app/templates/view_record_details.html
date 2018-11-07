@@ -10,36 +10,48 @@ Detail View
 {% block content %}
 <div class="row">
     <div class="col-10 offset-1">
-        <div class="card"> 
+        <div class="card">
             <div class="card-body">
-                    <div class="row">
-                            <div class="col-9">
-                                <div class="row">
-                                    <div class="col-1">
-                                        <button type="button" class="btn btn-outline-info disabled"> {{ record._id }} </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="float-right">
-                                    <button type="button" class="btn btn-outline-info"><i class="fas fa-arrow-left"></i></button>
-                                    <button type="button" class="btn btn-outline-info"><i class="fas fa-arrow-right"></i></button>
-                                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <div class="row">
+                            <div class="col-1">
+                                <button type="button" class="btn btn-outline-info disabled"> {{ record._id }} </button>
                             </div>
                         </div>
-                        <hr>
-                    {% if (catalog_type == 1) %}
-                    {{ details.book('book', author=record._author, title=record._title,
-                    format=record._format, pages=record._pages, publisher=record._publisher,
-                    year_of_publication = record._year_of_publication, language = record._language, 
-                    ISBN10 = record._ISBN10, ISBN13 = record._ISBN13 )}}
+                    </div>
+                    <div class="col-3">
+                        <div class="float-right">
+                            <button type="button" class="btn btn-outline-info"><i class="fas fa-arrow-left"></i></button>
+                            <button type="button" class="btn btn-outline-info"><i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Load the appropriate catalog and all attributes are passed to details_macro.html.
+                Feel free to modify the design -->
+                {% if (catalog_type == 1) %}
+                {{ details.book('book', author=record._author, title=record._title,
+                format=record._format, pages=record._pages, publisher=record._publisher,
+                year_of_publication = record._year_of_publication, language = record._language,
+                ISBN10 = record._ISBN10, ISBN13 = record._ISBN13 )}}
 
-                    {% elif (catalog_type == 2) %}
-                    {{ details.movie('movie', title=record._title, director=record._director,
-                    producers=record._producers, actors=record._actors, language=record._language,
-                    subtitles = record._subtitles, dubbed = record._dubbed, 
-                    release_date = record._release_date, runtime = record._runtime )}}
-                    {% endif %}
+                {% elif (catalog_type == 2) %}
+                {{ details.movie('movie', title=record._title, director=record._director,
+                producers=record._producers, actors=record._actors, language=record._language,
+                subtitles = record._subtitles, dubbed = record._dubbed,
+                release_date = record._release_date, runtime = record._runtime )}}
+
+                {% elif (catalog_type == 4) %}
+                {{ details.album('album', type=record._type, title=record._title, artist=record._artist,
+                label=record._label, release_date = record._release_date, ASIN = record._ASIN )}}
+
+                {% elif (catalog_type == 3) %}
+                {{ details.magazine('magazine', title=record._title, publisher=record._publisher,
+                year_of_publication = record._year_of_publication, language = record._language,
+                ISBN10 = record._ISBN10, ISBN13 = record._ISBN13 )}}
+
+                {% endif %}
             </div>
         </div>
     </div>
@@ -68,6 +80,7 @@ Detail View
         text-align: center;
     }
 
+
     #details {
         letter-spacing: 2px;
         padding: 60px 0;
@@ -81,7 +94,6 @@ Detail View
         text-transform: uppercase;
         font-size: 20px;
     }
-
 </style>
 
 {% endblock %}

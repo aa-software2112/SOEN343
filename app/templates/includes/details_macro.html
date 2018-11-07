@@ -1,16 +1,18 @@
+<!-- BOOK -->
 {%- macro book(name, author='', title='', format='', pages='', publisher='', year_of_publication='', language='',
 ISBN10='', ISBN13='') -%}
-
 <div class="row">
     <div class="col-8 offset-2">
         <div class="title text-monospace text-info"> {{ title }} </div>
         <hr>
-        <div class="font-1 text-monospace"> {{ author }} </div>
-        <blockquote class="offset-3">
+        <div>
+            <p class="text-monospace text-center"> Copyright © {{ year_of_publication }} By </p>
+            <p class="font-1 text-monospace">{{ author }}</p>
+        </div>
+        <blockquote class="offset-1">
             <div id="details">
                 <p> Published by - <span class="font-3">{{ publisher }}</span> </p>
-                <p> Year of publication - {{ year_of_publication }} </p>
-                <p> Language - {{ language }} </p>
+                <p> Language - <span class="font-weight-light"> {{ language }} </span> </p>
                 <p> {{ pages }} pages </p><br>
                 <p> {{ ISBN10 }} <span class="font-weight-light">({{ format }})</span> </p>
                 <p> {{ ISBN13 }} <span class="font-weight-light">({{ format }})</span> </p>
@@ -18,18 +20,20 @@ ISBN10='', ISBN13='') -%}
         </blockquote>
     </div>
 </div>
-
 {%- endmacro %}
 
+<!-- MOVIE -->
 {%- macro movie(name, title='', director='', producers='', actors='', language='', subtitles='', dubbed='',
 release_date='', runtime='') -%}
-
 <div class="row">
     <div class="col-8 offset-2">
         <div class="font-2"> {{ actors }} </div>
         <div class="title text-monospace text-info"> {{ title }} </div>
         <hr>
-        <div class="font-1 text-monospace"> {{ director }} </div>
+        <div>
+            <p class="text-monospace text-center"> Directed by </p>
+            <p class="font-1 text-monospace">{{ director }}</p>
+        </div>
         <div class="font-2"> {{ release_date }} - {{ runtime }} min
         </div>
         <div id="details">
@@ -37,5 +41,49 @@ release_date='', runtime='') -%}
             <p> Language - {{ language }} <span class="font-weight-light">(Subtitle: {{ subtitles }})</span> </p>
         </div>
     </div>
+</div>
+{%- endmacro %}
+
+<!-- ALBUM -->
+{%- macro album(name, type='', title='', artist='', label='', release_date='', ASIN='') -%}
+<div class="row">
+    <div class="col-8 offset-2">
+        <div class="font-2"> {{ type }} </div>
+        <div class="title text-monospace text-info"> {{ title }} </div>
+        <hr>
+        <div class="font-1 text-monospace"> {{ artist }} </div>
+        <div class="font-2"> {{ release_date }} </div>
+    </div>
+</div>
+<div class="row">
+    <blockquote class="offset-8">
+        <div id="details">
+            <p> Label - <span class="font-weight-light">{{ label }}</span> </p>
+            <p> ASIN - <span class="font-weight-light">{{ ASIN }}</span> </p>
+        </div>
+    </blockquote>
+</div>
+{%- endmacro %}
+
+<!-- MAGAZINE -->
+{%- macro magazine(name, title='', publisher='', year_of_publication='', language='',
+ISBN10='', ISBN13='') -%}
+
+<div class="row">
+    <div class="col-8 offset-2">
+        <div class="title text-monospace text-info"> {{ title }} </div>
+        <hr>
+        <div class="font-1 text-monospace"> {{ publisher }} </div>
+    </div>
+</div>
+<div class="row">
+    <blockquote class="col-12 text-center">
+        <div id="details">
+            <p> Year of publication - <span class="font-weight-light"> {{ year_of_publication }} </span> </p>
+            <p> Language - <span class="font-weight-light"> {{ language }} </span> </p><br>
+            <p> {{ ISBN10 }} </p>
+            <p> {{ ISBN13 }} </p>
+        </div>
+    </blockquote>
 </div>
 {%- endmacro %}

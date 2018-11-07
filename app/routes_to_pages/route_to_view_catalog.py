@@ -32,12 +32,14 @@ def viewCatalog():
         album_filters = album_filters
     )
 
+# To-do
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():
     type = int(request.form["catalog_type"])
     print("CatalogType", type)
     return redirect('viewCatalog')
 
+# View record's detail route. Request the id and catalog_type from the front-end.
 @app.route('/viewCatalog/viewDetails', methods=['GET', 'POST'])
 def viewDetails():
     type = int(request.form["catalog_type"])
