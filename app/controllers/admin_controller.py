@@ -203,9 +203,12 @@ class AdminController(Controller):
         return admin_performing_search.get_last_searched_list()
   
     def filter_by(self, catalog_type, filter_key_values, admin_id):
-      
+
         usr = self._admin_catalog.get(admin_id)
         last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.filter_by(catalog_type, filter_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
 
     def sort_by(self, catalog_type, sort_key_values, admin_id):
       
