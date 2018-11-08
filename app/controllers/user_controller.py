@@ -167,3 +167,8 @@ class ClientController(Controller):
         usr.set_last_searched_list(lst)
 
         return lst
+
+    def set_detailed_view_index(self, record_object, client_id):
+        usr = self._client_catalog.get(client_id)
+        index = usr.get_index_from_object(record_object)
+        usr.set_index_last_searched(index)

@@ -16,14 +16,23 @@ Detail View
                     <div class="col-9">
                         <div class="row">
                             <div class="col-1">
+                                {% if g.user["_is_admin"] == 1 %}
                                 <button type="button" class="btn btn-outline-info disabled"> {{ record._id }} </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="float-right">
-                            <button type="button" class="btn btn-outline-info"><i class="fas fa-arrow-left"></i></button>
-                            <button type="button" class="btn btn-outline-info"><i class="fas fa-arrow-right"></i></button>
+                        <form action="/backToLIST" method="POST">
+                            <input type="hidden" name="catalog_type" value={{catalog_type}}>
+                            <button type="submit" class="btn btn-outline-info"><i class="fas fa-arrow-left"></i></button>
+                        </form>
+                        <form action="/nextDetailedView" method="POST">
+                            <input type="hidden" name="catalog_type" value={{catalog_type}}>
+                            <button class="btn btn-outline-info" type="submit"><i class="fas fa-arrow-right"></i></button>
+                        </form>
+                        </div>
                         </div>
                     </div>
                 </div>

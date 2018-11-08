@@ -44,12 +44,20 @@ class User:
     def set_index_last_searched(self, index_last_searched_list):
         self._index_of_last_searched_list=index_last_searched_list
 
-    #return next object in the list
     def get_next_record_searched(self):
         # return next record if list is not empty
         if len(self._last_searched_list)!=0 :
             self._index_of_last_searched_list = (self._index_of_last_searched_list +1)%len(self._last_searched_list)
             return self._last_searched_list[self._index_of_last_searched_list]
+
+    def get_index_from_object(self, object):
+        i = 0
+        for obj in self._last_searched_list:
+            if object._id == obj._id:
+                return i
+            i = i+1
+
+
         
 class Admin(User):
 
