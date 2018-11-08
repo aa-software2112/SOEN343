@@ -41,7 +41,7 @@ def login():
             # Display message after being redirected to home page
             flash('You are now logged in!', 'success')
 
-            return redirect(url_for('viewCatalog'))
+            return redirect(url_for('index'))
 
     return render_template('login.html', form=form)
 

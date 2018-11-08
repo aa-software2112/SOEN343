@@ -1,0 +1,240 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Catalog Viewer
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <a href="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info btn-lg btn-block" style="cursor:pointer">
+            Add Entry
+        </a>
+    </div>
+</div>
+<br>
+<ul class="nav nav-tabs nav-justified">
+    <li class="nav-item">
+        <a class="nav-link active" href="#Books" role="tab" data-toggle="tab"> Books </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#Movies" role="tab" data-toggle="tab"> Movies </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#Albums" role="tab" data-toggle="tab"> Albums </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#Magazines" role="tab" data-toggle="tab"> Magazines </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" role="tabpanel" id="Books">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Author </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Format </th>
+                    <th scope="col"> Pages </th>
+                    <th scope="col"> Publisher </th>
+                    <th scope="col"> Year of Publication </th>
+                    <th scope="col"> Language </th>
+                    <th scope="col"> ISBN10 </th>
+                    <th scope="col"> ISBN13 </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["books"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._author}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._format}}</td>
+                    <td>{{catalog_item._pages}}</td>
+                    <td>{{catalog_item._publisher}}</td>
+                    <td>{{catalog_item._year_of_publication}}</td>
+                    <td>{{catalog_item._language}}</td>
+                    <td>{{catalog_item._ISBN10}}</td>
+                    <td>{{catalog_item._ISBN13}}</td>
+                    <td class="px-2">
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="1">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="pl-0">
+                        <form action="/adminView/deleteViewRecords" method="post">
+                            <input type="hidden" name="id" value="{{catalog_item._id}}">
+                            <input type="hidden" name="type" value="1">
+                            <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" role="tabpanel" id="Movies">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Director </th>
+                    <th scope="col"> Producers </th>
+                    <th scope="col"> Actors </th>
+                    <th scope="col"> Language </th>
+                    <th scope="col"> Subtitle </th>
+                    <th scope="col"> Dubbed </th>
+                    <th scope="col"> Release Date </th>
+                    <th scope="col"> Run Time </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["movies"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._director}}</td>
+                    <td>{{catalog_item._producers}}</td>
+                    <td>{{catalog_item._actors}}</td>
+                    <td>{{catalog_item._language}}</td>
+                    <td>{{catalog_item._subtitles}}</td>
+                    <td>{{catalog_item._dubbed}}</td>
+                    <td>{{catalog_item._release_date}}</td>
+                    <td>{{catalog_item._runtime}}</td>
+                    <td class="px-2">
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="2">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="pl-0">
+                        <form action="/adminView/deleteViewRecords" method="post">
+                            <input type="hidden" name="id" value="{{catalog_item._id}}">
+                            <input type="hidden" name="type" value="2">
+                            <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" role="tabpanel" id="Albums">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Type </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Artist </th>
+                    <th scope="col"> Label </th>
+                    <th scope="col"> Release Date </th>
+                    <th scope="col"> ASIN </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["albums"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._type}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._artist}}</td>
+                    <td>{{catalog_item._label}}</td>
+                    <td>{{catalog_item._release_date}}</td>
+                    <td>{{catalog_item._ASIN}}</td>
+                    <td class="px-2">
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="4">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="pl-0">
+                        <form action="/adminView/deleteViewRecords" method="post">
+                            <input type="hidden" name="id" value="{{catalog_item._id}}">
+                            <input type="hidden" name="type" value="4">
+                            <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" role="tabpanel" id="Magazines">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col"> ID </th>
+                    <th scope="col"> Title </th>
+                    <th scope="col"> Publisher </th>
+                    <th scope="col"> Year of Publication </th>
+                    <th scope="col"> Language </th>
+                    <th scope="col"> ISBN10 </th>
+                    <th scope="col"> ISBN13 </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, catalog_item in dict_of_catalogs["magazines"].items() %}
+                <tr>
+                    <td>{{catalog_item._id}}</td>
+                    <td>{{catalog_item._title}}</td>
+                    <td>{{catalog_item._publisher}}</td>
+                    <td>{{catalog_item._year_of_publication}}</td>
+                    <td>{{catalog_item._language}}</td>
+                    <td>{{catalog_item._ISBN10}}</td>
+                    <td>{{catalog_item._ISBN13}}</td>
+                    <td class="px-2">
+                        <form action="/adminView/modifyCatalogForm" method="post">
+                            <input type="hidden" name="type" value="3">
+                            <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                                class="btn btn-info" style="cursor:pointer">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="pl-0">
+                        <form action="/adminView/deleteViewRecords" method="post">
+                            <input type="hidden" name="id" value="{{catalog_item._id}}">
+                            <input type="hidden" name="type" value="3">
+                            <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

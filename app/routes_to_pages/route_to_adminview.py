@@ -33,6 +33,23 @@ def adminViewUserRegistry():
 
     return render_template('admin_view_user_registry.html', list_of_clients=list_of_clients)
 
+
+@app.route('/adminView/adminViewCatalog', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def adminViewCatalog():
+
+    dict_of_catalogs = adminController.view_inventory()
+    # comment this out when fully implemented
+    # for catalog_name in dict_of_catalogs.keys():
+    #   print("*****\nDictionary: {}\n*****".format(catalog_name))
+    #  dict_of_objects = dict_of_catalogs[catalog_name]
+    # for object_id, media_object in dict_of_objects.items():
+    #    print ("ID {} OBJ {}".format(object_id, media_object))
+
+    return render_template('admin_view_catalog.html', dict_of_catalogs=dict_of_catalogs)
+
+
 @app.route('/registerUser', methods=['POST'])
 @login_required
 @admin_required
@@ -88,7 +105,7 @@ def adminViewAddBook():
     if request.method == 'POST':
         adminController.add_entry_to_catalog(CatalogController.BOOK_TYPE, request.form)
         flash("Book entry created successfully.", 'success')
-        return redirect('viewCatalog')
+        return redirect('/adminView/adminViewCatalog')
     return render_template('add_book.html')
 
 
@@ -99,7 +116,7 @@ def adminViewAddMovie():
     if request.method == 'POST':
         adminController.add_entry_to_catalog(CatalogController.MOVIE_TYPE, request.form)
         flash("Movie entry created successfully.", 'success')
-        return redirect('viewCatalog')
+        return redirect('/adminView/adminViewCatalog')
     return render_template('add_movie.html')
 
 
@@ -110,7 +127,7 @@ def adminViewAddMagazine():
     if request.method == 'POST':
         adminController.add_entry_to_catalog(CatalogController.MAGAZINE_TYPE, request.form)
         flash("Magazine entry created successfully.", 'success')
-        return redirect('viewCatalog')
+        return redirect('/adminView/adminViewCatalog')
     return render_template('add_magazine.html')
 
 
@@ -121,7 +138,7 @@ def adminViewAddAlbum():
     if request.method == 'POST':
         adminController.add_entry_to_catalog(CatalogController.ALBUM_TYPE, request.form)
         flash("Album entry created successfully.", 'success')
-        return redirect('viewCatalog')
+        return redirect('/adminView/adminViewCatalog')
     return render_template('add_album.html')
 
 
@@ -148,7 +165,7 @@ def modify_catalog():
     type = request.form["type"]
     adminController.modify_catalog(type, request.form)
     flash("Entry modified succesfully.", 'success')
-    return redirect('viewCatalog')
+    return redirect('/adminView/adminViewCatalog')
 
 @app.route('/adminView/deleteViewRecords', methods=['GET', 'POST'])
 def delete_view_catalog():
@@ -181,4 +198,4 @@ def delete_catalog():
     adminController.delete_catalog_copy_entry(catalog_type, int(id))
 
     flash("Entry deleted succesfully.", 'success')
-    return redirect('viewCatalog')
+    return redirect('/adminView/adminViewCatalog')
