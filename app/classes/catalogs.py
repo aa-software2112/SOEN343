@@ -259,7 +259,13 @@ class BookCatalog(Catalog):
         return search_catalog(self._books, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        return sort_records(sort_key_values, last_searched_list)
+        # The sort_key_values is a string, not a dict
+
+        transformed_sort_key_value = {}
+
+        transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
+
+        return sort_records(transformed_sort_key_value, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
@@ -433,7 +439,13 @@ class MovieCatalog(Catalog):
         return search_catalog(self._movies, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        return sort_records(sort_key_values, last_searched_list)
+        # The sort_key_values is a string, not a dict
+
+        transformed_sort_key_value = {}
+
+        transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
+
+        return sort_records(transformed_sort_key_value, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
@@ -600,7 +612,13 @@ class MagazineCatalog(Catalog):
         return search_catalog(self._magazines, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        return sort_records(sort_key_values, last_searched_list)
+        # The sort_key_values is a string, not a dict
+
+        transformed_sort_key_value = {}
+
+        transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
+
+        return sort_records(transformed_sort_key_value, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
@@ -765,7 +783,13 @@ class AlbumCatalog(Catalog):
         return search_catalog(self._albums, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        return sort_records(sort_key_values, last_searched_list)
+        # The sort_key_values is a string, not a dict
+
+        transformed_sort_key_value = {}
+
+        transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
+
+        return sort_records(transformed_sort_key_value, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
