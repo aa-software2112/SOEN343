@@ -148,8 +148,13 @@ class ClientController(Controller):
         return lst
       
     def search_from(self, catalog_type, search_value, client_id):
-      
-        lst = self._catalog_controller.search_from(catalog_type, search_value)
+
         usr = self._client_catalog.get(client_id)
+
+        if search_value.strip() == "":
+            return usr.get_last_searched_list()
+
+        lst = self._catalog_controller.search_from(catalog_type, search_value)
         usr.set_last_searched_list(lst)
+
         return lst
