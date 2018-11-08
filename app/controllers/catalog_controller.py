@@ -63,6 +63,9 @@ class CatalogController(Controller):
                             "albums": self._inventory[CatalogController.ALBUM_TYPE].get_all()
                             }
         return dict_of_catalogs
+    
+    def get_records_by_catalog(self, catalog_type):
+        return self._inventory[catalog_type].get_all()
 
     def add_entry_to_catalog(self, type, new_record_object):
         self._inventory[type].add(new_record_object, True)
