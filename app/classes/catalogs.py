@@ -2,6 +2,7 @@ import abc
 from app.common_definitions.helper_functions import convert_date_time_to_epoch as to_epoch
 from app.common_definitions.helper_functions import search_catalog
 from app.common_definitions import helper_functions
+from app.common_definitions.helper_functions import sort_records
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
@@ -258,8 +259,7 @@ class BookCatalog(Catalog):
         return search_catalog(self._books, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        lst = ["placeholder"]
-        return lst
+        return sort_records(sort_key_values, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
@@ -433,8 +433,7 @@ class MovieCatalog(Catalog):
         return search_catalog(self._movies, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        lst = ["placeholder"]
-        return lst
+        return sort_records(sort_key_values, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
@@ -601,8 +600,7 @@ class MagazineCatalog(Catalog):
         return search_catalog(self._magazines, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        lst = ["placeholder"]
-        return lst
+        return sort_records(sort_key_values, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
@@ -767,8 +765,7 @@ class AlbumCatalog(Catalog):
         return search_catalog(self._albums, search_string)
 
     def sort(self, sort_key_values, last_searched_list):
-        lst = ["placeholder"]
-        return lst
+        return sort_records(sort_key_values, last_searched_list)
 
     def filter(self, filter_key_values, last_searched_list):
 
