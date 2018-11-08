@@ -138,7 +138,16 @@ class ClientController(Controller):
         client_performing_search = self._client_catalog.get(client_id)
 
         return client_performing_search.get_last_searched_list()
-        
+
+
+    def add_list_to(self, client_id, list_to_add):
+
+        usr = self._client_catalog.get(client_id)
+
+        usr.set_last_searched_list(list_to_add)
+
+        return
+
     def filter_by(self, catalog_type, filter_key_values, client_id):
       
         usr = self._client_catalog.get(client_id)

@@ -201,7 +201,16 @@ class AdminController(Controller):
         admin_performing_search = self._admin_catalog.get(admin_id)
 
         return admin_performing_search.get_last_searched_list()
-  
+
+    def add_list_to(self, admin_id, list_to_add):
+
+        usr = self._admin_catalog.get(admin_id)
+
+        usr.set_last_searched_list(list_to_add)
+
+        return
+
+
     def filter_by(self, catalog_type, filter_key_values, admin_id):
 
         usr = self._admin_catalog.get(admin_id)
