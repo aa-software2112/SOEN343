@@ -1,0 +1,63 @@
+{% import '/includes/description_macro.html' as description %}
+{% extends "index.html" %}
+
+{% block pageTitle %}
+{% if catalog_record_copy %}
+Copies found for {{ catalog_record._title }}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% for record_copy in catalog_record_copy %}
+<div class="card p-3 m-3">
+  <blockquote class="blockquote mb-0 card-body">
+    <div class="row">
+
+      <div class="col-md-1">
+        <button type="button" class="btn btn-outline-info disabled btn-sm"> ID - {{ record_copy._id }}</button>
+      </div>
+
+      <div class="col-md-10">
+        <p class="text-monospace bold"> {{ record_copy._title }} </p>
+        <hr>
+
+        <!-- Load the right catalog format -->
+
+        {% if (catalog_type == 1) %}
+          {{ description.book('book', format= record_copy._format, year_of_publication = record_copy._year_of_publication,
+          author = record_copy._author, isbn13 = record_copy._ISBN13 )}}
+
+        {% elif (catalog_type == 2) %}
+          {{ description.movie('movie', director = record_copy._director, producers = record_copy._producers, 
+          actors = record_copy._actors, release_date = record_copy._release_date,
+          language = record_copy._language )}}
+
+        {% elif (catalog_type == 3) %}
+          {{ description.magazine('magazine', publisher = record_copy._publisher, year_of_publication =record_copy._year_of_publication, 
+          isbn13 = record_copy._ISBN13, language = record_copy._language)}}
+
+        {% elif (catalog_type == 4) %}
+          {{ description.album('album', artist = record_copy._artist, release_date = record_copy._release_date, 
+          asin = record_copy._ASIN, type = record_copy._type, label = record_copy._label )}}
+        {% endif %}
+
+      </div>
+
+      <div class="col-md-1">
+        <form action="/deleteCatalog" method="post">
+          <input type="hidden" name="id" value="{{ record_copy._id }}">
+          <input type="hidden" name="type" value="{{ catalog_type }}">
+          <button type="submit" class="btn btn-info" style="cursor: pointer">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </blockquote>
+</div>
+{% else %}
+<h1 class="text-monospace bold"> No Copies found for {{ catalog_record._title }} </h1>
+{% endfor %}
+
+{% endblock %}

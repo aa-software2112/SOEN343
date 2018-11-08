@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Album
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+{% if errorMessage %}
+<div class="alert alert-danger" role="alert"> {{ errorMessage }}
+</div>
+{% endif %}
+<div class="card">
+    <div class="card-body">
+        <form action="#" method="post">
+            <input type="hidden" name="type" value="4">
+            <legend class="text-center pb-4"> Add Album </legend>
+            <div class="form-group">
+                <label for="type">Type</label>
+                <input type="text" class="form-control" name="album_type" placeholder="get type here" required>
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title" placeholder="get title here" required>
+            </div>
+            <div class="form-group">
+                <label for="artist">Artist</label>
+                <input type="text" class="form-control" name="artist" placeholder="get artist here" required>
+            </div>
+            <div class="form-group">
+                <label for="label">Label</label>
+                <input type="text" class="form-control" name="label" placeholder="get label here" required>
+            </div>
+            <div class="form-group">
+                <label for="release_date">Release Date</label>
+                <input type="text" class="form-control" name="release_date" placeholder="get release date here" required>
+            </div>
+            <div class="form-group">
+                <label for="asin">ASIN</label>
+                <input type="text" class="form-control" name="asin" placeholder="get asin here" required>
+            </div>
+            <button type="submit" name="save" class="btn btn-primary">Save</button>
+            <form action="#" method="post">
+                <a href="#" class="btn btn-info">Cancel</a>
+            </form>
+        </form>
+    </div>
+</div>
+{% endblock %}

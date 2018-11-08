@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+<!-- Replace Title -->
+{% block pageTitle %}
+Modify a Movie
+{% endblock %}
+<!-- Replace Content -->
+{% block content %}
+{% if errorMessage %}
+<div class="alert alert-danger" role="alert"> {{ errorMessage }}
+</div>
+{% endif %}
+<div class="card">
+   <div class="card-body">
+      <form action="/modifyCatalog" method="post">
+        <input type="hidden" name="type" value="2">
+         <div class="form-group">
+            <label for="title">Title</label>
+            <input type="hidden" name="id" value="{{movie._id}}">
+            <input type="text" class="form-control" name="title" value='{{movie._title}}'>
+         </div>
+         <div class="form-group">
+            <label for="director">Director</label>
+            <input type="text" class="form-control" name="director" value='{{movie._director}}'>
+         </div>
+         <div class="form-group">
+            <label for="producers">Producers</label>
+            <input type="text" class="form-control" name="producers" value='{{movie._producers}}'>
+         </div>
+         <div class="form-group">
+            <label for="actors">Actors</label>
+            <input type="text" class="form-control" name="actors" value='{{movie._actors}}'>
+         </div>
+         <div class="form-group">
+            <label for="language">Language</label>
+            <input type="text" class="form-control" name="language" value='{{movie._language}}'>
+         </div>
+         <div class="form-group">
+            <label for="subtitles">Subtitles</label>
+            <input type="text" class="form-control" name="subtitles" value='{{movie._subtitles}}'>
+         </div>
+         <div class="form-group">
+            <label for="dubbed">Dubbed</label>
+            <input type="text" class="form-control" name="dubbed" value='{{movie._dubbed}}'>
+         </div>
+         <div class="form-group">
+            <label for="release_date">Release Date</label>
+            <input type="text" class="form-control" name="release_date" value='{{movie._release_date}}'>
+         </div>
+         <div class="form-group">
+            <label for="run_time">Runtime</label>
+            <input type="text" class="form-control" name="run_time" value='{{movie._runtime}}'>
+         </div>
+         <div class="float-right mt-4">
+            <button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
+            <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+        </div>
+      </form> 
+   </div>
+</div>
+{% endblock %}
