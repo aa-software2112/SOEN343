@@ -107,6 +107,16 @@ class BookCatalog(Catalog):
                 "Language":"_language"
                }
 
+    Sorts = {"Ascending Author":"_author",
+             "Descending Author": "_author",
+             "Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Publisher":"_publisher",
+             "Descending Publisher": "_publisher",
+             "Ascending Year":"_year_of_publication",
+             "Descending Year":"_year_of_publication"
+             }
+
     def __init__(self, database):
         self.db = database
         # private variable convention in python have '_' prefix
@@ -258,6 +268,16 @@ class MovieCatalog(Catalog):
                "Producer": "_producers",
                "Actor": "_actors"
                }
+
+    Sorts = {"Ascending Director":"_director",
+             "Descending Director": "_director",
+             "Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Producer":"_producers",
+             "Descending Producer": "_producers",
+             "Ascending Runtime":"_runtime",
+             "Descending Runtime":"_runtime"
+             }
 
     def __init__(self, database):
         self.db = database
@@ -411,6 +431,14 @@ class MagazineCatalog(Catalog):
                "Language": "_language"
                }
 
+    Sorts = {"Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Publisher":"_publisher",
+             "Descending Publisher": "_publisher",
+             "Ascending Year":"_year_of_publication",
+             "Descending Year":"_year_of_publication"
+             }
+
     def __init__(self, database):
         self.db = database
         self._magazines = {}
@@ -558,6 +586,14 @@ class AlbumCatalog(Catalog):
                "Artist": "_artist",
                "Label": "_label"
                }
+
+    Sorts = {"Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Artist":"_artist",
+             "Descending Artist": "_artist",
+             "Ascending Label":"_label",
+             "Descending Label":"_label"
+             }
 
     def __init__(self, database):
         self.db = database
