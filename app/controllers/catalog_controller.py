@@ -85,6 +85,9 @@ class CatalogController(Controller):
     def get_filters(self, catalog_type):
         return sorted(list(self.view_catalog_inventory()[catalog_type].Filters.keys()))
 
+    def get_sorting_criteria(self, catalog_type):
+        return sorted(list(self.view_catalog_inventory()[catalog_type].Sorts.keys()))
+
     def sort_by(self, catalog_type, sort_key_values, last_searched_list):
         return self.view_catalog_inventory()[catalog_type].sort(sort_key_values, last_searched_list)
 
