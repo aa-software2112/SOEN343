@@ -83,6 +83,7 @@ def filter(criteria, catalog_records):
 # sort_key_values = holds criteria dictionnary of ascending/descenting, Attribute. Ex: {"ascending": "Title"}
 # last_searched_list = holds list of objects
 def sort_records(sort_key_values, last_searched_list):
+    print(sort_key_values)
     # gets the order to which it will be sorted (ascending or descending) from the sort_key_values criteria
     sort_order = list(sort_key_values.keys())[0]
 
@@ -90,9 +91,9 @@ def sort_records(sort_key_values, last_searched_list):
     sort_attribute = list(sort_key_values.values())[0]
 
     # Holds boolean which will be used to sort inorder or in reverse order
-    if sort_order is "ascending":
+    if sort_order == "ascending":
         reverse_order = False
-    elif sort_order is "descending":
+    elif sort_order == "descending":
         reverse_order = True
     else:
         print("criteria value isn't properly defined in terms of ascending or descending")

@@ -57,6 +57,7 @@ def search():
         filters = catalog_controller.get_filters(catalog_type)
         transformed_filters = {}
         sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
+        input_sorting_criteria = request.form['sort_attr']
 
         for k in filters:
             transformed_filters[k] = request.form[k]
@@ -71,10 +72,12 @@ def search():
             url_string = "view_albums.html"
         if g.user["_is_admin"] == 1:
             search_result = adminController.search_from(catalog_type, search_value, g.user["_id"])
-            search_result = adminController.filter_by(catalog_type,transformed_filters, g.user["_id"])
+            search_result = adminController.filter_by(catalog_type, transformed_filters, g.user["_id"])
+            search_result = adminController.sort_by(catalog_type, input_sorting_criteria, g.user["_id"])
         else:
             search_result = clientController.search_from(catalog_type, search_value, g.user["_id"])
-            search_result = adminController.filter_by(catalog_type, transformed_filters, g.user["_id"])
+            search_result = clientController.filter_by(catalog_type, transformed_filters, g.user["_id"])
+            search_result = clientController.sort_by(catalog_type, input_sorting_criteria, g.user["_id"])
 
         return render_template(url_string, records = search_result, filters=filters, sorting_criteria = sorting_criteria)
 
