@@ -219,8 +219,13 @@ class AdminController(Controller):
         return lst
 
     def search_from(self, catalog_type, search_value, admin_id):
+
+        usr = self._admin_catalog.get(admin_id)
+
+        if search_value.strip() == "":
+            return usr.get_last_searched_list()
       
         lst = self._catalog_controller.search_from(catalog_type, search_value)
-        usr = self._admin_catalog.get(admin_id)
         usr.set_last_searched_list(lst)
+
         return lst

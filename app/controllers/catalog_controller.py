@@ -92,10 +92,26 @@ class CatalogController(Controller):
         return sorted(list(self.view_catalog_inventory()[catalog_type].Sorts.keys()))
 
     def sort_by(self, catalog_type, sort_key_values, last_searched_list):
+
+        # No sorting criteria was provided, return the list as-is
+        if sort_key_values.strip() == "":
+            return last_searched_list
+
         return self.view_catalog_inventory()[catalog_type].sort(sort_key_values, last_searched_list)
 
     def filter_by(self, catalog_type, filter_key_values, last_searched_list):
-        return self.view_catalog_inventory()[catalog_type].filter(filter_key_values, last_searched_list)
+
+        # Remove the keys with no value
+        transformed_filter_key_values = {}
+
+        for k, v in filter_key_values.items():
+
+            # Empty key, don't use this as a filter
+            if not v.trim() == "":
+                transformed_filter_key_values[k] = v
+
+
+        return self.view_catalog_inventory()[catalog_type].filter(transformed_filter_key_values, last_searched_list)
 
     def search_from(self, catalog_type, search_value):
         return self.view_catalog_inventory()[catalog_type].search(search_value)
