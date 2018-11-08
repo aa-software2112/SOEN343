@@ -22,9 +22,13 @@
          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
                <li class="nav-item">
-                  {% if g.user["_is_admin"] == 1 %}
-                    <a class="nav-item nav-link" href="/adminView"> Admin Page </a>
-                  {%endif%}
+                   {% if g.user %}
+                       {% if g.user["_is_admin"] == 1 %}
+                       <a class="nav-item nav-link" href="/adminView"> Admin Page </a>
+                       {% else %}
+                       <a class="nav-item nav-link" href="/viewCatalog"> View Catalog </a>
+                       {%endif%}
+                   {% endif %}
             </ul>
 
             <!-- Display the navbar depending on the cookies -->
@@ -34,7 +38,7 @@
                     <a class="nav-item nav-link" href="/adminView"> {{ g.user["_username"] }} </a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                       {% else %}
-                    <a class="nav-item nav-link" href="#"> {{ g.user["_username"] }} </a>
+                    <a class="nav-item nav-link" href="/viewCatalog"> {{ g.user["_username"] }} </a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                      {% endif %}
                 {% else %}
