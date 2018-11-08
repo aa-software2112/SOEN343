@@ -120,16 +120,36 @@ class ClientController(Controller):
 
         self._client_catalog.add(Client(attributesDict), True)
 
+    def sort_by(self, catalog_type, sort_key_values, client_id):
+        usr = self._client_catalog.get(client_id)
+        last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+
     def get_next_item(self, client_id):
 
         client_performing_search = self._client_catalog.get(client_id)
 
-        # This function (below) should autoincrement the index when
-        # We get the next value
-        # return client_performing_search.getNextSearchedItem()
+        return client_performing_search.get_next_record_searched()
 
     def get_last_searched_list(self, client_id):
 
         client_performing_search = self._client_catalog.get(client_id)
 
-        # return client_performing_search.getLastSearchedList()
+        return client_performing_search.get_last_searched_list()
+        
+    def filter_by(self, catalog_type, filter_key_values, client_id):
+      
+        usr = self._client_catalog.get(client_id)
+        last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.filter_by(catalog_type, filter_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+      
+    def search_from(self, catalog_type, search_value, client_id):
+      
+        lst = self._catalog_controller.search_from(catalog_type, search_value)
+        usr = self._client_catalog.get(client_id)
+        usr.set_last_searched_list(lst)
+        return lst
