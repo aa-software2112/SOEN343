@@ -1,6 +1,7 @@
 import abc
 from app.common_definitions.helper_functions import convert_date_time_to_epoch as to_epoch
 from app.common_definitions.helper_functions import search_catalog
+from app.common_definitions import helper_functions
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
@@ -260,6 +261,18 @@ class BookCatalog(Catalog):
         lst = ["placeholder"]
         return lst
 
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
+
 
 class MovieCatalog(Catalog):
 
@@ -423,6 +436,18 @@ class MovieCatalog(Catalog):
         lst = ["placeholder"]
         return lst
 
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
+
 
 class MagazineCatalog(Catalog):
 
@@ -579,6 +604,17 @@ class MagazineCatalog(Catalog):
         lst = ["placeholder"]
         return lst
 
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
 
 class AlbumCatalog(Catalog):
 
@@ -733,3 +769,15 @@ class AlbumCatalog(Catalog):
     def sort(self, sort_key_values, last_searched_list):
         lst = ["placeholder"]
         return lst
+
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
