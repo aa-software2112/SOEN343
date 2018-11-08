@@ -156,19 +156,9 @@ class AdminController(Controller):
     def get_catalog_copies_by_id(self, catalog_type, id):
         return self._catalog_controller.get_catalog_entry_copies_by_id(catalog_type, id)
 
-    def add_entry_to_catalog(self, type, request_form):
-    
-        if (type == self._catalog_controller.BOOK_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Book(request_form))
+    def add_entry_to_catalog(self, catalog_type, request_form):
 
-        elif (type == self._catalog_controller.MOVIE_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Movie(request_form))
-
-        elif (type == self._catalog_controller.MAGAZINE_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Magazine(request_form))
-
-        elif (type == self._catalog_controller.ALBUM_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Album(request_form))
+        return self._catalog_controller.add_entry_to_catalog(catalog_type, request_form)
 
     def modify_catalog(self, type, request_form):
 

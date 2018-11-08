@@ -67,8 +67,17 @@ class CatalogController(Controller):
     def get_records_by_catalog(self, catalog_type):
         return self._inventory[catalog_type].get_all()
 
-    def add_entry_to_catalog(self, type, new_record_object):
-        self._inventory[type].add(new_record_object, True)
+    def get_constructor(self, catalog_type):
+        return self._constructors[catalog_type]
+
+    def add_entry_to_catalog(self, catalog_type, record_key_values):
+
+        # Create the new record based on catalog_type and key_values
+        new_record = self.get_constructor(catalog_type)(record_key_values)
+
+        # Add the object to the catalog
+        self._inventory[catalog_type].add(new_record, True)
+
 
     def view_catalog_inventory(self):
         return self._inventory
