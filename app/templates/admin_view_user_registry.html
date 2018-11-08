@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Registry of Active Users
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Last Time Logged</th>
+            <th scope="col">Is Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in list_of_clients %}
+        <tr>
+            <td>{{ client._id }}</td>
+            <td>{{ client._username }}</td>
+            <td>{{ convert_epoch_to_datetime(client._last_logged | int) }}</td>
+            {% if client._is_admin == 1 %}
+            <td>Yes</td>
+            {% else %}
+            <td>No</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

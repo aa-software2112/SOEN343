@@ -1,21 +1,18 @@
 language: python
- # Existing Python versions
+
 python:
-  - 2.7
-  - 3.4
-  - 3.5
-  - 3.6
-# Enable 3.7 without globally enabling sudo and dist: xenial for other build jobs
+  - 3.7
+
 matrix:
   include:
     - python: 3.7
       dist: xenial
       sudo: true
-      
-install: pip install -r requirements/dev.txt
-      
+
 before_script:
-  - export FLASK_APP="$TRAVIS_BUILD_DIR/autoapp.py"
-  - export FLASK_DEBUG=1
-  
-script: pytest       
+  - cd install_dependencies
+  - python install_dependencies.py
+  - cd ..
+
+script:
+  - python run.py & pytest

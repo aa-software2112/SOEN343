@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Modify a Book
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+{% if errorMessage %}
+	<div class="alert alert-danger" role="alert"> {{ errorMessage }}
+    </div>
+{% endif %}
+<div class="card">
+    <div class="card-body">
+		<form action="/modifyCatalog" method="post">
+          <input type="hidden" name="type" value="1">
+		  <div class="form-group">
+		    <label for="author">Author</label>
+              <input type="hidden" name="id" value="{{book._id}}">
+		    <input type="text"  class="form-control" name="author" value='{{book._author}}'>
+		  </div>
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" name="title" value='{{book._title}}'>
+		  </div>
+		  <div class="form-group">
+		    <label for="format">Format</label>
+		    <input type="text" class="form-control" name="format" value='{{book._format}}'>
+		  </div>
+		  <div class="form-group">
+		    <label for="pages">Pages</label>
+		    <input type="text" class="form-control" name="pages" value='{{book._pages}}' >
+		  </div>
+		  <div class="form-group">
+		    <label for="publisher">Publisher</label>
+		    <input type="text" class="form-control" name="publisher" value='{{book._publisher}}'>
+		  </div>
+		  <div class="form-group">
+		    <label for="year_of_publication">Year of Publication</label>
+		    <input type="text" class="form-control" name="year_of_publication" value='{{book._year_of_publication}}' pattern=".{4,}" title="Please use 4 numbers">
+		  </div>
+		  <div class="form-group">
+		    <label for="language">Language</label>
+		    <input type="text" class="form-control" name="language" value='{{book._language}}'>
+		  </div>
+			<div class="form-group">
+		    <label for="isbn_10">ISBN 10</label>
+		    <input type="text" class="form-control" name="isbn_10" value='{{book._ISBN10}}'>
+		  </div>
+			<div class="form-group">
+		    <label for="isbn_13">ISBN 13</label>
+		    <input type="text" class="form-control" name="isbn_13" value='{{book._ISBN13}}'>
+		  </div>
+			<div class="float-right mt-4">
+				<button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
+				<a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+			</div>
+      </form>
+    </div>
+</div>
+{% endblock %}
+
