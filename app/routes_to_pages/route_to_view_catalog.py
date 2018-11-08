@@ -29,30 +29,36 @@ def viewCatalog():
 def viewCatalogTab():
     type = int(request.form["catalog_type"])
     if (type == 1):
-        book_filters = catalog_controller.get_filters(CatalogController.BOOK_TYPE)
+        filters = catalog_controller.get_filters(CatalogController.BOOK_TYPE)
+        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.BOOK_TYPE)
         all_records = catalog_controller.get_records_by_catalog(CatalogController.BOOK_TYPE)
-        return render_template('view_books.html', records = list(all_records.values()), book_filters = book_filters)
+        return render_template('view_books.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
 
     elif (type == 2):
-        movie_filters = catalog_controller.get_filters(CatalogController.MOVIE_TYPE)
+        filters = catalog_controller.get_filters(CatalogController.MOVIE_TYPE)
+        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.MOVIE_TYPE)
         all_records = catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE)
-        return render_template('view_movies.html', records = list(all_records.values()), movie_filters = movie_filters)
+        return render_template('view_movies.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
 
     elif (type == 3):
-        magazine_filters = catalog_controller.get_filters(CatalogController.MAGAZINE_TYPE)
+        filters = catalog_controller.get_filters(CatalogController.MAGAZINE_TYPE)
+        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.MAGAZINE_TYPE)
         all_records = catalog_controller.get_records_by_catalog(CatalogController.MAGAZINE_TYPE)
-        return render_template('view_magazines.html', records = list(all_records.values()), magazine_filters = magazine_filters)
+        return render_template('view_magazines.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
 
     elif (type == 4):
-        album_filters = catalog_controller.get_filters(CatalogController.ALBUM_TYPE)
+        filters = catalog_controller.get_filters(CatalogController.ALBUM_TYPE)
+        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.ALBUM_TYPE)
         all_records = catalog_controller.get_records_by_catalog(CatalogController.ALBUM_TYPE)
-        return render_template('view_albums.html', records = list(all_records.values()), album_filters = album_filters)
+        return render_template('view_albums.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
 
-# To-do
+# To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():
     type = int(request.form["catalog_type"])
+    sort_attr = (request.form["sort_attr"])
     print("CatalogType", type)
+    print("SortAtt", sort_attr)
     return redirect('viewCatalog')
 
 # View record's detail route. Request the id and catalog_type from the front-end.

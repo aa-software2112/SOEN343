@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-6">
                     <p class="text-monospace bold"> Filter Movies By</p>
-                    {% for movie_filter in movie_filters %}
+                    {% for movie_filter in filters %}
                     <div class="form-group row">
                         <label for="{{ movie_filter }}" class="col-md-3 offset-md-1 col-form-label text-monospace">
                             {{ movie_filter }}
@@ -22,15 +22,15 @@
                 </div>
                 <div class="col-6">
                     <p class="text-monospace bold"> Sort Movies By</p>
-                    <div class="btn-group dropright">
-                        <button class="btn btn-outline-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Select
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="form-group row">
+                        <label class="col-md-3 offset-md-1 col-form-label text-monospace" for="sel1">Select list:</label>
+                        <div class="col-md-6">
+                            <select name="sort_attr" class="form-control form-control-sm" id="sel1">
+                                <option></option>
+                                {% for movie_sorting_criteria in sorting_criteria %}
+                                <option>{{ movie_sorting_criteria }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </div>
