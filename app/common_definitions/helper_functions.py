@@ -63,11 +63,14 @@ def admin_required(f):
 
 def filter(criteria, catalog_records):
     lst = []
+    print(criteria)
+    for v in catalog_records:
+        print(v)
     #takes two parameter as input criteria as dictionary and catalog_records(example book )as list and match the criteria value in
     #catalog record to the search value if match is found add it inside the empty list and return it .
     for v in catalog_records:
         for a, b in criteria.items():
-            if v.__dict__[a] == b:
+            if b.strip().lower() in v.__dict__[a].lower():
                 print("Match found! entering into the list")
                 lst.append(v)
 
@@ -110,6 +113,7 @@ def search_catalog(catalog, search_string):
     items which contain the string inside their title (case insensitive)"""
 
     lst = []
+    search_string = search_string.strip().lower()
 
     for k, v in catalog.items():
         title = str(v.__dict__['_title'])

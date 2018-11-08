@@ -107,8 +107,11 @@ class CatalogController(Controller):
         for k, v in filter_key_values.items():
 
             # Empty key, don't use this as a filter
-            if not v.trim() == "":
+            if not v.strip() == "":
                 transformed_filter_key_values[k] = v
+
+        if len(transformed_filter_key_values) == 0:
+            return last_searched_list
 
 
         return self.view_catalog_inventory()[catalog_type].filter(transformed_filter_key_values, last_searched_list)

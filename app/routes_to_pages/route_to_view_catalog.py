@@ -27,34 +27,57 @@ def viewCatalog():
 # Separate the singular view catalog page into its respective page
 @app.route('/viewCatalog/viewCatalogTab', methods=['GET', 'POST'])
 def viewCatalogTab():
-    type = int(request.form["catalog_type"])
-    if (type == 1):
-        filters = catalog_controller.get_filters(CatalogController.BOOK_TYPE)
-        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.BOOK_TYPE)
-        all_records = catalog_controller.get_records_by_catalog(CatalogController.BOOK_TYPE)
-        return render_template('view_books.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
+    catalog_type = request.form["catalog_type"]
+    url_string=""
+    filters = catalog_controller.get_filters(catalog_type)
+    sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
+    all_records = list(catalog_controller.get_records_by_catalog(catalog_type).values())
+    if (catalog_type == "1"):
+        url_string = "view_books.html"
+    elif (catalog_type == "2"):
+        url_string = "view_movies.html"
+    elif (catalog_type == "3"):
+        url_string = "view_magazines.html"
+    elif (catalog_type == "4"):
+        url_string = "view_albums.html"
+    if g.user["_is_admin"] == 1:
+        adminController.add_list_to(g.user["_id"], all_records)
+    else:
+        clientController.add_list_to(g.user["_id"], all_records)
 
-    elif (type == 2):
-        filters = catalog_controller.get_filters(CatalogController.MOVIE_TYPE)
-        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.MOVIE_TYPE)
-        all_records = catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE)
-        return render_template('view_movies.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
-
-    elif (type == 3):
-        filters = catalog_controller.get_filters(CatalogController.MAGAZINE_TYPE)
-        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.MAGAZINE_TYPE)
-        all_records = catalog_controller.get_records_by_catalog(CatalogController.MAGAZINE_TYPE)
-        return render_template('view_magazines.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
-
-    elif (type == 4):
-        filters = catalog_controller.get_filters(CatalogController.ALBUM_TYPE)
-        sorting_criteria = catalog_controller.get_sorting_criteria(CatalogController.ALBUM_TYPE)
-        all_records = catalog_controller.get_records_by_catalog(CatalogController.ALBUM_TYPE)
-        return render_template('view_albums.html', records = list(all_records.values()), filters = filters, sorting_criteria = sorting_criteria)
+    return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria)
 
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():
+    if request.method == 'POST':
+        catalog_type = request.form['catalog_type']
+        search_value = request.form['search_value']
+        url_string =""
+        filters = catalog_controller.get_filters(catalog_type)
+        transformed_filters = {}
+        sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
+
+        for k in filters:
+            transformed_filters[k] = request.form[k]
+
+        if (catalog_type == "1"):
+            url_string = "view_books.html"
+        elif (catalog_type == "2"):
+            url_string = "view_movies.html"
+        elif (catalog_type == "3"):
+           url_string = "view_magazines.html"
+        elif (catalog_type== "4"):
+            url_string = "view_albums.html"
+        if g.user["_is_admin"] == 1:
+            search_result = adminController.search_from(catalog_type, search_value, g.user["_id"])
+            search_result = adminController.filter_by(catalog_type,transformed_filters, g.user["_id"])
+        else:
+            search_result = clientController.search_from(catalog_type, search_value, g.user["_id"])
+            search_result = adminController.filter_by(catalog_type, transformed_filters, g.user["_id"])
+
+        return render_template(url_string, records = search_result, filters=filters, sorting_criteria = sorting_criteria)
+
     type = int(request.form["catalog_type"])
     sort_attr = (request.form["sort_attr"])
     print("CatalogType", type)
