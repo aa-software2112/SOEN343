@@ -103,5 +103,44 @@ def viewDetails():
         catalog_type = CatalogController.ALBUM_TYPE
 
     selected_record = catalog_controller.get_catalog_entry_by_id(catalog_type, int(id))
-    print("selected record", selected_record)
+    if g.user["_is_admin"] == 1:
+        adminController.set_detailed_view_index(selected_record, g.user["_id"])
+    else:
+        clientController.set_detailed_view_index(selected_record, g.user["_id"])
     return render_template('view_record_details.html', catalog_type = int(catalog_type), record = selected_record)
+
+@app.route('/nextDetailedView', methods=['GET', 'POST'])
+@login_required
+def nextDetailedView():
+    if request.method == 'POST':
+        catalog_type = request.form["catalog_type"]
+        if g.user["_is_admin"] == 1:
+            next_catalog_entry = adminController.get_next_item(g.user["_id"])
+        else:
+            next_catalog_entry = clientController.get_next_item(g.user["_id"])
+
+        return render_template('view_record_details.html', record=next_catalog_entry, catalog_type=int(catalog_type))
+
+@app.route('/backToLIST', methods=['GET', 'POST'])
+@login_required
+def backToList():
+    if request.method == 'POST':
+        catalog_type = request.form['catalog_type']
+        url_string = ""
+        filters = catalog_controller.get_filters(catalog_type)
+        sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
+
+        if (catalog_type == "1"):
+            url_string = "view_books.html"
+        elif (catalog_type == "2"):
+            url_string = "view_movies.html"
+        elif (catalog_type == "3"):
+            url_string = "view_magazines.html"
+        elif (catalog_type == "4"):
+            url_string = "view_albums.html"
+        if g.user["_is_admin"] == 1:
+            last_searched_list = adminController.get_last_searched_list(g.user["_id"])
+        else:
+            last_searched_list = clientController.get_last_searched_list(g.user["_id"])
+
+    return render_template(url_string, records=last_searched_list, filters=filters, sorting_criteria=sorting_criteria)
