@@ -1,6 +1,7 @@
 import abc
 from app.common_definitions.helper_functions import convert_date_time_to_epoch as to_epoch
 from app.common_definitions.helper_functions import search_catalog
+from app.common_definitions import helper_functions
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
@@ -106,6 +107,16 @@ class BookCatalog(Catalog):
                 "Publisher":"_publisher",
                 "Language":"_language"
                }
+
+    Sorts = {"Ascending Author":"_author",
+             "Descending Author": "_author",
+             "Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Publisher":"_publisher",
+             "Descending Publisher": "_publisher",
+             "Ascending Year":"_year_of_publication",
+             "Descending Year":"_year_of_publication"
+             }
 
     def __init__(self, database):
         self.db = database
@@ -250,6 +261,18 @@ class BookCatalog(Catalog):
         lst = ["placeholder"]
         return lst
 
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
+
 
 class MovieCatalog(Catalog):
 
@@ -258,6 +281,16 @@ class MovieCatalog(Catalog):
                "Producer": "_producers",
                "Actor": "_actors"
                }
+
+    Sorts = {"Ascending Director":"_director",
+             "Descending Director": "_director",
+             "Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Producer":"_producers",
+             "Descending Producer": "_producers",
+             "Ascending Runtime":"_runtime",
+             "Descending Runtime":"_runtime"
+             }
 
     def __init__(self, database):
         self.db = database
@@ -403,6 +436,18 @@ class MovieCatalog(Catalog):
         lst = ["placeholder"]
         return lst
 
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
+
 
 class MagazineCatalog(Catalog):
 
@@ -410,6 +455,14 @@ class MagazineCatalog(Catalog):
                "Publisher": "_publisher",
                "Language": "_language"
                }
+
+    Sorts = {"Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Publisher":"_publisher",
+             "Descending Publisher": "_publisher",
+             "Ascending Year":"_year_of_publication",
+             "Descending Year":"_year_of_publication"
+             }
 
     def __init__(self, database):
         self.db = database
@@ -551,6 +604,17 @@ class MagazineCatalog(Catalog):
         lst = ["placeholder"]
         return lst
 
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
 
 class AlbumCatalog(Catalog):
 
@@ -558,6 +622,14 @@ class AlbumCatalog(Catalog):
                "Artist": "_artist",
                "Label": "_label"
                }
+
+    Sorts = {"Ascending Title": "_title",
+             "Descending Title": "_title",
+             "Ascending Artist":"_artist",
+             "Descending Artist": "_artist",
+             "Ascending Label":"_label",
+             "Descending Label":"_label"
+             }
 
     def __init__(self, database):
         self.db = database
@@ -697,3 +769,15 @@ class AlbumCatalog(Catalog):
     def sort(self, sort_key_values, last_searched_list):
         lst = ["placeholder"]
         return lst
+
+    def filter(self, filter_key_values, last_searched_list):
+
+        transformed_dict = {}
+
+        for k, v in filter_key_values.items():
+
+            # Converts the front-end key to a key representing the
+            # attribute of the objects stored in this catalog
+            transformed_dict[ self.Filters[k] ] = v
+
+        return helper_functions.filter(transformed_dict, last_searched_list)
