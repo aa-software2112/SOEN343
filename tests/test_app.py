@@ -12,7 +12,6 @@ def test_index_page():
 
 
 def test_login_page():
-
 	""" Query login page unit test """
 	r = requests.get(ENDPOINT + "/login")
 	assert r.status_code == 200
