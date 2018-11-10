@@ -105,6 +105,7 @@ class ClientController(Controller):
             self._client_catalog.modify(client)
 
         print("Client has been logged out")
+        return True
 
     # function takes self and several values to create a client
     # inserts a new client into the client table
