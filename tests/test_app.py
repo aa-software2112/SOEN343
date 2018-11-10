@@ -8,6 +8,7 @@ ENDPOINT = "http://127.0.0.1:5000"
 def test_index_page():
 	""" Query index page unit test"""
 	r = requests.get(ENDPOINT)
+	assert r.status_code == 200
 
 
 def test_login_page():
