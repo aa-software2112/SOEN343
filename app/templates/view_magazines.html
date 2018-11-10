@@ -1,0 +1,83 @@
+{% extends "view_catalog.html" %}
+
+{% block catalog_page %}
+<form action="/viewCatalog/search" method="POST">
+    <input type="hidden" name="catalog_type" value="3">
+    <div class="my-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Enter magazine title" name="search_value" aria-label="magazine-search" aria-describedby="magazine-search-btn">
+            <div class="input-group-prepend" id="magazine-search-btn">
+                <button class="btn btn-outline-info" type="submit">Search</button>
+                <button class="btn btn-info" data-toggle="collapse" data-target="#magazine-search-box" type="button">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div id="magazine-search-box" class="collapse">
+            {% include '/includes/magazine_search_box.html' %}
+        </div>
+    </div>
+</form>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            {% if g.user["_is_admin"] == 1 %}
+            <th scope="col"> ID </th>
+            {% endif %}
+            <th scope="col"> Title </th>
+            <th scope="col"> Publisher </th>
+            <th scope="col"> Year of Publication </th>
+            <th scope="col"> Language </th>
+            <th scope="col"> ISBN10 </th>
+            <th scope="col"> ISBN13 </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for catalog_item in records %}
+        <tr>
+            <form action="/viewCatalog/viewDetails" method="POST" id="record-tab">
+                <input type="hidden" name="catalog_type" value="3">
+                <input type="hidden" name="id" value="{{catalog_item._id}}">
+                <td>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm" title="More Information">
+                        <i class="fas fa-info"></i>
+                    </button>
+                </td>
+                {% if g.user["_is_admin"] == 1 %}
+                <td>{{catalog_item._id}}</td>
+                {% endif %}
+                <td>{{catalog_item._title}}</td>
+                <td>{{catalog_item._publisher}}</td>
+                <td>{{catalog_item._year_of_publication}}</td>
+                <td>{{catalog_item._language}}</td>
+                <td>{{catalog_item._ISBN10}}</td>
+                <td>{{catalog_item._ISBN13}}</td>
+            </form>
+            {% if g.user["_is_admin"] == 1 %}
+            <td class="px-2">
+                <form action="/adminView/modifyCatalogForm" method="post">
+                    <input type="hidden" name="type" value="3">
+                    <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                        class="btn btn-info" style="cursor:pointer">
+                        <i class="far fa-edit"></i>
+                    </button>
+                </form>
+            </td>
+            <td class="pl-0">
+                <form action="/adminView/deleteViewRecords" method="post">
+                    <input type="hidden" name="id" value="{{catalog_item._id}}">
+                    <input type="hidden" name="type" value="3">
+                    <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

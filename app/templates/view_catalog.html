@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+Catalog Viewer
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% if g.user["_is_admin"] == 1 %}
+        <div class="row">
+            <div class="col-12">
+                <a href="{{url_for('adminViewAddToCatalog')}}" class="btn btn-outline-info btn-lg btn-block" style="cursor:pointer">
+                    Add Entry
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        <br>
+
+        {% include '/includes/view_catalog_nav.html' %}
+       
+        {% block catalog_page %}
+            
+        {% endblock %}
+    </div>
+</div>
+
+{% endblock %}

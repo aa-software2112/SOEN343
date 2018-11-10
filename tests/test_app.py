@@ -1,4 +1,4 @@
-import requests, pytest
+import requests
 
 from app import clientController, adminController
 
@@ -8,10 +8,10 @@ ENDPOINT = "http://127.0.0.1:5000"
 def test_index_page():
 	""" Query index page unit test"""
 	r = requests.get(ENDPOINT)
-	assert r.status_code == 200
 
 
 def test_login_page():
+
 	""" Query login page unit test """
 	r = requests.get(ENDPOINT + "/login")
 	assert r.status_code == 200
@@ -70,3 +70,4 @@ def test_view_user_registry():
 	assert r.status_code == 200
 	list_of_clients = adminController.get_all_logged_admins() + clientController.get_all_logged_clients()
 	assert list_of_clients != None
+  

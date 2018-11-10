@@ -156,21 +156,12 @@ class AdminController(Controller):
     def get_catalog_copies_by_id(self, catalog_type, id):
         return self._catalog_controller.get_catalog_entry_copies_by_id(catalog_type, id)
 
-    def add_entry_to_catalog(self, type, request_form):
-    
-        if (type == self._catalog_controller.BOOK_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Book(request_form))
+    def add_entry_to_catalog(self, catalog_type, request_form):
 
-        elif (type == self._catalog_controller.MOVIE_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Movie(request_form))
-
-        elif (type == self._catalog_controller.MAGAZINE_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Magazine(request_form))
-
-        elif (type == self._catalog_controller.ALBUM_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Album(request_form))
+        return self._catalog_controller.add_entry_to_catalog(catalog_type, request_form)
 
     def modify_catalog(self, type, request_form):
+
         if (type == self._catalog_controller.BOOK_TYPE):
             self._catalog_controller.modify_catalog_entry(type, Book(request_form))
 
@@ -188,3 +179,57 @@ class AdminController(Controller):
 
     def delete_catalog_copy_entry(self, catalog_type, id):
         return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)
+      
+    def get_next_item(self, admin_id):
+
+        admin_performing_search = self._admin_catalog.get(admin_id)
+
+        return admin_performing_search.get_next_record_searched()
+
+    def get_last_searched_list(self, admin_id):
+
+        admin_performing_search = self._admin_catalog.get(admin_id)
+
+        return admin_performing_search.get_last_searched_list()
+
+    def add_list_to(self, admin_id, list_to_add):
+
+        usr = self._admin_catalog.get(admin_id)
+
+        usr.set_last_searched_list(list_to_add)
+
+        return
+
+
+    def filter_by(self, catalog_type, filter_key_values, admin_id):
+
+        usr = self._admin_catalog.get(admin_id)
+        last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.filter_by(catalog_type, filter_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+
+    def sort_by(self, catalog_type, sort_key_values, admin_id):
+      
+        usr = self._admin_catalog.get(admin_id)
+        last_searched_list = usr.get_last_searched_list()
+        lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
+        usr.set_last_searched_list(lst)
+        return lst
+
+    def search_from(self, catalog_type, search_value, admin_id):
+
+        usr = self._admin_catalog.get(admin_id)
+
+        if search_value.strip() == "":
+            return usr.get_last_searched_list()
+      
+        lst = self._catalog_controller.search_from(catalog_type, search_value)
+        usr.set_last_searched_list(lst)
+
+        return lst
+
+    def set_detailed_view_index(self, record_object, admin_id):
+        usr = self._admin_catalog.get(admin_id)
+        index = usr.get_index_from_object(record_object)
+        usr.set_index_last_searched(index)
