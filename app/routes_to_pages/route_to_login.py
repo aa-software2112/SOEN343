@@ -14,6 +14,9 @@ app.config['SECRET_KEY'] = 'SOEN_343'
 @is_logged
 def login():
 
+    print(request.form)
+    print(session)
+
     # import from Classes/forms
     form = LoginForm()
 
@@ -39,6 +42,7 @@ def login():
             session['user'] = client.__dict__
 
             # Display message after being redirected to home page
+            print(session)
             flash('You are now logged in!', 'success')
 
             return redirect(url_for('viewCatalog'))
