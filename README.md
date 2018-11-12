@@ -4,7 +4,7 @@ This repository holds the web application for the SOEN 343-H term project.
 
 [Google Drive](https://drive.google.com/open?id=15SQAkmROdWf5RozuKSclYbbJzdMQugfd)
 
-## Main technologies used:
+## Main technologies used
 
    * [Python with Flask](http://flask.pocoo.org/)
    * [SQLite](https://www.sqlite.org)
