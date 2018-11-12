@@ -3,18 +3,18 @@ from flask import Flask
 
 app = Flask(__name__)
 
-# Dynamically generates the routes.py file
+""" Dynamically generates the routes.py file
 with open('app/routes.py', 'w') as file:
     file.write("from flask import render_template\nimport random\n\n# All routes from route folder are imported here...\n")
 
     for route in os.listdir("app/routes_to_pages"):
         file.write("from app.routes_to_pages import {}\n".format(route.split('.')[0]))
-        print("Added {}".format(route))
+        print("Added {}".format(route)) """
 
 from app.classes.database_container import DatabaseContainer
 from app.common_definitions.common_paths import PATH_TO_DATABASE
 from app.database import sqlite_script
-from app.controllers.user_controller import ClientController
+from app.controllers.client_controller import ClientController
 from app.controllers.admin_controller import AdminController
 from app.controllers.catalog_controller import CatalogController
 from app.common_definitions import helper_functions
