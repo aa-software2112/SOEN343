@@ -26,26 +26,20 @@ def test_login_page():
 
 def test_client_login():
 	""" Client login unit test """
-
-	# Perform the login
 	r = requests.post(ENDPOINT + "/login", data=client_account)
-
-	# Check that the client is now logged in
-	client_is_logged = clientController.get_client_by_username(client_account["username"])[0]._is_logged == 1
-
-	assert r.status_code == 200 and client_is_logged
+	assert r.status_code == 200
+	client = clientController.get_client_by_password(
+		username='antman', password='password1')
+	assert client != []
 
 
 def test_invalid_client_password():
 	""" Client invalid login unit test """
-
-	# Perform the invalid login
-	r = requests.post(ENDPOINT + "/login", data=client_invalid_password)
-
-	client_is_not_logged = clientController.get_client_by_username(client_account["username"])[0]._is_logged == 0
-
-	assert r.status_code == 200 and client_is_not_logged
-
+	r = requests.post(ENDPOINT + "/login",data =client_invalid_password)
+	assert r.status_code == 200
+	client = clientController.get_client_by_password(
+		username='antman', password='passsword1')
+	assert client == []
 
 # must work on this one
 # def test_logout_client():
