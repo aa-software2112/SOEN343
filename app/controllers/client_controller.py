@@ -109,6 +109,8 @@ class ClientController(Controller):
 
         print("Client has been logged out")
 
+        return True
+
     # function takes self and several values to create a client
     # inserts a new client into the client table
     def create_client(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password,

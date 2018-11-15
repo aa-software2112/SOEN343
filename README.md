@@ -23,4 +23,4 @@ This repository holds the web application for the SOEN 343-H term project.
 | Rodrigo Cordova Cespedes | rodrigosebastian9@hotmail.com | 40029479 | RodrigoCordovaC |
 | Sajeel Shabir | sajeel155@yahoo.com | 40004271 | SajeelS |
 | Saleh Ali | Saleh.ali@mail.concordia.ca | 40018218 | SAA9 |
-| Samuel Gosselin | samuelgosselin1@hotmail.com | 40010393 | samgo1 |
+| Samuel Gosselin | samuelgosselin1@gmail.com | 40010393 | samgo1 |
