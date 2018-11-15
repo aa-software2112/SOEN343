@@ -6,7 +6,7 @@ app = Flask(__name__)
 from app.classes.database_container import DatabaseContainer
 from app.common_definitions.common_paths import PATH_TO_DATABASE
 from app.database import sqlite_script
-from app.controllers.user_controller import ClientController
+from app.controllers.client_controller import ClientController
 from app.controllers.admin_controller import AdminController
 from app.controllers.catalog_controller import CatalogController
 from app.common_definitions import helper_functions

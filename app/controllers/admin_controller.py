@@ -1,5 +1,5 @@
 from app.controllers.controller import Controller
-from app.controllers.user_controller import ClientController
+from app.controllers.client_controller import ClientController
 from app.classes.user import Admin
 from app.classes.album import Album
 from app.classes.book import Book
