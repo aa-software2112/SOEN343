@@ -1,4 +1,5 @@
 import app.common_definitions.helper_functions as helper_functions
+from app.classes.cart import Cart
 
 class User:
 
@@ -21,6 +22,10 @@ class User:
         
         self._last_searched_list = []
         self._index_of_last_searched_list = 0
+        self._cart = Cart()
+
+    def get_cart_set(self):
+        return self._cart.get_set()
 
     def get_id(self):
         """Returns the id of the object"""

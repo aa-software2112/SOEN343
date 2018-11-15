@@ -174,3 +174,7 @@ class ClientController(Controller):
         usr = self._client_catalog.get(client_id)
         index = usr.get_index_from_object(record_object)
         usr.set_index_last_searched(index)
+
+    # returns the cart set from the specific client with 'client_id'
+    def get_all_cart_items(self, client_id):
+        return self._client_catalog.get_cart_set(client_id)
