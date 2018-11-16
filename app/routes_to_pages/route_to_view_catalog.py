@@ -1,7 +1,7 @@
 from flask import render_template, g, session, redirect, request, flash
 from app import app
 from app.common_definitions.helper_functions import login_required
-from app import clientController, adminController, catalog_controller
+from app import client_controller, admin_controller, catalog_controller
 from app.controllers.catalog_controller import CatalogController
 
 # Needs to be redone
@@ -41,9 +41,9 @@ def viewCatalogTab():
     elif (catalog_type == "4"):
         url_string = "view_albums.html"
     if g.user["_is_admin"] == 1:
-        adminController.add_list_to(g.user["_id"], all_records)
+        admin_controller.add_list_to(g.user["_id"], all_records)
     else:
-        clientController.add_list_to(g.user["_id"], all_records)
+        client_controller.add_list_to(g.user["_id"], all_records)
 
     return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria)
 
@@ -71,13 +71,13 @@ def search():
         elif (catalog_type== "4"):
             url_string = "view_albums.html"
         if g.user["_is_admin"] == 1:
-            search_result = adminController.search_from(catalog_type, search_value, g.user["_id"])
-            search_result = adminController.filter_by(catalog_type, transformed_filters, g.user["_id"])
-            search_result = adminController.sort_by(catalog_type, input_sorting_criteria, g.user["_id"])
+            search_result = admin_controller.search_from(catalog_type, search_value, g.user["_id"])
+            search_result = admin_controller.filter_by(catalog_type, transformed_filters, g.user["_id"])
+            search_result = admin_controller.sort_by(catalog_type, input_sorting_criteria, g.user["_id"])
         else:
-            search_result = clientController.search_from(catalog_type, search_value, g.user["_id"])
-            search_result = clientController.filter_by(catalog_type, transformed_filters, g.user["_id"])
-            search_result = clientController.sort_by(catalog_type, input_sorting_criteria, g.user["_id"])
+            search_result = client_controller.search_from(catalog_type, search_value, g.user["_id"])
+            search_result = client_controller.filter_by(catalog_type, transformed_filters, g.user["_id"])
+            search_result = client_controller.sort_by(catalog_type, input_sorting_criteria, g.user["_id"])
 
         return render_template(url_string, records = search_result, filters=filters, sorting_criteria = sorting_criteria)
 
@@ -104,9 +104,9 @@ def viewDetails():
 
     selected_record = catalog_controller.get_catalog_entry_by_id(catalog_type, int(id))
     if g.user["_is_admin"] == 1:
-        adminController.set_detailed_view_index(selected_record, g.user["_id"])
+        admin_controller.set_detailed_view_index(selected_record, g.user["_id"])
     else:
-        clientController.set_detailed_view_index(selected_record, g.user["_id"])
+        client_controller.set_detailed_view_index(selected_record, g.user["_id"])
     return render_template('view_record_details.html', catalog_type = int(catalog_type), record = selected_record)
 
 @app.route('/nextDetailedView', methods=['GET', 'POST'])
@@ -115,9 +115,9 @@ def nextDetailedView():
     if request.method == 'POST':
         catalog_type = request.form["catalog_type"]
         if g.user["_is_admin"] == 1:
-            next_catalog_entry = adminController.get_next_item(g.user["_id"])
+            next_catalog_entry = admin_controller.get_next_item(g.user["_id"])
         else:
-            next_catalog_entry = clientController.get_next_item(g.user["_id"])
+            next_catalog_entry = client_controller.get_next_item(g.user["_id"])
 
         return render_template('view_record_details.html', record=next_catalog_entry, catalog_type=int(catalog_type))
 
@@ -139,8 +139,8 @@ def backToList():
         elif (catalog_type == "4"):
             url_string = "view_albums.html"
         if g.user["_is_admin"] == 1:
-            last_searched_list = adminController.get_last_searched_list(g.user["_id"])
+            last_searched_list = admin_controller.get_last_searched_list(g.user["_id"])
         else:
-            last_searched_list = clientController.get_last_searched_list(g.user["_id"])
+            last_searched_list = client_controller.get_last_searched_list(g.user["_id"])
 
     return render_template(url_string, records=last_searched_list, filters=filters, sorting_criteria=sorting_criteria)
