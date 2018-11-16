@@ -21,11 +21,11 @@ databaseObject = DatabaseContainer(PATH_TO_DATABASE)
 catalog_controller = CatalogController(databaseObject)
 catalog_controller.load_database_into_memory()
 
-clientController = ClientController(databaseObject, catalog_controller)
-clientController.load_database_into_memory()
+client_controller = ClientController(databaseObject, catalog_controller)
+client_controller.load_database_into_memory()
 
-adminController = AdminController(databaseObject, catalog_controller)
-adminController.load_database_into_memory()
+admin_controller = AdminController(databaseObject, catalog_controller)
+admin_controller.load_database_into_memory()
 
 # Helper function to be used in front end
 app.jinja_env.globals.update(convert_epoch_to_datetime=helper_functions.convert_epoch_to_datetime)
