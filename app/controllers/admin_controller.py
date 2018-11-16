@@ -8,47 +8,34 @@ from app.classes.catalogs import UserCatalog
 
 
 class AdminController(Controller):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
+
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if AdminController._instance is None:
+            AdminController()
+        return AdminController._instance
 
     def __init__(self, database, catalog_controller):
-        Controller.__init__(self, database)
+        if AdminController._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            AdminController._instance = self
+            Controller.__init__(self, database)
 
-        # Admin Controller should have an instance of catalog controller
-        self._catalog_controller = catalog_controller
+            # Admin Controller should have an instance of catalog controller
+            self._catalog_controller = catalog_controller
 
-        # Admin Controller contains a catalog of admin users
-        self._admin_catalog = UserCatalog(database)
+            # Admin Controller contains a catalog of admin users
+            self._admin_catalog = UserCatalog(database)
 
-        self._db_loaded = False
+            self._db_loaded = False
 
-    def example_admin_sql_call(self):
 
-        # Create your query
-        yourQuery = ''' SELECT * from client WHERE isLogged=1'''
-
-        """ There is a DatabaseContainer object (see Database/DatabaseContainer.py) stored in every Controller (see Controllers/Controller.py)
-		through this class' constructor __init__(...). It is sent all the way up the object hierarchy until it reaches the Controller object
-		
-		This database object abstracts stores the sqlite connection (see __init__.py in /application/). We need this
-		encapsulation to control read/write requests later.
-		
-		This next line executes the query; it has an optional input parameter for write-based SQL queries; this example is a read-based one
-		
-		The function .executeQuery(...) returns the cursor created out of the execution of your query --> again, see Database/DatabaseContainer.py
-		"""
-        yourCursor = self.db.execute_query(yourQuery, inputParameters=None)
-
-        # See
-        # https://docs.python.org/2/library/sqlite3.html#sqlite3.Cursor.execute
-        # for cursor functions
-        yourResults = yourCursor.fetchall()
-
-        # At this point, iterate over results and store them in some object (User, Book, Music, etc...) before returning
-        # print("Results from exampleAdminSQLCall: ")
-        # for result in yourResults:
-        #	print(result)
-
-        # Here you would return a list of objects
-        return
 
     def get_all_logged_admins(self):
 

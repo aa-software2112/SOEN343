@@ -3,25 +3,39 @@ import sys
 
 
 class DatabaseContainer(object):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
+
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if DatabaseContainer._instance is None:
+            DatabaseContainer()
+        return DatabaseContainer._instance
 
     def __init__(self, pathToDatabase):
+        if DatabaseContainer._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            DatabaseContainer._instance = self
+            # Connect to database immediately
+            self.connection = None
+            self.dbPath = pathToDatabase
 
-        # Connect to database immediately
-        self.connection = None
-        self.dbPath = pathToDatabase
+            try:
+                # Make database useable in all threads
+                self.connection = sqlite3.connect(
+                    pathToDatabase, check_same_thread=False)
 
-        try:
-            # Make database useable in all threads
-            self.connection = sqlite3.connect(
-                pathToDatabase, check_same_thread=False)
+                # Make database accessible through index and keys
+                self.connection.row_factory = sqlite3.Row
 
-            # Make database accessible through index and keys
-            self.connection.row_factory = sqlite3.Row
-
-            print("Made connection!")
-        except Error as e:
-            print(e)
-            sys.exit()
+                print("Made connection!")
+            except Error as e:
+                print(e)
+                sys.exit()
 
     def execute_query(self, sqlQuery, inputParameters=None):
         """

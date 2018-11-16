@@ -7,22 +7,38 @@ from app.classes.catalogs import *
 
 
 class CatalogController(Controller):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
+
     BOOK_TYPE = "1"
     MOVIE_TYPE = "2"
     MAGAZINE_TYPE = "3"
     ALBUM_TYPE = "4"
 
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if CatalogController._instance is None:
+            CatalogController()
+        return CatalogController._instance
+
     def __init__(self, database):
-        Controller.__init__(self, database)
-        self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(database),
-                           CatalogController.MOVIE_TYPE: MovieCatalog(database),
-                           CatalogController.MAGAZINE_TYPE: MagazineCatalog(database),
-                           CatalogController.ALBUM_TYPE: AlbumCatalog(database)}
-        self._constructors = {CatalogController.BOOK_TYPE: Book,
-                              CatalogController.MOVIE_TYPE: Movie,
-                              CatalogController.MAGAZINE_TYPE: Magazine,
-                              CatalogController.ALBUM_TYPE: Album}
-        self._db_loaded = False
+        if CatalogController._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            CatalogController._instance = self
+            Controller.__init__(self, database)
+            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(database),
+                               CatalogController.MOVIE_TYPE: MovieCatalog(database),
+                               CatalogController.MAGAZINE_TYPE: MagazineCatalog(database),
+                               CatalogController.ALBUM_TYPE: AlbumCatalog(database)}
+            self._constructors = {CatalogController.BOOK_TYPE: Book,
+                                  CatalogController.MOVIE_TYPE: Movie,
+                                  CatalogController.MAGAZINE_TYPE: Magazine,
+                                  CatalogController.ALBUM_TYPE: Album}
+            self._db_loaded = False
 
     def load_database_into_memory(self):
 
@@ -52,7 +68,7 @@ class CatalogController(Controller):
                 catalog.add(constructor(row), False)
 
         # Uncomment these two lines to see all objects in all catalogs
-        #for k, v in self._inventory.items():
+        # for k, v in self._inventory.items():
         #    v.display()
 
     def get_all_catalogs(self):
@@ -63,7 +79,7 @@ class CatalogController(Controller):
                             "albums": self._inventory[CatalogController.ALBUM_TYPE].get_all()
                             }
         return dict_of_catalogs
-    
+
     def get_records_by_catalog(self, catalog_type):
         return self._inventory[catalog_type].get_all()
 
@@ -78,14 +94,13 @@ class CatalogController(Controller):
         # Add the object to the catalog
         self._inventory[catalog_type].add(new_record, True)
 
-
     def view_catalog_inventory(self):
         return self._inventory
 
     def modify_catalog_entry(self, type, modified_entry_object):
         return self._inventory[type].modify(modified_entry_object)
 
-    def get_catalog_entry_by_id(self,catalog_type, id):
+    def get_catalog_entry_by_id(self, catalog_type, id):
         return self.view_catalog_inventory()[catalog_type].get(id)
 
     def get_catalog_entry_copies_by_id(self, catalog_type, id):
@@ -122,9 +137,7 @@ class CatalogController(Controller):
         if len(transformed_filter_key_values) == 0:
             return last_searched_list
 
-
         return self.view_catalog_inventory()[catalog_type].filter(transformed_filter_key_values, last_searched_list)
 
     def search_from(self, catalog_type, search_value):
         return self.view_catalog_inventory()[catalog_type].search(search_value)
-
