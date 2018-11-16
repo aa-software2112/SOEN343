@@ -5,20 +5,34 @@ from app.classes.user_container import User
 
 
 class ClientController(Controller):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
+
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if ClientController._instance is None:
+            ClientController()
+        return ClientController._instance
 
     def __init__(self, database, catalog_controller):
-        Controller.__init__(self, database)
+        if ClientController._instance is not None:
+            raise Exception("This class is a singleton!")
 
-        self._db_loaded = False
+        else:
+            ClientController._instance = self
+            Controller.__init__(self, database)
 
-        self._client_catalog = UserCatalog(database)
-
-        self._catalog_controller = catalog_controller
+            self._db_loaded = False
+            self._client_catalog = UserCatalog(database)
+            self._catalog_controller = catalog_controller
 
     def load_database_into_memory(self):
 
-        # Database cannot be loaded into RAM more than once
-        if not (self._db_loaded):
+        # Database cannot be loaded into RAM more than once.
+        if not self._db_loaded:
             self._db_loaded = True
 
         # Add all objects form database into catalogs
