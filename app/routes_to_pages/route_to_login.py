@@ -4,8 +4,6 @@ from app import clientController, adminController
 from app.classes.forms import LoginForm
 from app.common_definitions.helper_functions import is_logged
 
-import json
-
 app.config['SECRET_KEY'] = 'SOEN_343'
 
 
@@ -26,22 +24,26 @@ def login():
         get_password = form.password.data
         # Return query result
         user_response = clientController.get_client_by_password(
-            username=get_username, password=get_password) + adminController.get_admin_by_password(username=get_username,
+            username = get_username, password=get_password) + adminController.get_admin_by_password(username=get_username,
                                                                                                   password=get_password)
 
-        if user_response == []:
+        if not user_response:
             error = "Invalid login. Please check your username or password"
             return render_template('login.html', form=form, error=error)
 
         else:
             client = user_response[0]
 
-            # Set session
-            session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
+            # Set session.
+            # The user will not have access to the login page while logged, but the session will be reset just in case.
+            session.clear()
             session['logged_in'] = True
-            session['user'] = client.__dict__
 
-            # Display message after being redirected to home page
+            # Do not send cart object to front end, e.g. pop it.
+            session['user'] = vars(client)
+            session['user'].pop("_cart")
+
+            # Display message after being redirected to home page.
             print(session)
             flash('You are now logged in!', 'success')
 

@@ -1,12 +1,10 @@
 from app.controllers.controller import Controller
-from app.controllers.client_controller import ClientController
 from app.classes.user import Admin
 from app.classes.album import Album
 from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
 from app.classes.catalogs import UserCatalog
-import app.common_definitions.helper_functions as helper_functions
 
 
 class AdminController(Controller):
@@ -21,9 +19,6 @@ class AdminController(Controller):
         self._admin_catalog = UserCatalog(database)
 
         self._db_loaded = False
-
-    def example_admin_controller_function(self):
-        print("Admin Controller")
 
     def example_admin_sql_call(self):
 
@@ -55,7 +50,6 @@ class AdminController(Controller):
         # Here you would return a list of objects
         return
 
-
     def get_all_logged_admins(self):
 
         return list(self._admin_catalog.get_all().values())
@@ -69,7 +63,6 @@ class AdminController(Controller):
         # Add all objects form database into catalogs
         sql_query = """ SELECT * FROM client WHERE isAdmin = 1 """
 
-
         all_rows = self.db.execute_query(sql_query).fetchall()
 
         # Create an object for each row
@@ -77,7 +70,7 @@ class AdminController(Controller):
             self._admin_catalog.add(Admin(row), False)
 
         # Uncomment these two lines to see all objects in all catalogs
-        #for k, v in self._admin_catalog.get_all().items():
+        # for k, v in self._admin_catalog.get_all().items():
         #    print(v)
 
     def logout_admin(self, username):
@@ -92,14 +85,14 @@ class AdminController(Controller):
         print("Admin has been logged out.")
 
     # Creates admin using create_client method in UserController.
-    def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isLogged, lastLogged):
+    def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isLogged,
+                     lastLogged):
 
-        attributesDict = {"firstName": firstName, "lastName": lastName, "physicalAddress":physicalAddress,
+        attributesDict = {"firstName": firstName, "lastName": lastName, "physicalAddress": physicalAddress,
                           "email": email, "phoneNumber": phoneNumber, "username": username, "password": password,
-                          "isAdmin":1, "isLogged":isLogged, "lastLogged": lastLogged}
+                          "isAdmin": 1, "isLogged": isLogged, "lastLogged": lastLogged}
 
         self._admin_catalog.add(Admin(attributesDict), True)
-
 
     def get_admin_by_username(self, username):
 
@@ -117,6 +110,7 @@ class AdminController(Controller):
         # function takes self and a string "email" to get the user from the client table.
         # returns list with client information or emptylist if client doesn't
         # exist in database
+
     def get_admin_by_email(self, email):
         found_admin = []
 
@@ -150,7 +144,7 @@ class AdminController(Controller):
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
 
-    def get_catalog_entry_by_id(self,catalog_type, id):
+    def get_catalog_entry_by_id(self, catalog_type, id):
         return self._catalog_controller.get_catalog_entry_by_id(catalog_type, id)
 
     def get_catalog_copies_by_id(self, catalog_type, id):
@@ -179,7 +173,7 @@ class AdminController(Controller):
 
     def delete_catalog_copy_entry(self, catalog_type, id):
         return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)
-      
+
     def get_next_item(self, admin_id):
 
         admin_performing_search = self._admin_catalog.get(admin_id)
@@ -200,7 +194,6 @@ class AdminController(Controller):
 
         return
 
-
     def filter_by(self, catalog_type, filter_key_values, admin_id):
 
         usr = self._admin_catalog.get(admin_id)
@@ -210,7 +203,7 @@ class AdminController(Controller):
         return lst
 
     def sort_by(self, catalog_type, sort_key_values, admin_id):
-      
+
         usr = self._admin_catalog.get(admin_id)
         last_searched_list = usr.get_last_searched_list()
         lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
@@ -223,7 +216,7 @@ class AdminController(Controller):
 
         if search_value.strip() == "":
             return usr.get_last_searched_list()
-      
+
         lst = self._catalog_controller.search_from(catalog_type, search_value)
         usr.set_last_searched_list(lst)
 
