@@ -39,7 +39,7 @@ def login():
             session.clear()
             session['logged_in'] = True
 
-            # Do not send cart object to front end, e.g. pop it.
+            # Do not send cart object to front end, i.e. pop it from the dict stored in user session.
             session['user'] = vars(client)
             session['user'].pop("_cart")
 

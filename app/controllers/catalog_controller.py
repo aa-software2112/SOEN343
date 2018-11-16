@@ -42,9 +42,11 @@ class CatalogController(Controller):
 
     def load_database_into_memory(self):
 
-        # Database cannot be loaded into RAM more than once
-        if not (self._db_loaded):
+        # Database cannot be loaded into memory more than once
+        if not self._db_loaded:
             self._db_loaded = True
+        else:
+            raise Exception("Cannot load db into memory more than once!")
 
         # Add all objects form database into catalogs
         queries = {CatalogController.BOOK_TYPE: """ SELECT * FROM book; """,
@@ -64,7 +66,6 @@ class CatalogController(Controller):
 
             # Create an object for each row
             for row in all_rows:
-                #	print(type(constructor(row)._id))
                 catalog.add(constructor(row), False)
 
         # Uncomment these two lines to see all objects in all catalogs
