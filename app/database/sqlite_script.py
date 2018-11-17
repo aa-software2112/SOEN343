@@ -116,8 +116,8 @@ def create_magazine_copy(conn, magazine):
     Function takes database connection object 'conn' and a magazine copy
     creates a new magazine copy into the magazine copy table
     """
-    sql = ''' INSERT INTO magazine_copy(magazine_id,isLoaned)
-              VALUES(?,?) '''
+    sql = ''' INSERT INTO magazine_copy(magazine_id)
+              VALUES(?) '''
     cur = conn.cursor()
     cur.execute(sql, magazine)
 
@@ -250,7 +250,6 @@ def initializeAndFillDatabase(pathToDB):
     sql_create_magazine_copy_table = """CREATE TABLE IF NOT EXISTS magazine_copy (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                                     magazine_id INTEGER NOT NULL,
-                                    isLoaned INTEGER NOT NULL,
                                     FOREIGN KEY(magazine_id) REFERENCES magazine(id)
                                 );"""
 
