@@ -7,7 +7,7 @@ class ReadWriteLock:
     from "Concurrent Programming Concepts" by Constantinos Constantinides.
 
     A process can read if there are no writers in and no writers waiting.
-    A process can write if there are no readers reading and no writers waiting.
+    A process can write if there are no readers reading and no writers writing.
     """
 
     def __init__(self):
@@ -46,14 +46,52 @@ class ReadWriteLock:
 
         self._rw_lock.acquire()
 
-        while self._num_of_readers > 0 or self._writers_waiting > 1:
+        while self._num_of_readers > 0:
             self._rw_lock.wait()
 
-        with self._lock:
-            self._writers_waiting -= 1
+        self._writers_waiting -= 1
 
     def end_write(self):
         try:
             self._rw_lock.notify_all()
         finally:
             self._rw_lock.release()
+
+
+# For testing purposes.
+if __name__ == '__main__':
+    import time
+
+    rwl = ReadWriteLock()
+
+
+    class Reader(threading.Thread):
+        def run(self):
+            print(self, 'start')
+            rwl.start_read()
+            print(self, 'acquired')
+            time.sleep(5)
+            print(self, 'stop')
+            rwl.end_read()
+
+
+    class Writer(threading.Thread):
+        def run(self):
+            print(self, 'start')
+            rwl.start_write()
+            print(self, 'acquired')
+            time.sleep(10)
+            print(self, 'stop')
+            rwl.end_write()
+
+
+    Reader().start()
+    time.sleep(1)
+    Reader().start()
+    time.sleep(1)
+    Reader().start()
+    time.sleep(1)
+    Writer().start()
+    time.sleep(1)
+    Reader().start()
+    Writer().start()
