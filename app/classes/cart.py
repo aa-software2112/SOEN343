@@ -7,3 +7,7 @@ class Cart:
 
 	def add_to_cart(self, item):
 		self._items.add(item)
+
+	def delete_by_id(self, id):
+
+	def make_loan(self):	
