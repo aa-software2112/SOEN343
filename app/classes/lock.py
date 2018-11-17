@@ -3,7 +3,7 @@ import threading
 
 class ReadWriteLock:
     """
-    An implementation of a lock following the Readers-Writers Problem #4
+    An implementation of a lock based on the Readers-Writers Problem #4
     from "Concurrent Programming Concepts" by Constantinos Constantinides.
 
     A process can read if there are no writers in and no writers waiting.
@@ -92,6 +92,12 @@ if __name__ == '__main__':
     Reader().start()
     time.sleep(1)
     Writer().start()
-    time.sleep(1)
+    time.sleep(3)
     Reader().start()
     Writer().start()
+    Writer().start()
+    Writer().start()
+    Reader().start()
+    Writer().start()
+    Reader().start()
+    Reader().start()
