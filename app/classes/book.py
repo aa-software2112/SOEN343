@@ -1,4 +1,5 @@
 class Book:
+    record_type = "Book"
 
     def __init__(self, attributes):
         # Currently from CatalogController, the .fetchall() returns a
