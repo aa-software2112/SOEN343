@@ -39,8 +39,8 @@ def login():
             session.clear()
             session['logged_in'] = True
 
-            # Do not send cart object to front end, i.e. pop it from the dict stored in user session.
-            session['user'] = vars(client)
+            # Make a copy of the user attribute dictionary and pop the cart which we do not want to send to front end.
+            session['user'] = vars(client).copy()
             session['user'].pop("_cart")
 
             # Display message after being redirected to home page.
