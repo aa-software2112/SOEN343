@@ -1,6 +1,8 @@
 from app.common_definitions.helper_functions import convert_epoch_to_datetime as to_datetime
 
+
 class Movie:
+    record_type = "Movie"
 
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a
