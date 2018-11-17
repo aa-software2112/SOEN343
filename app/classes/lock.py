@@ -11,40 +11,49 @@ class ReadWriteLock:
     """
 
     def __init__(self):
-        self._lock = threading.Condition(threading.Lock())
+        self._rw_lock = threading.Condition(threading.Lock())
+        self._lock = threading.Lock()
         self._num_of_readers = 0
         self._readers_waiting = 0
         self._writers_waiting = 0
 
     def start_read(self):
-        self._readers_waiting += 1
-        self._lock.acquire()
+        with self._lock:
+            self._readers_waiting += 1
+
+        self._rw_lock.acquire()
+
         while self._writers_waiting > 0:
-            self._lock.wait()
+            self._rw_lock.wait()
         try:
             self._num_of_readers += 1
             self._readers_waiting -= 1
         finally:
-            self._lock.release()
+            self._rw_lock.release()
 
     def end_read(self):
-        self._lock.acquire()
+        self._rw_lock.acquire()
         try:
             self._num_of_readers -= 1
             if self._num_of_readers == 0:
-                self._lock.notify_all()
+                self._rw_lock.notify_all()
         finally:
-            self._lock.release()
+            self._rw_lock.release()
 
     def start_write(self):
-        self._writers_waiting += 1
-        self._lock.acquire()
+        with self._lock:
+            self._writers_waiting += 1
+
+        self._rw_lock.acquire()
+
         while self._num_of_readers > 0 or self._writers_waiting > 1:
-            self._lock.wait()
-        self._writers_waiting -= 1
+            self._rw_lock.wait()
+
+        with self._lock:
+            self._writers_waiting -= 1
 
     def end_write(self):
         try:
-            self._lock.notify_all()
+            self._rw_lock.notify_all()
         finally:
-            self._lock.release()
+            self._rw_lock.release()
