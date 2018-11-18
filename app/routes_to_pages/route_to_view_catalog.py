@@ -27,26 +27,33 @@ def viewCatalog():
 # Separate the singular view catalog page into its respective page
 @app.route('/viewCatalog/viewCatalogTab', methods=['GET', 'POST'])
 def viewCatalogTab():
-    catalog_type = request.form["catalog_type"]
-    url_string=""
-    filters = catalog_controller.get_filters(catalog_type)
-    sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
-    all_records = list(catalog_controller.get_records_by_catalog(catalog_type).values())
-    if (catalog_type == "1"):
-        url_string = "view_books.html"
-    elif (catalog_type == "2"):
-        url_string = "view_movies.html"
-    elif (catalog_type == "3"):
-        url_string = "view_magazines.html"
-    elif (catalog_type == "4"):
-        url_string = "view_albums.html"
-    if g.user["_is_admin"] == 1:
-        admin_controller.add_list_to(g.user["_id"], all_records)
-    else:
-        client_controller.add_list_to(g.user["_id"], all_records)
+    if request.method == "POST":
+        catalog_type = request.form["catalog_type"]
+        url_string=""
+        filters = catalog_controller.get_filters(catalog_type)
+        sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
+        all_records = list(catalog_controller.get_records_by_catalog(catalog_type).values())
+        if (catalog_type == "1"):
+            url_string = "view_books.html"
+        elif (catalog_type == "2"):
+            url_string = "view_movies.html"
+        elif (catalog_type == "3"):
+            url_string = "view_magazines.html"
+        elif (catalog_type == "4"):
+            url_string = "view_albums.html"
+        if g.user["_is_admin"] == 1:
+            admin_controller.add_list_to(g.user["_id"], all_records)
+        else:
+            client_controller.add_list_to(g.user["_id"], all_records)
 
-    return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria)
+    return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria )
 
+@app.route("/addToCart", methods=['GET', 'POST'])
+def testing():
+    if request.method == "POST":
+        catalog_id = request.form["catalog_id"]
+        return "Entry - " + catalog_id + " has been added to cart!"
+    return render_template("/")
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():

@@ -48,7 +48,7 @@
             </div>
          </div>
       </nav>
-      <main role="main" class="container my-5">
+      <main role="main" class="container-fluid my-5">
          <div class="starter-template">
             {% if g.user %}
             <h1 class="display-4">
@@ -61,7 +61,7 @@
 
         {% include '/includes/messages.html' %}
 
-		<div id="main-content-area" class="container">
+		<div id="main-content-area" class="container-fluid w-75">
          {% block content %}
             {% for book in books %}
             <div class="card mb-3">
