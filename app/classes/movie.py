@@ -2,6 +2,7 @@ from app.common_definitions.helper_functions import convert_epoch_to_datetime as
 
 
 class Movie:
+    record_type = "Movie"
     # Movie can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
     loan_time = 2 * 7 * 86400
 
