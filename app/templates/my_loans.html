@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+My Loans
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+       <form action="/returnLoans" method="POST" id="return-loans-form">
+       {% if errorMessage %}
+          <div class="alert alert-danger" role="alert"> {{ errorMessage }}</div>
+       {% else %}
+          {% for loan in loans %}
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="loan_id{{ loan._id }}" value="{{ loan._id }}" id="checkbox-{{ loan._id }}">
+              <label class="form-check-label" for="checkbox-{{ loan._id }}">
+                 {{ loan._name }}
+              </label>
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary">Return loans</button>
+       {% endif %}
+       </form>
+    </div>
+</div>
+{% endblock %}

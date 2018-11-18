@@ -9,3 +9,4 @@ from app.routes_to_pages import route_to_view_catalog
 from app.routes_to_pages import route_to_logout
 from app.routes_to_pages import route_to_adminview
 from app.routes_to_pages import route_to_login
+from app.routes_to_pages import route_to_loans
