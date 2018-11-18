@@ -15,8 +15,14 @@ class Magazine:
         self._language = arguments['language']
         self._ISBN10 = arguments['isbn_10']
         self._ISBN13 = arguments['isbn_13']
-        self._total_quantity = 1
-        self._quantity_available = 1
+        if 'total_quantity' in dict(arguments):
+            self._total_quantity = arguments['total_quantity']
+        else:
+            self._total_quantity = 1
+        if 'quantity_available' in dict(arguments):
+            self._quantity_available = arguments['quantity_available']
+        else:
+            self._quantity_available = 1
 
     def get_id(self):
         """Returns the id of the object"""

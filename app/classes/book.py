@@ -18,8 +18,14 @@ class Book:
         self._language = attributes['language']
         self._ISBN10 = attributes['isbn_10']
         self._ISBN13 = attributes['isbn_13']
-        self._total_quantity = 1
-        self._quantity_available = 1
+        if 'total_quantity' in dict(attributes):
+            self._total_quantity = attributes['total_quantity']
+        else:
+            self._total_quantity = 1
+        if 'quantity_available' in dict(attributes):
+            self._quantity_available= attributes['quantity_available']
+        else:
+            self._quantity_available = 1
 
     def get_id(self):
         """Returns the id of the object"""

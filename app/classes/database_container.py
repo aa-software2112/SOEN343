@@ -24,18 +24,20 @@ class DatabaseContainer(object):
             self.connection = None
             self.dbPath = pathToDatabase
 
-            try:
-                # Make database useable in all threads
-                self.connection = sqlite3.connect(
-                    pathToDatabase, check_same_thread=False)
+    #
+    def make_connection(self):
+        try:
+            # Make database useable in all threads
+            self.connection = sqlite3.connect(
+                self.dbPath, check_same_thread=False)
 
-                # Make database accessible through index and keys
-                self.connection.row_factory = sqlite3.Row
+            # Make database accessible through index and keys
+            self.connection.row_factory = sqlite3.Row
 
-                print("Made connection!")
-            except Error as e:
-                print(e)
-                sys.exit()
+            print("Made connection!")
+        except Error as e:
+            print(e)
+            sys.exit()
 
     def execute_query(self, sqlQuery, inputParameters=None):
         """

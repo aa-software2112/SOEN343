@@ -16,7 +16,7 @@ def convert_date_time_to_epoch(date_time_string):
     """ Expects a string in the form mm/dd/yyyy, otherwise returns
     current epoch time"""
     date_time_string = date_time_string.split("/")
-    print(date_time_string)
+    #print(date_time_string)
     if (not (len(date_time_string) == 3)):
         return time.time()
 

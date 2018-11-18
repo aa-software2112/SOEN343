@@ -1,6 +1,9 @@
 import sqlite3
 from sqlite3 import Error
 from faker import Faker
+from app.classes.catalogs import *
+from app.classes.user import User
+
 import time
 import glob
 
@@ -34,113 +37,52 @@ def create_in_memory_connection():
     return None
 
 
-def create_table(conn, sql_create_x_table):
+def create_table(database, sql_create_x_table):
     """
     Function takes database connection object 'conb' and sql statement to create table 'sql_create_x_table'.  
     creates table inside database. 
     """
     try:
-        c = conn.cursor()
+        c = database.connection.cursor()
         c.execute(sql_create_x_table)
     except Error as e:
         print(e)
 
-
-def create_book(conn, book):
-    """
-    Function takes database connection object 'conn' and a book
-    creates a new book into the book table
-    """
-    sql = ''' INSERT INTO book(author,title,format,pages,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)
-              VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, book)
-
-
-def create_magazine(conn, magazine):
-    """
-    Function takes database connection object 'conn' and a magazine
-    creates a new magazine into the magazine table
-    """
-    sql = ''' INSERT INTO magazine(title,publisher,year_of_publication,language,isbn_10,isbn_13,total_quantity,quantity_available)
-              VALUES(?,?,?,?,?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, magazine)
-
-
-def create_movie(conn, movie):
-    """
-    Function takes database connection object 'conn' and a movie 
-    creates a new movie into the movie  table
-    """
-
-    sql = ''' INSERT INTO movie(title,director,producers,actors,language,subtitles,dubbed,release_date,run_time,total_quantity,quantity_available)
-              VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, movie)
-
-
-def create_album(conn, music):
-    """
-    Function takes database connection object 'conn' and a music 
-    creates a new music into the music table
-    """
-    sql = ''' INSERT INTO album(type,title,artist,label,release_date,asin,total_quantity,quantity_available)
-              VALUES(?,?,?,?,?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, music)
-
-
-def create_client(conn, client):
-    """
-    Function takes database connection object 'conn' and a client 
-    creates a new client into the client table
-    """
-    sql = ''' INSERT INTO client(firstName,lastName,physicalAddress,email,phoneNumber,username,password,isAdmin,isLogged,lastLogged)
-              VALUES(?,?,?,?,?,?,?,?,?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, client)
-
-def create_book_copy(conn, book):
+def create_book_copy(database, book):
     """
     Function takes database connection object 'conn' and a book copy
     creates a new book copy into the book copy table
     """
     sql = ''' INSERT INTO book_copy(book_id,isLoaned)
               VALUES(?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, book)
+    database.execute_query_write(sql,book)
 
-def create_magazine_copy(conn, magazine):
+def create_magazine_copy(database, magazine):
     """
     Function takes database connection object 'conn' and a magazine copy
     creates a new magazine copy into the magazine copy table
     """
     sql = ''' INSERT INTO magazine_copy(magazine_id,isLoaned)
               VALUES(?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, magazine)
+    database.execute_query_write(sql, magazine)
 
-def create_movie_copy(conn, movie):
+def create_movie_copy(database, movie):
     """
     Function takes database connection object 'conn' and a movie copy
     creates a new movie copy into the movie copy table
     """
     sql = ''' INSERT INTO movie_copy(movie_id,isLoaned)
               VALUES(?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, movie)
+    database.execute_query_write(sql, movie)
 
-def create_album_copy(conn, album):
+def create_album_copy(database, album):
     """
     Function takes database connection object 'conn' and a album copy
     creates a new album copy into the album copy table
     """
     sql = ''' INSERT INTO album_copy(album_id,isLoaned)
               VALUES(?,?) '''
-    cur = conn.cursor()
-    cur.execute(sql, album)
-
+    database.execute_query_write(sql, album)
 
 def close_connection(conn):
     """
@@ -153,17 +95,16 @@ def close_connection(conn):
         print(e)
 
 
-def initializeAndFillDatabase(pathToDB):
+def initializeAndFillDatabase(database, catalog_controller, client_controller, admin_controller):
     """
     Main where we implement most methods above (create connection, create table, insert data, close connection.)
     """
 
     # Database already exists; do nothing
-    if len(glob.glob(pathToDB)) == 1:
+    if len(glob.glob(database.dbPath)) == 1:
         return
 
-    conn = create_connection(pathToDB)
-
+    database.make_connection()
     # initialized variable with query that creates book table with columns/attributes
     sql_create_book_table = """CREATE TABLE IF NOT EXISTS book (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -270,118 +211,163 @@ def initializeAndFillDatabase(pathToDB):
                                     FOREIGN KEY(album_id) REFERENCES album(id)
                                 );"""
 
-    if conn is None:
+    if database.connection is None:
         print("Error! cannot create the database connection.")
         return
 
     # creates book table inside database
-    create_table(conn, sql_create_book_table)
+    create_table(database, sql_create_book_table)
     # create magazine table inside database
-    create_table(conn, sql_create_magazine_table)
+    create_table(database, sql_create_magazine_table)
     # create movie table inside database
-    create_table(conn, sql_create_movie_table)
+    create_table(database, sql_create_movie_table)
     # create album table inside database
-    create_table(conn, sql_create_album_table)
+    create_table(database, sql_create_album_table)
     # create client table inside database
-    create_table(conn, sql_create_client_table)
+    create_table(database, sql_create_client_table)
     # create book copy table inside database
-    create_table(conn, sql_create_book_copy_table)
+    create_table(database, sql_create_book_copy_table)
     # create magazine copy table inside database
-    create_table(conn, sql_create_magazine_copy_table)
+    create_table(database, sql_create_magazine_copy_table)
     # create movie copy table inside database
-    create_table(conn, sql_create_movie_copy_table)
+    create_table(database, sql_create_movie_copy_table)
     # create album copy table inside database
-    create_table(conn, sql_create_album_copy_table)
+    create_table(database, sql_create_album_copy_table)
 
-    with conn:
+    COPIES = 3
+    NUM_BOOKS = 50
+    MAX_BOOK_PAGES = 1500
+    NUM_MAGAZINES = 50
+    NUM_MOVIES = 50
+    NUM_ALBUMS = 50
+    NUM_USERS = 50
+    book_types = ['Paperback', 'Hardcover', 'Graphic', 'Coffee Table Book', 'Textbook']
+    languages = ['English', 'French', 'Italian', 'Spanish', 'Greek', 'Russian', 'German']
+    album_types = ["Vinyl", "CD", "Cassette"]
+    MAX_QUANTITY = 10
+    MAX_TOTAL = 4
 
-        COPIES = 3
-        NUM_BOOKS = 50
-        MAX_BOOK_PAGES = 1500
-        NUM_MAGAZINES = 50
-        NUM_MOVIES = 50
-        NUM_ALBUMS = 50
-        NUM_USERS = 50
-        book_types = ['Paperback', 'Hardcover', 'Graphic', 'Coffee Table Book', 'Textbook']
-        languages = ['English', 'French', 'Italian', 'Spanish', 'Greek', 'Russian', 'German']
-        album_types = ["Vinyl", "CD", "Cassette"]
-        MAX_QUANTITY = 10
-        MAX_TOTAL = 4
+    catalog_controll = catalog_controller.get_instance()
+    admin_controll = admin_controller.get_instance()
+    client_controll = client_controller.get_instance()
 
-        movie_name = lambda: "The " + f.job() if f.random_int() % 2 == 0 else " ".join(f.words()).capitalize()
-        album_name = movie_name
-        names = lambda: ", ".join([f.name() for x in range(1 + f.random_int() % 9)])
-        date = lambda: int(time.time() - f.random_int() * f.random_int())
-        asin = lambda: "".join(
-            [f.random_letter().upper() if f.random_int() % 2 == 0 else str(f.random_digit()) for x in range(10)])
-        phone_number = lambda: "".join([str(f.random_digit()) for x in range(3)]) + "-" + "".join(
-            [str(f.random_digit()) for x in range(3)]) + "-" + "".join([str(f.random_digit()) for x in range(4)])
+    movie_name = lambda: "The " + f.job() if f.random_int() % 2 == 0 else " ".join(f.words()).capitalize()
+    album_name = movie_name
+    names = lambda: ", ".join([f.name() for x in range(1 + f.random_int() % 9)])
+    date = lambda: int(time.time() - f.random_int() * f.random_int())
+    asin = lambda: "".join(
+        [f.random_letter().upper() if f.random_int() % 2 == 0 else str(f.random_digit()) for x in range(10)])
+    phone_number = lambda: "".join([str(f.random_digit()) for x in range(3)]) + "-" + "".join(
+        [str(f.random_digit()) for x in range(3)]) + "-" + "".join([str(f.random_digit()) for x in range(4)])
 
-        # Fake data generator
-        f = Faker()
+    # Fake data generator
+    f = Faker()
 
-        for b in range(NUM_BOOKS):
-            book = (
-            f.name(), f.catch_phrase(), book_types[f.random_int() % len(book_types)], f.random_int() % MAX_BOOK_PAGES,
-            f.last_name(), (f.random_int() % 100) + 1910, languages[f.random_int() % len(languages)], f.isbn10(),
-            f.isbn13(), 3, 3)
-            book_copy = (b+1, 0)
-            create_book(conn, book)
-            # Create copies of the same book - also done for every record type below
-            for cop in range(COPIES):
-                create_book_copy(conn, book_copy)
+    for b in range(NUM_BOOKS):
+        book_attributes = {'author': f.name(),
+                           'title': f.catch_phrase(),
+                           'format': book_types[f.random_int() % len(book_types)],
+                           'pages': f.random_int() % MAX_BOOK_PAGES,
+                           'publisher': f.last_name(),
+                           'year_of_publication': (f.random_int() % 100) + 1910,
+                           'language': languages[f.random_int()% len(languages)],
+                           'isbn_10': f.isbn10(),
+                           'isbn_13': f.isbn13(),
+                           'total_quantity': 3,
+                           'quantity_available': 3
+                           }
+        book_copy = (b+1, 0)
+        new_book = Book(book_attributes)
+        catalog_controll.view_catalog_inventory()[catalog_controll.BOOK_TYPE].add(new_book, True)
+        # Create copies of the same book - also done for every record type below
+        for cop in range(COPIES):
+            create_book_copy(database, book_copy)
 
-        for m in range(NUM_MAGAZINES):
-            magazine = (f.word().upper(), f.last_name(), f.random_int() % 100 + 1910,
-                        languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13(), 3, 3)
-            magazine_copy = (m+1, 0)
-            create_magazine(conn, magazine)
-            for cop in range(COPIES):
-                create_magazine_copy(conn, magazine_copy)
+    for m in range(NUM_MAGAZINES):
+        magazine_attributes = {'title': f.word().upper(),
+                               'publisher': f.last_name(),
+                               'year_of_publication': f.random_int() % 100 + 1910,
+                               'language': languages[f.random_int() % len(languages)],
+                               'isbn_10': f.isbn10(),
+                               'isbn_13': f.isbn13(),
+                               'total_quantity': 3,
+                               'quantity_available': 3
+                               }
+        magazine_copy = (m+1, 0)
+        new_magazine = Magazine(magazine_attributes)
+        catalog_controll.view_catalog_inventory()[catalog_controll.MAGAZINE_TYPE].add(new_magazine, True)
 
-        for m in range(NUM_MOVIES):
-            movie = (movie_name(), f.name(), names(), names(), languages[f.random_int() % len(languages)],
-                     languages[f.random_int() % len(languages)], languages[f.random_int() % len(languages)], date(),
-                     60 + f.random_int() % (2 * 60), 3, 3)
-            movie_copy = (m+1, 0)
-            create_movie(conn, movie)
-            for cop in range(COPIES):
-                create_movie_copy(conn, movie_copy)
+        for cop in range(COPIES):
+            create_magazine_copy(database, magazine_copy)
 
-        for a in range(NUM_ALBUMS):
-            album = (
-            album_types[f.random_int() % len(album_types)], album_name(), f.name(), f.word().upper(), date(), asin(), 3, 3)
-            album_copy = (a+1, 0)
-            create_album(conn, album)
-            for cop in range(COPIES):
-                create_album_copy(conn, album_copy)
+    for m in range(NUM_MOVIES):
+        movie_attributes = {'title':movie_name(),
+                            'director': f.name(),
+                            'producers': names(),
+                            'actors': names(),
+                            'language': languages[f.random_int() % len(languages)],
+                            'subtitles': languages[f.random_int() % len(languages)],
+                            'dubbed': languages[f.random_int() % len(languages)],
+                            'release_date': date(),
+                            'run_time': 60 + f.random_int() % (2 * 60),
+                            'total_quantity': 3,
+                            'quantity_available': 3
+                            }
+        movie_copy = (m+1, 0)
+        new_movie = Movie(movie_attributes)
+        catalog_controll.view_catalog_inventory()[catalog_controll.MOVIE_TYPE].add(new_movie, True)
+        for cop in range(COPIES):
+            create_movie_copy(database, movie_copy)
 
-        for u in range(NUM_USERS):
-            client = (
-            f.first_name(), f.last_name(), f.address().replace("\n", ", "), f.email(), phone_number(), f.user_name(),
-            f.password(), f.random_int() % 2, f.random_int() % 2, int(time.time() - f.random_int() * f.random_int()))
-            create_client(conn, client)
+    for a in range(NUM_ALBUMS):
+        album_attributes = {'type': album_types[f.random_int() % len(album_types)],
+                            'title': album_name(),
+                            'artist': f.name(),
+                            'label': f.word().upper(),
+                            'release_date': date(),
+                            'asin': asin(),'total_quantity': 3,
+                            'quantity_available': 3
+                            }
+        album_copy = (a+1, 0)
+        new_album = Album(album_attributes)
+        catalog_controll.view_catalog_inventory()[catalog_controll.ALBUM_TYPE].add(new_album, True)
+        for cop in range(COPIES):
+            create_album_copy(database, album_copy)
 
-        client1 = ('Aaron', 'Doe', '1451 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student1@hotmail.com',
-                   '514-555-0001', 'antman', 'password1', 0, 1, 1537207100)
-        client2 = ('Burns', 'Doe', '1452 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student2@hotmail.com',
-                   '514-555-0002', 'batman', 'password2', 0, 1, 1537207200)
-        client3 = ('Chloe', 'Doe', '1453 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student3@hotmail.com',
-                   '514-555-0003', 'catwoman', 'password3', 1, 1, 1537207300)
-        client4 = ('Donovan', 'Doe', '1454 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student4@hotmail.com',
-                   '514-555-0004', 'datman', 'password4', 0, 0, 1537207400)
-        client5 = ('Eric', 'Doe', '1455 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada', 'student5@hotmail.com',
-                   '514-555-0005', 'eagleman', 'password5', 1, 1, 1537207500)
+    for u in range(NUM_USERS):
+        user_attributes = {'firstName': f.first_name(),
+                             'lastName': f.last_name(),
+                             'physicalAddress': f.address().replace("\n", ", "),
+                             'email': f.email(),
+                             'phoneNumber': phone_number(),
+                             'username': f.user_name(),
+                             'password': f.password(),
+                             'isAdmin': f.random_int() % 2,
+                             'isLogged': f.random_int() % 2,
+                             'lastLogged': int(time.time() - f.random_int() * f.random_int())
+                             }
+        new_user = User(user_attributes)
+        if new_user._is_admin == 1:
+            admin_controll._admin_catalog.add(new_user,True)
+        elif new_user._is_admin ==0:
+            client_controll._client_catalog.add(new_user, True)
 
-        # create a new clients inside client table
-        create_client(conn, client1)
-        create_client(conn, client2)
-        create_client(conn, client3)
-        create_client(conn, client4)
-        create_client(conn, client5)
+    client1 = dict((('firstName', "Aaron"), ('lastName','Doe'), ('physicalAddress','1451 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada'),
+                    ('email','student1@hotmail.com'), ('phoneNumber','514-555-0001'), ( 'username' ,'antman'), ('password','password1'), ('isAdmin',0), ('isLogged',1), ('lastLogged',1537207100)))
 
-    # closes database
-    close_connection(conn)
+    client2 = dict((('firstName', "Chloe"), ('lastName', 'Doe'),
+          ('physicalAddress', '1452 De Maisonneuve Blvd. W. Montreal, QC H3G 1M8 Canada'),
+          ('email', 'student2@hotmail.com'), ('phoneNumber', '514-555-0002'), ('username', 'catwoman'),
+          ('password', 'password3'), ('isAdmin', 1), ('isLogged', 1), ('lastLogged', 1537207100)))
+
+    new_client1 = User(client1)
+    new_client2 = User(client2)
+    # create a new clients inside client table
+    client_controll._client_catalog.add(new_client1, True)
+    admin_controll._admin_catalog.add(new_client2, True)
+
+    #close database connection
+    database.close_connection()
 
 
 # run main function
