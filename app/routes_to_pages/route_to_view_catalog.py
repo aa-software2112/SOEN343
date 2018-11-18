@@ -52,7 +52,8 @@ def viewCatalogTab():
 def testing():
     if request.method == "POST":
         catalog_id = request.form["catalog_id"]
-        return "Entry - " + catalog_id + " has been added to cart!"
+        catalog_type = request.form["catalog_type"]
+        return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
     return render_template("/")
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])

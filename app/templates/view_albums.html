@@ -5,7 +5,8 @@
     <input type="hidden" name="catalog_type" value="4">
     <div class="my-4">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter album title" name="search_value" aria-label="album-search" aria-describedby="album-search-btn">
+            <input type="text" class="form-control" placeholder="Enter album title" name="search_value" aria-label="album-search"
+                aria-describedby="album-search-btn">
             <div class="input-group-prepend" id="album-search-btn">
                 <button class="btn btn-outline-info" type="submit">Search</button>
                 <button class="btn btn-info" data-toggle="collapse" data-target="#album-search-box" type="button">
@@ -31,8 +32,12 @@
             <th scope="col"> Label </th>
             <th scope="col"> Release Date </th>
             <th scope="col"> ASIN </th>
+            {% if g.user["_is.admin"] == 1 %}
             <th></th>
             <th></th>
+            {% else %}
+            <th></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -72,6 +77,16 @@
                     <input type="hidden" name="type" value="4">
                     <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
                         <i class="far fa-trash-alt"></i>
+                    </button>
+                </form>
+            </td>
+            {% else %}
+            <td>
+                <form action="/testing" method="post">
+                    <input type="hidden" id="{{catalog_item._id}}" name="id" value="{{ catalog_item._id }}">
+                    <input type="hidden" id="type" name="type" value="4">
+                    <button type="button" class="btn btn-outline-info result" id="btn-add-to-cart" onclick="add_to_cart('{{catalog_item._id}}');"
+                        data-toggle="popover"> <span><i class="fas fa-cart-arrow-down"></i></span>
                     </button>
                 </form>
             </td>

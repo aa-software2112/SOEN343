@@ -92,58 +92,19 @@
                 </td>
                 {% else %}
                 <td>
-                    <!-- <form action="/adminView/viewCatalogTab" method="POST">
-                        <input type="hidden" name="id" value="{{ catalog_item._id }}">
-                        <input type="hidden" name="type" value="1">
-                        <input type="hidden" name="message" value="10">
-                        
-                        <button type="submit" class="btn btn-outline-info" onclick="add_to_cart()"><i class="fas fa-cart-arrow-down"></i></button>
-                        <div id="result">Test</div>
-                        <div></div>
-
-                    </form> -->
                     <form action="/testing" method="post">
                         <input type="hidden" id="{{catalog_item._id}}" name="id" value="{{ catalog_item._id }}">
+                        <input type="hidden" id="type" name="type" value="1">
                         <button type="button" class="btn btn-outline-info result" id="btn-add-to-cart" onclick="add_to_cart('{{catalog_item._id}}');"
                             data-toggle="popover"> <span><i class="fas fa-cart-arrow-down"></i></span>
                         </button>
-
                     </form>
-
-
-                </td>
-                <td>
-
                 </td>
                 {% endif %}
-
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-
-<script type="text/javascript">
-    function add_to_cart(id) {
-        var req = new XMLHttpRequest();
-        var result = document.querySelectorAll(".result");
-
-        req.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                loanedMessage = this.responseText;
-                $(result[id - 1]).popover({
-                    placement: 'right',
-                    content: loanedMessage,
-                }).popover('show')
-
-            } else {
-                // result[id - 1].innerHTML = "Loading...";
-            }
-        }
-        req.open('POST', '/addToCart', true);
-        req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-        req.send("catalog_id=" + document.getElementById(id).value);
-    }
-</script>
 {% endblock %}
