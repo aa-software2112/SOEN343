@@ -2,6 +2,8 @@ import app.common_definitions.helper_functions as helper_functions
 from app.classes.cart import Cart
 
 class User:
+    #Maximun number of items that can be loaned by a single user
+    LOAN_LIMIT = 10
 
     def __init__(self, arguments):
 
