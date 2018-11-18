@@ -9,5 +9,7 @@ class Cart:
 		self._items.add(item)
 
 	def delete_by_id(self, id):
+		print("implementation required")
 
-	def make_loan(self):	
+	def make_loan(self):
+		print("implementation required")
