@@ -40,7 +40,7 @@ def login():
             session['logged_in'] = True
 
             # Do not send cart object to front end, i.e. pop it from the dict stored in user session.
-            session['user'] = vars(client)
+            session['user'] = vars(client).copy()
             session['user'].pop("_cart")
 
             # Display message after being redirected to home page.

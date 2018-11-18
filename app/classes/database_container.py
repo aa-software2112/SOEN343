@@ -9,25 +9,25 @@ class DatabaseContainer(object):
     _instance = None
 
     @staticmethod
-    def get_instance(pathToDatabase):
+    def get_instance(path_to_database):
         """ Static access method. """
         if DatabaseContainer._instance is None:
-            DatabaseContainer(pathToDatabase)
+            DatabaseContainer(path_to_database)
         return DatabaseContainer._instance
 
-    def __init__(self, pathToDatabase):
+    def __init__(self, path_to_database):
         if DatabaseContainer._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             DatabaseContainer._instance = self
             # Connect to database immediately
             self.connection = None
-            self.dbPath = pathToDatabase
+            self.dbPath = path_to_database
 
             try:
                 # Make database useable in all threads
                 self.connection = sqlite3.connect(
-                    pathToDatabase, check_same_thread=False)
+                    path_to_database, check_same_thread=False)
 
                 # Make database accessible through index and keys
                 self.connection.row_factory = sqlite3.Row
