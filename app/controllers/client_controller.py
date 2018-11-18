@@ -26,7 +26,7 @@ class ClientController(Controller):
             Controller.__init__(self, database)
 
             self._db_loaded = False
-            self._client_catalog = UserCatalog(database)
+            self._client_catalog = UserCatalog.get_instance(database)
             self._catalog_controller = catalog_controller
 
     def load_database_into_memory(self):

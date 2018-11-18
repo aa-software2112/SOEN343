@@ -45,10 +45,25 @@ class Catalog(abc.ABC):
 
 # Can be used to store either administrators or clients
 class UserCatalog(Catalog):
-    
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
+
+    @staticmethod
+    def get_instance(database):
+        """ Static access method. """
+        if UserCatalog._instance is None:
+            UserCatalog(database)
+        return UserCatalog._instance
+
     def __init__(self, database):
-        self.db = database
-        self._users = {}
+        if UserCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            UserCatalog._instance = self
+            self.db = database
+            self._users = {}
         
     def get_all(self):
         return self._users
@@ -107,6 +122,10 @@ class UserCatalog(Catalog):
 
 
 class BookCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Author":"_author",
                 "Title":"_title",
@@ -124,10 +143,21 @@ class BookCatalog(Catalog):
              "Descending Year":"_year_of_publication"
              }
 
+    @staticmethod
+    def get_instance(database):
+        """ Static access method. """
+        if BookCatalog._instance is None:
+            BookCatalog(database)
+        return BookCatalog._instance
+
     def __init__(self, database):
-        self.db = database
-        # private variable convention in python have '_' prefix
-        self._books = {}
+        if BookCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            BookCatalog._instance = self
+            self.db = database
+            # private variable convention in python have '_' prefix
+            self._books = {}
 
     def get_all(self):
         return self._books
@@ -286,6 +316,10 @@ class BookCatalog(Catalog):
 
 
 class MovieCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Director": "_director",
                "Title": "_title",
@@ -303,9 +337,20 @@ class MovieCatalog(Catalog):
              "Descending Runtime":"_runtime"
              }
 
+    @staticmethod
+    def get_instance(database):
+        """ Static access method. """
+        if MovieCatalog._instance is None:
+            MovieCatalog(database)
+        return MovieCatalog._instance
+
     def __init__(self, database):
-        self.db = database
-        self._movies = {}
+        if MovieCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            MovieCatalog._instance = self
+            self.db = database
+            self._movies = {}
 
     def get_all(self):
         return self._movies
@@ -466,6 +511,10 @@ class MovieCatalog(Catalog):
 
 
 class MagazineCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Title": "_title",
                "Publisher": "_publisher",
@@ -480,9 +529,20 @@ class MagazineCatalog(Catalog):
              "Descending Year":"_year_of_publication"
              }
 
+    @staticmethod
+    def get_instance(database):
+        """ Static access method. """
+        if MagazineCatalog._instance is None:
+            MagazineCatalog(database)
+        return MagazineCatalog._instance
+
     def __init__(self, database):
-        self.db = database
-        self._magazines = {}
+        if MagazineCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            MagazineCatalog._instance = self
+            self.db = database
+            self._magazines = {}
 
     def get_all(self):
         return self._magazines
@@ -638,6 +698,10 @@ class MagazineCatalog(Catalog):
         return helper_functions.filter(transformed_dict, last_searched_list)
 
 class AlbumCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Title": "_title",
                "Artist": "_artist",
@@ -652,9 +716,20 @@ class AlbumCatalog(Catalog):
              "Descending Label":"_label"
              }
 
+    @staticmethod
+    def get_instance(database):
+        """ Static access method. """
+        if AlbumCatalog._instance is None:
+            AlbumCatalog(database)
+        return AlbumCatalog._instance
+
     def __init__(self, database):
-        self.db = database
-        self._albums = {}
+        if AlbumCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            AlbumCatalog._instance = self
+            self.db = database
+            self._albums = {}
 
     def get_all(self):
         return self._albums

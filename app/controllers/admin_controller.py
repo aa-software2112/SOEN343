@@ -31,7 +31,7 @@ class AdminController(Controller):
             self._catalog_controller = catalog_controller
 
             # Admin Controller contains a catalog of admin users
-            self._admin_catalog = UserCatalog(database)
+            self._admin_catalog = UserCatalog.get_instance(database)
 
             self._db_loaded = False
 
