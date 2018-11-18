@@ -7,3 +7,6 @@ class Cart:
 
 	def add_to_cart(self, item):
 		self._items.add(item)
+
+	def delete_by_id(self, o_id):
+		self._items.remove(o_id)
