@@ -1,5 +1,7 @@
 class Book:
     record_type = "Book"
+    # Book can be loaned for 1 week (converted to seconds, #weeks x days/week x seconds/day)
+    loan_time = 1 * 7 * 86400
 
     def __init__(self, attributes):
         # Currently from CatalogController, the .fetchall() returns a
