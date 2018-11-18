@@ -11,10 +11,10 @@ class ClientController(Controller):
     _instance = None
 
     @staticmethod
-    def get_instance():
+    def get_instance(database, catalog_controller):
         """ Static access method. """
         if ClientController._instance is None:
-            ClientController()
+            ClientController(database, catalog_controller)
         return ClientController._instance
 
     def __init__(self, database, catalog_controller):

@@ -18,10 +18,10 @@ class CatalogController(Controller):
     ALBUM_TYPE = "4"
 
     @staticmethod
-    def get_instance():
+    def get_instance(database):
         """ Static access method. """
         if CatalogController._instance is None:
-            CatalogController()
+            CatalogController(database)
         return CatalogController._instance
 
     def __init__(self, database):

@@ -9,10 +9,10 @@ class DatabaseContainer(object):
     _instance = None
 
     @staticmethod
-    def get_instance():
+    def get_instance(pathToDatabase):
         """ Static access method. """
         if DatabaseContainer._instance is None:
-            DatabaseContainer()
+            DatabaseContainer(pathToDatabase)
         return DatabaseContainer._instance
 
     def __init__(self, pathToDatabase):

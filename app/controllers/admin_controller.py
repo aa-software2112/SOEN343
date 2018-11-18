@@ -14,10 +14,10 @@ class AdminController(Controller):
     _instance = None
 
     @staticmethod
-    def get_instance():
+    def get_instance(database, catalog_controller):
         """ Static access method. """
         if AdminController._instance is None:
-            AdminController()
+            AdminController(database, catalog_controller)
         return AdminController._instance
 
     def __init__(self, database, catalog_controller):

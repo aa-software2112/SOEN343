@@ -15,16 +15,16 @@ from app.common_definitions import helper_functions
 sqlite_script.initializeAndFillDatabase(PATH_TO_DATABASE)
 
 # Connect to the database through an abstracted object - this object must be imported into route files for use
-databaseObject = DatabaseContainer(PATH_TO_DATABASE)
+databaseObject = DatabaseContainer.get_instance(PATH_TO_DATABASE)
 
 # Send the database object to all Controllers
-catalog_controller = CatalogController(databaseObject)
+catalog_controller = CatalogController.get_instance(databaseObject)
 catalog_controller.load_database_into_memory()
 
-client_controller = ClientController(databaseObject, catalog_controller)
+client_controller = ClientController.get_instance(databaseObject, catalog_controller)
 client_controller.load_database_into_memory()
 
-admin_controller = AdminController(databaseObject, catalog_controller)
+admin_controller = AdminController.get_instance(databaseObject, catalog_controller)
 admin_controller.load_database_into_memory()
 
 # Helper function to be used in front end
