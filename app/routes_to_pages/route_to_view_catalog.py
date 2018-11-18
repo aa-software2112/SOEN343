@@ -54,7 +54,6 @@ def testing():
         catalog_id = request.form["catalog_id"]
         catalog_type = request.form["catalog_type"]
         return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
-    return render_template("/")
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():
