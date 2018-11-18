@@ -49,11 +49,12 @@ def viewCatalogTab():
     return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria )
 
 @app.route("/addToCart", methods=['GET', 'POST'])
-def testing():
+def addToCart():
     if request.method == "POST":
         catalog_id = request.form["catalog_id"]
         catalog_type = request.form["catalog_type"]
-        return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
+    return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
+
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
 def search():
@@ -151,3 +152,8 @@ def backToList():
             last_searched_list = client_controller.get_last_searched_list(g.user["_id"])
 
     return render_template(url_string, records=last_searched_list, filters=filters, sorting_criteria=sorting_criteria)
+
+@app.route("/viewCart", methods=['GET', 'POST'])
+def viewCart():
+
+    return render_template("view_cart.html")

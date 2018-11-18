@@ -92,7 +92,7 @@
                 </td>
                 {% else %}
                 <td>
-                    <form action="/testing" method="post">
+                    <form action="/" method="post">
                         <input type="hidden" id="{{catalog_item._id}}" name="id" value="{{ catalog_item._id }}">
                         <input type="hidden" id="type" name="type" value="1">
                         <button type="button" class="btn btn-outline-info result" id="btn-add-to-cart" onclick="add_to_cart('{{catalog_item._id}}');"
