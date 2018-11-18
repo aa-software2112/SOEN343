@@ -1,6 +1,9 @@
 from app.common_definitions.helper_functions import convert_epoch_to_datetime as to_datetime
 
+
 class Movie:
+    # Movie can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
+    loan_time = 2 * 7 * 86400
 
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a
