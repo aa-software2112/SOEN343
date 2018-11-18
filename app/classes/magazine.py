@@ -1,4 +1,5 @@
 class Magazine:
+    record_type = "Magazine"
 
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a

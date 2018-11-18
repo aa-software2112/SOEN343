@@ -1,7 +1,11 @@
 from app.common_definitions.helper_functions import convert_epoch_to_datetime as to_datetime
 
-class Album:
 
+class Album:
+    record_type = "Album"  
+    # Album can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
+    loan_time = 2 * 7 * 86400
+    
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a
         # sqlite3.row object, so I convert it to a dictionary to search the
