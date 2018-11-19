@@ -3,6 +3,7 @@ from app import app
 from app import client_controller, admin_controller
 from app.classes.forms import LoginForm
 from app.common_definitions.helper_functions import is_logged
+import time
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 
@@ -33,6 +34,8 @@ def login():
 
         else:
             client = user_response[0]
+
+            client.set_last_logged(time.time())
 
             # Set session.
             # The user will not have access to the login page while logged, but the session will be reset just in case.

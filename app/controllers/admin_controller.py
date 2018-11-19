@@ -7,6 +7,7 @@ from app.classes.movie import Movie
 from app.classes.catalogs import UserCatalog
 from app.classes.database_container import DatabaseContainer
 from app.controllers.catalog_controller import CatalogController
+import time
 
 class AdminController(Controller):
     """
@@ -41,6 +42,13 @@ class AdminController(Controller):
     def get_all_logged_admins(self):
 
         return list(self._admin_catalog.get_all().values())
+
+    def get_all_active_admins(self):
+        all_admins = list(self._admin_catalog.get_all().values())
+        # active_admins = [admin for admin in all_admins if admin._is_logged is True]
+        # For the sake of testing, we can define an active user as one who has logged in in the past 24 hours.
+        active_admins = [admin for admin in all_admins if time.time() - admin._last_logged < 86400]
+        return active_admins
 
     def load_database_into_memory(self):
 

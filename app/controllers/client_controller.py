@@ -4,6 +4,7 @@ from app.classes.user import Admin, Client
 from app.classes.user_container import User
 from app.classes.database_container import DatabaseContainer
 from app.controllers.catalog_controller import CatalogController
+import time
 
 class ClientController(Controller):
     """
@@ -52,6 +53,13 @@ class ClientController(Controller):
     def get_all_logged_clients(self):
 
         return list(self._client_catalog.get_all().values())
+
+    def get_all_active_clients(self):
+        all_clients = list(self._client_catalog.get_all().values())
+        # active_clients = [client for client in all_clients if client._is_logged is True]
+        # For the sake of testing, we can define an active user as one who has logged in in the past 24 hours.
+        active_clients = [client for client in all_clients if time.time() - client._last_logged < 86400]
+        return active_clients
 
     # function takes self and a string "username" to get the user from the client table.
     # returns list with client information or emptylist if client doesn't
