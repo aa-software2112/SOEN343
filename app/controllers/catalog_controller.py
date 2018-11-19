@@ -4,7 +4,7 @@ from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
 from app.classes.catalogs import *
-
+from app.classes.database_container import DatabaseContainer
 
 class CatalogController(Controller):
     """
@@ -21,19 +21,19 @@ class CatalogController(Controller):
     def get_instance():
         """ Static access method. """
         if CatalogController._instance is None:
-            CatalogController()
+            CatalogController._instance = CatalogController()
         return CatalogController._instance
 
-    def __init__(self, database):
+    def __init__(self):
         if CatalogController._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             CatalogController._instance = self
-            Controller.__init__(self, database)
-            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(database),
-                               CatalogController.MOVIE_TYPE: MovieCatalog(database),
-                               CatalogController.MAGAZINE_TYPE: MagazineCatalog(database),
-                               CatalogController.ALBUM_TYPE: AlbumCatalog(database)}
+            Controller.__init__(self, DatabaseContainer.get_instance())
+            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(DatabaseContainer.get_instance()),
+                               CatalogController.MOVIE_TYPE: MovieCatalog(DatabaseContainer.get_instance()),
+                               CatalogController.MAGAZINE_TYPE: MagazineCatalog(DatabaseContainer.get_instance()),
+                               CatalogController.ALBUM_TYPE: AlbumCatalog(DatabaseContainer.get_instance())}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
