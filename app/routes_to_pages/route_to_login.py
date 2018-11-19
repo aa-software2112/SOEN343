@@ -3,6 +3,7 @@ from app import app
 from app import client_controller, admin_controller
 from app.classes.forms import LoginForm
 from app.common_definitions.helper_functions import is_logged
+import time
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 
@@ -32,15 +33,21 @@ def login():
             return render_template('login.html', form=form, error=error)
 
         else:
-            client = user_response[0]
+            user = user_response[0]
+
+            if user._is_admin == 1:
+                admin_controller.login_admin(get_username)
+            else:
+                client_controller.login_client(get_username)
+
 
             # Set session.
             # The user will not have access to the login page while logged, but the session will be reset just in case.
             session.clear()
             session['logged_in'] = True
 
-            # Make a copy of the user attribute dictionary and pop the cart which we do not want to send to front end.
-            session['user'] = vars(client).copy()
+            # Do not send cart object to front end, i.e. pop it from the dict stored in user session.
+            session['user'] = vars(user).copy()
             session['user'].pop("_cart")
 
             # Display message after being redirected to home page.
