@@ -333,7 +333,7 @@ def initializeAndFillDatabase(pathToDB):
         for m in range(NUM_MAGAZINES):
             magazine = (f.word().upper(), f.last_name(), f.random_int() % 100 + 1910,
                         languages[f.random_int() % len(languages)], f.isbn10(), f.isbn13(), 3, 3)
-            magazine_copy = (m+1, 0)
+            magazine_copy = (m+1,)
             create_magazine(conn, magazine)
             for cop in range(COPIES):
                 create_magazine_copy(conn, magazine_copy)

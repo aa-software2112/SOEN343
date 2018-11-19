@@ -25,8 +25,23 @@ class Album:
             self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
             
         self._ASIN = arguments['asin']
-        self._total_quantity = 1
-        self._quantity_available = 1
+
+        if 'total_quantity' in dict(arguments):
+
+            self._total_quantity = arguments["total_quantity"]
+
+        else:
+
+            self._total_quantity = 1
+
+        if 'quantity_available' in dict(arguments):
+
+            self._quantity_available = arguments["quantity_available"]
+
+        else:
+
+            self._quantity_available = 1
+
         
     def get_id(self):
         """Returns the id of the object"""

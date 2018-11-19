@@ -30,10 +30,10 @@ class CatalogController(Controller):
         else:
             CatalogController._instance = self
             Controller.__init__(self, DatabaseContainer.get_instance())
-            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(DatabaseContainer.get_instance()),
-                               CatalogController.MOVIE_TYPE: MovieCatalog(DatabaseContainer.get_instance()),
-                               CatalogController.MAGAZINE_TYPE: MagazineCatalog(DatabaseContainer.get_instance()),
-                               CatalogController.ALBUM_TYPE: AlbumCatalog(DatabaseContainer.get_instance())}
+            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog().get_instance(),
+                               CatalogController.MOVIE_TYPE: MovieCatalog().get_instance(),
+                               CatalogController.MAGAZINE_TYPE: MagazineCatalog().get_instance(),
+                               CatalogController.ALBUM_TYPE: AlbumCatalog().get_instance()}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
@@ -88,6 +88,9 @@ class CatalogController(Controller):
         return self._constructors[catalog_type]
 
     def add_entry_to_catalog(self, catalog_type, record_key_values):
+
+        print(catalog_type)
+        print(record_key_values)
 
         # Create the new record based on catalog_type and key_values
         new_record = self.get_constructor(catalog_type)(record_key_values)
