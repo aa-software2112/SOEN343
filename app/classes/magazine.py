@@ -34,8 +34,6 @@ class Magazine:
 
             self._quantity_available = 1
 
-        print(self.__str__())
-
 
     def get_id(self):
         """Returns the id of the object"""

@@ -17,6 +17,7 @@ class Book:
         self._pages = arguments['pages']
         self._publisher = arguments['publisher']
         # Make sure it is in integer format
+
         self._year_of_publication = int(arguments['year_of_publication'])
         self._language = arguments['language']
         self._ISBN10 = arguments['isbn_10']
@@ -37,7 +38,6 @@ class Book:
         else:
 
             self._quantity_available = 1
-
 
     def get_id(self):
         """Returns the id of the object"""

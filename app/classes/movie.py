@@ -28,7 +28,6 @@ class Movie:
             self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
         self._runtime = arguments['run_time']
 
-
         if 'total_quantity' in dict(arguments):
 
             self._total_quantity = arguments["total_quantity"]
@@ -44,7 +43,6 @@ class Movie:
         else:
 
             self._quantity_available = 1
-
 
 
     def get_id(self):

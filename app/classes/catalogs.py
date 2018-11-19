@@ -207,7 +207,7 @@ class BookCatalog(Catalog):
                 book._id = existing_book_id_fetched[0]
                 book._total_quantity = existing_book_id_fetched[1] + 1
                 book._quantity_available = existing_book_id_fetched[2] + 1
-                print(book._id , book._total_quantity, book._quantity_available)
+                #print(book._id , book._total_quantity, book._quantity_available)
 
 
                 #insert book into book_copy table
@@ -393,7 +393,6 @@ class MovieCatalog(Catalog):
                 movie._id = existing_movie_id_fetched[0]
                 movie._total_quantity = existing_movie_id_fetched[1] + 1
                 movie._quantity_available = existing_movie_id_fetched[2] + 1
-                print(movie._id , movie._total_quantity, movie._quantity_available)
 
 
                 #insert movie into movie_copy table
@@ -543,8 +542,6 @@ class MagazineCatalog(Catalog):
 
     def add(self, magazine, add_to_db):
 
-        print(magazine)
-
         if add_to_db is True:
 
             #If magazine exist, gets cursor that holds id, total_quantity & quantity_available of a magazine from magazine table, by quering title and year of publication of the added magazine.
@@ -586,7 +583,7 @@ class MagazineCatalog(Catalog):
                 magazine._id = existing_magazine_id_fetched[0]
                 magazine._total_quantity = existing_magazine_id_fetched[1] + 1
                 magazine._quantity_available = existing_magazine_id_fetched[2] + 1
-                print(magazine._id , magazine._total_quantity, magazine._quantity_available)
+                #print(magazine._id , magazine._total_quantity, magazine._quantity_available)
 
 
                 #insert magazine into magazine_copy table
@@ -752,8 +749,7 @@ class AlbumCatalog(Catalog):
                 tuple_for_insert_query = (album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN, album._total_quantity, album._quantity_available)
 
                 # getting the id of the last inserted album
-                new_album_id = self.db.execute_query_write(
-                insert_new_album_query, tuple_for_insert_query).lastrowid
+                new_album_id = self.db.execute_query_write(insert_new_album_query, tuple_for_insert_query).lastrowid
                 # since the object created has by default id = 0, we have to set
                 # its id to the id obtained above
                 album._id = new_album_id
@@ -772,13 +768,11 @@ class AlbumCatalog(Catalog):
                 album._id = existing_album_id_fetched[0]
                 album._total_quantity = existing_album_id_fetched[1] + 1
                 album._quantity_available = existing_album_id_fetched[2] + 1
-                print(album._id , album._total_quantity, album._quantity_available)
-
-
                 #insert album into album_copy table
                 insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
                 'VALUES(?,?)'
                 tuple_for_insert_copy_query =(album._id, 0)
+
                 self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
 
                 #update album quantity in database

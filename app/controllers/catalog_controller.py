@@ -30,10 +30,10 @@ class CatalogController(Controller):
         else:
             CatalogController._instance = self
             Controller.__init__(self, DatabaseContainer.get_instance())
-            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog().get_instance(),
-                               CatalogController.MOVIE_TYPE: MovieCatalog().get_instance(),
-                               CatalogController.MAGAZINE_TYPE: MagazineCatalog().get_instance(),
-                               CatalogController.ALBUM_TYPE: AlbumCatalog().get_instance()}
+            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog.get_instance(),
+                               CatalogController.MOVIE_TYPE: MovieCatalog.get_instance(),
+                               CatalogController.MAGAZINE_TYPE: MagazineCatalog.get_instance(),
+                               CatalogController.ALBUM_TYPE: AlbumCatalog.get_instance()}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
