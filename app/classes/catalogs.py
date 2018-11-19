@@ -7,7 +7,7 @@ from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
 from app.classes.album import Album
-
+from app.classes.database_container import DatabaseContainer
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -45,9 +45,15 @@ class Catalog(abc.ABC):
 
 # Can be used to store either administrators or clients
 class UserCatalog(Catalog):
-    
-    def __init__(self, database):
-        self.db = database
+    """
+        This class does NOT use the Singleton pattern as
+        multiple instances of this class may be created (due to there
+        being an admin and client - two separate entities)
+        """
+
+    def __init__(self):
+
+        self.db = DatabaseContainer.get_instance()
         self._users = {}
         
     def get_all(self):
@@ -107,6 +113,10 @@ class UserCatalog(Catalog):
 
 
 class BookCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Author":"_author",
                 "Title":"_title",
@@ -124,10 +134,21 @@ class BookCatalog(Catalog):
              "Descending Year":"_year_of_publication"
              }
 
-    def __init__(self, database):
-        self.db = database
-        # private variable convention in python have '_' prefix
-        self._books = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if BookCatalog._instance is None:
+            BookCatalog._instance = BookCatalog()
+        return BookCatalog._instance
+
+    def __init__(self):
+        if BookCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            BookCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            # private variable convention in python have '_' prefix
+            self._books = {}
 
     def get_all(self):
         return self._books
@@ -186,7 +207,7 @@ class BookCatalog(Catalog):
                 book._id = existing_book_id_fetched[0]
                 book._total_quantity = existing_book_id_fetched[1] + 1
                 book._quantity_available = existing_book_id_fetched[2] + 1
-                print(book._id , book._total_quantity, book._quantity_available)
+                #print(book._id , book._total_quantity, book._quantity_available)
 
 
                 #insert book into book_copy table
@@ -286,6 +307,10 @@ class BookCatalog(Catalog):
 
 
 class MovieCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Director": "_director",
                "Title": "_title",
@@ -303,9 +328,20 @@ class MovieCatalog(Catalog):
              "Descending Runtime":"_runtime"
              }
 
-    def __init__(self, database):
-        self.db = database
-        self._movies = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if MovieCatalog._instance is None:
+            MovieCatalog._instance = MovieCatalog()
+        return MovieCatalog._instance
+
+    def __init__(self):
+        if MovieCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            MovieCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._movies = {}
 
     def get_all(self):
         return self._movies
@@ -357,7 +393,7 @@ class MovieCatalog(Catalog):
                 movie._id = existing_movie_id_fetched[0]
                 movie._total_quantity = existing_movie_id_fetched[1] + 1
                 movie._quantity_available = existing_movie_id_fetched[2] + 1
-                print(movie._id , movie._total_quantity, movie._quantity_available)
+                #print(movie._id , movie._total_quantity, movie._quantity_available)
 
 
                 #insert movie into movie_copy table
@@ -466,6 +502,10 @@ class MovieCatalog(Catalog):
 
 
 class MagazineCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Title": "_title",
                "Publisher": "_publisher",
@@ -480,9 +520,20 @@ class MagazineCatalog(Catalog):
              "Descending Year":"_year_of_publication"
              }
 
-    def __init__(self, database):
-        self.db = database
-        self._magazines = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if MagazineCatalog._instance is None:
+            MagazineCatalog._instance = MagazineCatalog()
+        return MagazineCatalog._instance
+
+    def __init__(self):
+        if MagazineCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            MagazineCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._magazines = {}
 
     def get_all(self):
         return self._magazines
@@ -491,6 +542,7 @@ class MagazineCatalog(Catalog):
         return self._magazines[id]
 
     def add(self, magazine, add_to_db):
+
 
         if add_to_db is True:
 
@@ -521,9 +573,9 @@ class MagazineCatalog(Catalog):
                 self._magazines[new_magazine_id] = magazine
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query = (new_magazine_id, 0)
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
+                tuple_for_insert_copy_query = (new_magazine_id,)
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
             #else already exist. Need to add new magazine in second table and update quantity of first table
@@ -533,13 +585,13 @@ class MagazineCatalog(Catalog):
                 magazine._id = existing_magazine_id_fetched[0]
                 magazine._total_quantity = existing_magazine_id_fetched[1] + 1
                 magazine._quantity_available = existing_magazine_id_fetched[2] + 1
-                print(magazine._id , magazine._total_quantity, magazine._quantity_available)
+                #print(magazine._id , magazine._total_quantity, magazine._quantity_available)
 
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query =(magazine._id, 0)
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
+                tuple_for_insert_copy_query =(magazine._id, )
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
                 #update magazine quantity in database
@@ -638,6 +690,10 @@ class MagazineCatalog(Catalog):
         return helper_functions.filter(transformed_dict, last_searched_list)
 
 class AlbumCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Title": "_title",
                "Artist": "_artist",
@@ -652,9 +708,20 @@ class AlbumCatalog(Catalog):
              "Descending Label":"_label"
              }
 
-    def __init__(self, database):
-        self.db = database
-        self._albums = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if AlbumCatalog._instance is None:
+            AlbumCatalog._instance = AlbumCatalog()
+        return AlbumCatalog._instance
+
+    def __init__(self):
+        if AlbumCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            AlbumCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._albums = {}
 
     def get_all(self):
         return self._albums
@@ -704,7 +771,7 @@ class AlbumCatalog(Catalog):
                 album._id = existing_album_id_fetched[0]
                 album._total_quantity = existing_album_id_fetched[1] + 1
                 album._quantity_available = existing_album_id_fetched[2] + 1
-                print(album._id , album._total_quantity, album._quantity_available)
+                # print(album._id , album._total_quantity, album._quantity_available)
 
 
                 #insert album into album_copy table

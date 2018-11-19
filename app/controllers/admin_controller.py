@@ -5,6 +5,9 @@ from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
 from app.classes.catalogs import UserCatalog
+from app.classes.database_container import DatabaseContainer
+from app.controllers.catalog_controller import CatalogController
+import time
 
 
 class AdminController(Controller):
@@ -17,29 +20,29 @@ class AdminController(Controller):
     def get_instance():
         """ Static access method. """
         if AdminController._instance is None:
-            AdminController()
+            AdminController._instance = AdminController()
         return AdminController._instance
 
-    def __init__(self, database, catalog_controller):
+    def __init__(self):
         if AdminController._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             AdminController._instance = self
-            Controller.__init__(self, database)
+            Controller.__init__(self, DatabaseContainer.get_instance())
 
             # Admin Controller should have an instance of catalog controller
-            self._catalog_controller = catalog_controller
+            self._catalog_controller = CatalogController.get_instance()
 
             # Admin Controller contains a catalog of admin users
-            self._admin_catalog = UserCatalog(database)
+            self._admin_catalog = UserCatalog()
 
             self._db_loaded = False
 
-
-
     def get_all_logged_admins(self):
+        all_admins = list(self._admin_catalog.get_all().values())
+        logged_admins = [admin for admin in all_admins if admin._is_logged == 1]
+        return logged_admins
 
-        return list(self._admin_catalog.get_all().values())
 
     def load_database_into_memory(self):
 
@@ -59,6 +62,15 @@ class AdminController(Controller):
         # Uncomment these two lines to see all objects in all catalogs
         # for k, v in self._admin_catalog.get_all().items():
         #    print(v)
+
+    def login_admin(self, username):
+        admin = self.get_admin_by_username(username)
+
+        if len(admin) == 1:
+            admin = admin[0]
+            admin._is_logged = 1
+            admin._last_logged = time.time()
+            self._admin_catalog.modify(admin)
 
     def logout_admin(self, username):
         admin = self.get_admin_by_username(username)
