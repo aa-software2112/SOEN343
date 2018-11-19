@@ -572,8 +572,8 @@ class MagazineCatalog(Catalog):
                 self._magazines[new_magazine_id] = magazine
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
                 tuple_for_insert_copy_query = (new_magazine_id, 0)
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
@@ -588,8 +588,8 @@ class MagazineCatalog(Catalog):
 
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
                 tuple_for_insert_copy_query =(magazine._id, 0)
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
