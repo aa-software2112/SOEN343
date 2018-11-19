@@ -26,17 +26,17 @@ class Book:
 
             self._total_quantity = arguments["total_quantity"]
 
-        else:
+        # else:
 
-            self._total_quantity = 1
+          #  self._total_quantity = 1
 
         if 'quantity_available' in dict(arguments):
 
             self._quantity_available = arguments["quantity_available"]
 
-        else:
+        # else:
 
-            self._quantity_available = 1
+          #  self._quantity_available = 1
 
 
     def get_id(self):

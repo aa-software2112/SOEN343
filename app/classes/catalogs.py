@@ -74,7 +74,9 @@ class UserCatalog(Catalog):
                                   modified_user._id)
 
         self.db.execute_query_write(modify_user_query, tuple_for_modify_query)
-        self._users[int(modified_user.get_id())].__dict__.update(modified_user.__dict__)
+
+        for key, value in modified_user.__dict__.items():
+            setattr(self._users[int(modified_user.get_id())], key, value)
 
     def add(self, user, add_to_db):
 
@@ -165,7 +167,9 @@ class BookCatalog(Catalog):
         modified_book._year_of_publication, modified_book._language, modified_book._ISBN10, modified_book._ISBN13,
         modified_book._id)
         self.db.execute_query_write(modify_book_query, tuple_for_modify_query)
-        self._books[int(modified_book.get_id())].__dict__.update(modified_book.__dict__)
+
+        for key, value in modified_book.__dict__.items():
+            setattr(self._books[int(modified_book.get_id())], key, value)
 
     def add(self, book, add_to_db):
 
@@ -420,7 +424,12 @@ class MovieCatalog(Catalog):
         modified_movie._subtitles, modified_movie._dubbed, to_epoch(modified_movie._release_date),
         modified_movie._runtime, modified_movie._id)
         self.db.execute_query_write(modify_movie_query, tuple_for_modify_query)
-        self._movies[int(modified_movie.get_id())].__dict__.update(modified_movie.__dict__)
+
+        print(self._movies[int(modified_movie.get_id())]._total_quantity)
+
+        for key, value in modified_movie.__dict__.items():
+            setattr(self._movies[int(modified_movie.get_id())], key, value)
+
 
     def get_copies(self, id):
 
@@ -607,9 +616,11 @@ class MagazineCatalog(Catalog):
         tuple_for_modify_query = (
         modified_magazine._title, modified_magazine._publisher, modified_magazine._year_of_publication,
         modified_magazine._language, modified_magazine._ISBN10, modified_magazine._ISBN13, modified_magazine._id)
-        self.db.execute_query_write(
-            modify_magazine_query, tuple_for_modify_query)
-        self._magazines[int(modified_magazines.get_id())].__dict__.update(modified_magazines.__dict__)
+        self.db.execute_query_write(modify_magazine_query, tuple_for_modify_query)
+
+        for key, value in modified_magazine.__dict__.items():
+            setattr(self._magazines[int(modified_magazine.get_id())], key, value)
+
 
     def get_copies(self, id):
 
@@ -793,7 +804,9 @@ class AlbumCatalog(Catalog):
                                   modified_album._label, to_epoch(modified_album._release_date), modified_album._ASIN,
                                   int(modified_album._id))
         self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
-        self._albums[int(modified_albums.get_id())].__dict__.update(modified_albums.__dict__)
+
+        for key, value in modified_album.__dict__.items():
+            setattr(self._albums[int(modified_album.get_id())], key, value)
 
     def get_copies(self, id):
 
