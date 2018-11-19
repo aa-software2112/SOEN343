@@ -2,7 +2,8 @@ from app.controllers.controller import Controller
 from app.classes.catalogs import UserCatalog
 from app.classes.user import Admin, Client
 from app.classes.user_container import User
-
+from app.classes.database_container import DatabaseContainer
+from app.controllers.catalog_controller import CatalogController
 
 class ClientController(Controller):
     """
@@ -14,20 +15,20 @@ class ClientController(Controller):
     def get_instance():
         """ Static access method. """
         if ClientController._instance is None:
-            ClientController()
+            ClientController._instance = ClientController()
         return ClientController._instance
 
-    def __init__(self, database, catalog_controller):
+    def __init__(self):
         if ClientController._instance is not None:
             raise Exception("This class is a singleton!")
 
         else:
             ClientController._instance = self
-            Controller.__init__(self, database)
+            Controller.__init__(self, DatabaseContainer.get_instance())
 
             self._db_loaded = False
-            self._client_catalog = UserCatalog(database)
-            self._catalog_controller = catalog_controller
+            self._client_catalog = UserCatalog()
+            self._catalog_controller = CatalogController.get_instance()
 
     def load_database_into_memory(self):
 

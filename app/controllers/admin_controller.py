@@ -5,7 +5,8 @@ from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
 from app.classes.catalogs import UserCatalog
-
+from app.classes.database_container import DatabaseContainer
+from app.controllers.catalog_controller import CatalogController
 
 class AdminController(Controller):
     """
@@ -17,21 +18,21 @@ class AdminController(Controller):
     def get_instance():
         """ Static access method. """
         if AdminController._instance is None:
-            AdminController()
+            AdminController._instance = AdminController()
         return AdminController._instance
 
-    def __init__(self, database, catalog_controller):
+    def __init__(self):
         if AdminController._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             AdminController._instance = self
-            Controller.__init__(self, database)
+            Controller.__init__(self, DatabaseContainer.get_instance())
 
             # Admin Controller should have an instance of catalog controller
-            self._catalog_controller = catalog_controller
+            self._catalog_controller = CatalogController.get_instance()
 
             # Admin Controller contains a catalog of admin users
-            self._admin_catalog = UserCatalog(database)
+            self._admin_catalog = UserCatalog()
 
             self._db_loaded = False
 
