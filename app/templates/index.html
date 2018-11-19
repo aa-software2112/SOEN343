@@ -29,6 +29,14 @@
                        <a class="nav-item nav-link" href="/viewCatalog"> View Catalog </a>
                        {%endif%}
                    {% endif %}
+               </li>
+               <li class="nav-item">
+                    {% if g.user %}
+                        {% if g.user["_is_admin"] != 1 %}
+                            <a class="nav-item nav-link" href="/myLoans"> My Loans </a>
+                        {% endif %}
+                    {% endif %}
+               </li>
             </ul>
 
             <!-- Display the navbar depending on the cookies -->
@@ -53,15 +61,15 @@
             {% if g.user %}
             <h1 class="display-4">
                 {% block pageTitle %}
-			        Welcome, {{ g.user["_first_name"]}}!
-				{% endblock %}
+                    Welcome, {{ g.user["_first_name"]}}!
+                {% endblock %}
             </h1>
             {% endif %}
          </div>
 
         {% include '/includes/messages.html' %}
 
-		<div id="main-content-area" class="container">
+        <div id="main-content-area" class="container">
          {% block content %}
             {% for book in books %}
             <div class="card mb-3">
@@ -77,7 +85,7 @@
             </div>
             {% endfor %}
          {% endblock %}
-		</div>
+        </div>
       </main>
       <!-- /.container -->
       <!-- Bootstrap core JavaScript
