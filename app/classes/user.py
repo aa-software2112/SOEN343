@@ -27,6 +27,7 @@ class User:
         self._cart = Cart()
         self._loan_list = []
 
+
     def get_cart_set(self):
         return self._cart.get_set()
 

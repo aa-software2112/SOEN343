@@ -4,6 +4,7 @@ from app.classes.user import Admin, Client
 from app.classes.user_container import User
 from app.classes.database_container import DatabaseContainer
 from app.controllers.catalog_controller import CatalogController
+import time
 
 class ClientController(Controller):
     """
@@ -50,8 +51,10 @@ class ClientController(Controller):
         #    print(v)
 
     def get_all_logged_clients(self):
+        all_clients = list(self._client_catalog.get_all().values())
+        logged_clients = [client for client in all_clients if client._is_logged == 1]
+        return logged_clients
 
-        return list(self._client_catalog.get_all().values())
 
     # function takes self and a string "username" to get the user from the client table.
     # returns list with client information or emptylist if client doesn't
@@ -105,6 +108,15 @@ class ClientController(Controller):
 
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
+
+    def login_client(self, username):
+        client = self.get_client_by_username(username)
+
+        if len(client) == 1:
+            client = client[0]
+            client._is_logged = 1
+            client._last_logged = time.time()
+            self._client_catalog.modify(client)
 
     # function takes self and username
     # updates value in attribute isLogged to 0.
