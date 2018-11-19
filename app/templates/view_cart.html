@@ -2,7 +2,7 @@
 
 <!-- Replace Title -->
 {% block pageTitle %}
-My Cart
+<p class="text-monospace">My Cart</p>
 {% endblock %}
 
 {% block content %}
@@ -22,16 +22,21 @@ My Cart
                 <p><span class="text-monospace text-info font-weight-bold">{{ record._title }}</span><small class="font-weight-light">
                         by {{ record._author }}</small></p>
                 <div>
-                    <button type="submit" class="btn btn-link text-info"> <span class="small">Delete</span>
+                    <button type="submit" class="btn btn-link text-info"> 
+                        <span class="small"> Delete </span>
                     </button>
                     <span class="font-weight-light"> | </span>
-                    <button type="button" class="btn btn-link text-info"> <span class="small">Details</span>
+                    <button type="button" class="btn btn-link text-info"> 
+                        <span class="small"> Details </span>
                     </button>
                 </div>
             </div>
         </div>
         <hr>
         {% endfor %}
+        <div>
+            <button type="submit" class="btn btn-outline-info float-right mt-3 "> Proceed to Checkout </button>
+        </div>
     </div>
 </div>
 {% endblock %}
