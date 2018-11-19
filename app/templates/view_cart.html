@@ -7,15 +7,31 @@ My Cart
 
 {% block content %}
 <div class="card p-3">
-    <blockquote class="blockquote mb-0 card-body">
-            <div> Shopping Cart </div>
-            <hr>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-      <footer class="blockquote-footer">
-        <small class="text-muted">
-          Someone famous in <cite title="Source Title">Source Title</cite>
-        </small>
-      </footer>
-    </blockquote>
-  </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8" style="font-size: 24px"> <span class="text-monospace">Shopping Cart</span> </div>
+            <div class="col-2"> <span class="text-monospace">Due Date</span> </div>
+            <div class="col-2"> <span class="text-monospace">Quantity</span> </div>
+        </div>
+        <hr>
+
+        {% for record in records %}
+
+        <div class="row">
+            <div class="col-8">
+                <p><span class="text-monospace text-info font-weight-bold">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._author }}</small></p>
+                <div>
+                    <button type="submit" class="btn btn-link text-info"> <span class="small">Delete</span>
+                    </button>
+                    <span class="font-weight-light"> | </span>
+                    <button type="button" class="btn btn-link text-info"> <span class="small">Details</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
