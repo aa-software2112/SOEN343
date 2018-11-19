@@ -1,5 +1,6 @@
 import sqlite3
 import sys
+from app.common_definitions.common_paths import PATH_TO_DATABASE
 
 
 class DatabaseContainer(object):
@@ -12,28 +13,28 @@ class DatabaseContainer(object):
     def get_instance():
         """ Static access method. """
         if DatabaseContainer._instance is None:
-            DatabaseContainer()
+            DatabaseContainer._instance = DatabaseContainer()
         return DatabaseContainer._instance
 
-    def __init__(self, pathToDatabase):
+    def __init__(self):
         if DatabaseContainer._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             DatabaseContainer._instance = self
             # Connect to database immediately
             self.connection = None
-            self.dbPath = pathToDatabase
+            self.dbPath = PATH_TO_DATABASE
 
             try:
                 # Make database useable in all threads
                 self.connection = sqlite3.connect(
-                    pathToDatabase, check_same_thread=False)
+                    PATH_TO_DATABASE, check_same_thread=False)
 
                 # Make database accessible through index and keys
                 self.connection.row_factory = sqlite3.Row
 
                 print("Made connection!")
-            except Error as e:
+            except sqlite3.Error as e:
                 print(e)
                 sys.exit()
 
@@ -62,6 +63,9 @@ class DatabaseContainer(object):
         # Create new cursor
         cursor = self.connection.cursor()
 
+        print(sqlQuery)
+        print(inputParameters)
+
         if inputParameters == None:
             cursor.execute(sqlQuery)
         else:
@@ -74,7 +78,7 @@ class DatabaseContainer(object):
     def close_connection(self):
         try:
             self.connection.close()
-        except Error as e:
+        except sqlite3.Error as e:
             print(e)
 
     def print_path(self):
