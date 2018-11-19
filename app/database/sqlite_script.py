@@ -217,6 +217,19 @@ def initializeAndFillDatabase():
                                     album_id INTEGER NOT NULL,
                                     isLoaned INTEGER NOT NULL,
                                     FOREIGN KEY(album_id) REFERENCES album(id)
+                                );""",
+
+    # TODO: issue here; record_id needs to be a foreign key, but there are four copy tables...
+    "loan_table" : """CREATE TABLE IF NOT EXISTS loan (
+                                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    user_id INTEGER NOT NULL,
+                                    record_id INTEGER NOT NULL,
+                                    table_name TEXT NOT NULL,
+                                    loan_time INTEGER NOT NULL,
+                                    due_time INTEGER NOT NULL,
+                                    return_time INTEGER NOT NULL,
+                                    is_returned INTEGER NOT NULL,
+                                    FOREIGN KEY(user_id) REFERENCES client(id)
                                 );"""
    }
 

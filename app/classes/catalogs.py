@@ -3,6 +3,7 @@ from app.common_definitions.helper_functions import convert_date_time_to_epoch a
 from app.common_definitions.helper_functions import search_catalog
 from app.common_definitions import helper_functions
 from app.common_definitions.helper_functions import sort_records
+from app.controllers.client_controller import ClientController
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
@@ -109,8 +110,6 @@ class UserCatalog(Catalog):
     def get_cart_set(self, user_id):
         user = self.get(user_id)
         return user.get_cart_set()
-
-
 
 class BookCatalog(Catalog):
     """
@@ -305,7 +304,6 @@ class BookCatalog(Catalog):
 
         return helper_functions.filter(transformed_dict, last_searched_list)
 
-
 class MovieCatalog(Catalog):
     """
         This class uses the Singleton pattern.
@@ -498,7 +496,6 @@ class MovieCatalog(Catalog):
             transformed_dict[ self.Filters[k] ] = v
 
         return helper_functions.filter(transformed_dict, last_searched_list)
-
 
 class MagazineCatalog(Catalog):
     """
@@ -869,3 +866,105 @@ class AlbumCatalog(Catalog):
             transformed_dict[ self.Filters[k] ] = v
 
         return helper_functions.filter(transformed_dict, last_searched_list)
+
+class LoanCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
+
+    Filters = { }
+
+    Sorts = { }
+
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if LoanCatalog._instance is None:
+            LoanCatalog._instance = LoanCatalog()
+        return LoanCatalog._instance
+
+    def __init__(self):
+        """
+        This initializer creates all the catalogs necessary
+        for making loans appropriately; setting a loan to "returned" should
+        return the copy
+        """
+
+        if LoanCatalog._instance is not None:
+
+            raise Exception("This class is a singleton!")
+
+        else:
+
+            # Catalogs necessary for making and returning loans
+            self.book_catalog = BookCatalog.get_instance()
+            self.album_catalog = AlbumCatalog.get_instance()
+            self.movie_catalog = MovieCatalog.get_instance()
+            self.client_catalog = ClientController.get_instance()
+
+            LoanCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._loans = {}
+
+
+    def get_all(self):
+        return self._loans
+
+    def get(self, id):
+        return self._loans[id]
+
+    def add(self, album, add_to_db):
+
+        print ("Missing implementation")
+
+
+    def modify(self, modified_album):
+        """
+        Modifies the values in the loan table
+        :param modified_album:
+        :return:
+        """
+
+        #modify_loans_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
+        #tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
+        #                          modified_album._label, to_epoch(modified_album._release_date), modified_album._ASIN, int(modified_album._id))
+        #self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
+        #self._albums[int(modified_album.get_id())] = modified_album
+
+
+    def remove(self, id):
+        """
+        This function simply removes a loan from the list of loans; cannot remove
+        the object if the item is still out as loaned!
+        :param id: the id of the loan to remove
+        :return: None if no object was removed, otherwise, object that was removed
+        """
+
+        loan = self._loans[id]
+
+        # Loan was returned, OK to remove from database & memory
+        if loan._is_returned == 1:
+
+            remove_album = 'DELETE FROM loan WHERE id = ?'
+
+            # Remove the loan from the database
+            self.db.execute_query_write(remove_album, (id,))
+
+            return self._loans.pop(id, None)
+
+        return None
+
+    def display(self):
+
+        for k, v in self._loans.items():
+            print(v)
+
+    def search(self, search_string):
+
+        search_list = []
+
+        print("Implementation needed")
+
+        return search_list
+
