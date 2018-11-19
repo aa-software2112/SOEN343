@@ -56,7 +56,7 @@ class ClientController(Controller):
 
     def get_all_active_clients(self):
         all_clients = list(self._client_catalog.get_all().values())
-        # active_clients = [client for client in all_clients if client._is_logged is True]
+        # active_clients = [client for client in all_clients if client._is_logged == 1]
         # For the sake of testing, we can define an active user as one who has logged in in the past 24 hours.
         active_clients = [client for client in all_clients if time.time() - client._last_logged < 86400]
         return active_clients

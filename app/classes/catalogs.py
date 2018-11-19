@@ -207,7 +207,7 @@ class BookCatalog(Catalog):
                 book._id = existing_book_id_fetched[0]
                 book._total_quantity = existing_book_id_fetched[1] + 1
                 book._quantity_available = existing_book_id_fetched[2] + 1
-                print(book._id , book._total_quantity, book._quantity_available)
+                #print(book._id , book._total_quantity, book._quantity_available)
 
 
                 #insert book into book_copy table
@@ -393,7 +393,7 @@ class MovieCatalog(Catalog):
                 movie._id = existing_movie_id_fetched[0]
                 movie._total_quantity = existing_movie_id_fetched[1] + 1
                 movie._quantity_available = existing_movie_id_fetched[2] + 1
-                print(movie._id , movie._total_quantity, movie._quantity_available)
+                #print(movie._id , movie._total_quantity, movie._quantity_available)
 
 
                 #insert movie into movie_copy table
@@ -543,7 +543,6 @@ class MagazineCatalog(Catalog):
 
     def add(self, magazine, add_to_db):
 
-        print(magazine)
 
         if add_to_db is True:
 
@@ -586,7 +585,7 @@ class MagazineCatalog(Catalog):
                 magazine._id = existing_magazine_id_fetched[0]
                 magazine._total_quantity = existing_magazine_id_fetched[1] + 1
                 magazine._quantity_available = existing_magazine_id_fetched[2] + 1
-                print(magazine._id , magazine._total_quantity, magazine._quantity_available)
+                #print(magazine._id , magazine._total_quantity, magazine._quantity_available)
 
 
                 #insert magazine into magazine_copy table
@@ -772,7 +771,7 @@ class AlbumCatalog(Catalog):
                 album._id = existing_album_id_fetched[0]
                 album._total_quantity = existing_album_id_fetched[1] + 1
                 album._quantity_available = existing_album_id_fetched[2] + 1
-                print(album._id , album._total_quantity, album._quantity_available)
+                # print(album._id , album._total_quantity, album._quantity_available)
 
 
                 #insert album into album_copy table

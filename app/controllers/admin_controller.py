@@ -45,8 +45,8 @@ class AdminController(Controller):
 
     def get_all_active_admins(self):
         all_admins = list(self._admin_catalog.get_all().values())
-        # active_admins = [admin for admin in all_admins if admin._is_logged is True]
-        # For the sake of testing, we can define an active user as one who has logged in in the past 24 hours.
+        # active_admins = [admin for admin in all_admins if admin._is_logged == 1]
+        # For the sake of testing, we can define an active user as one who has logged in in the past 24 hours; otherwise use above commented line.
         active_admins = [admin for admin in all_admins if time.time() - admin._last_logged < 86400]
         return active_admins
 
