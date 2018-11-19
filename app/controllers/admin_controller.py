@@ -44,13 +44,6 @@ class AdminController(Controller):
         return logged_admins
 
 
-    def get_all_active_admins(self):
-        """ not really needed, but can be useful"""
-        all_admins = list(self._admin_catalog.get_all().values())
-        # "active admin" => admin that logged in the past 24 hours.
-        active_admins = [admin for admin in all_admins if time.time() - admin._last_logged < 86400]
-        return active_admins
-
     def load_database_into_memory(self):
 
         # Database cannot be loaded into RAM more than once

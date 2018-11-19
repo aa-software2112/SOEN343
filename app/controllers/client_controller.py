@@ -55,12 +55,6 @@ class ClientController(Controller):
         logged_clients = [client for client in all_clients if client._is_logged == 1]
         return logged_clients
 
-    def get_all_active_clients(self):
-        """ not really needed, but can be useful"""
-        all_clients = list(self._client_catalog.get_all().values())
-        # "active client" => client that logged in the past 24 hours.
-        active_clients = [client for client in all_clients if time.time() - client._last_logged < 86400]
-        return active_clients
 
     # function takes self and a string "username" to get the user from the client table.
     # returns list with client information or emptylist if client doesn't
