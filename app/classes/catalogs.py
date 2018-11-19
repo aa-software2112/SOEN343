@@ -135,18 +135,18 @@ class BookCatalog(Catalog):
              }
 
     @staticmethod
-    def get_instance(database):
+    def get_instance():
         """ Static access method. """
         if BookCatalog._instance is None:
-            BookCatalog(database)
+            BookCatalog._instance = BookCatalog()
         return BookCatalog._instance
 
-    def __init__(self, database):
+    def __init__(self):
         if BookCatalog._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             BookCatalog._instance = self
-            self.db = database
+            self.db = DatabaseContainer.get_instance()
             # private variable convention in python have '_' prefix
             self._books = {}
 
@@ -329,18 +329,18 @@ class MovieCatalog(Catalog):
              }
 
     @staticmethod
-    def get_instance(database):
+    def get_instance():
         """ Static access method. """
         if MovieCatalog._instance is None:
-            MovieCatalog(database)
+            MovieCatalog._instance = MovieCatalog()
         return MovieCatalog._instance
 
-    def __init__(self, database):
+    def __init__(self):
         if MovieCatalog._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             MovieCatalog._instance = self
-            self.db = database
+            self.db = DatabaseContainer.get_instance()
             self._movies = {}
 
     def get_all(self):
@@ -521,18 +521,18 @@ class MagazineCatalog(Catalog):
              }
 
     @staticmethod
-    def get_instance(database):
+    def get_instance():
         """ Static access method. """
         if MagazineCatalog._instance is None:
-            MagazineCatalog(database)
+            MagazineCatalog._instance = MagazineCatalog()
         return MagazineCatalog._instance
 
-    def __init__(self, database):
+    def __init__(self):
         if MagazineCatalog._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             MagazineCatalog._instance = self
-            self.db = database
+            self.db = DatabaseContainer.get_instance()
             self._magazines = {}
 
     def get_all(self):
@@ -542,6 +542,8 @@ class MagazineCatalog(Catalog):
         return self._magazines[id]
 
     def add(self, magazine, add_to_db):
+
+        print(magazine)
 
         if add_to_db is True:
 
@@ -572,9 +574,9 @@ class MagazineCatalog(Catalog):
                 self._magazines[new_magazine_id] = magazine
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query = (new_magazine_id, 0)
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
+                tuple_for_insert_copy_query = (new_magazine_id,)
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
             #else already exist. Need to add new magazine in second table and update quantity of first table
@@ -588,9 +590,9 @@ class MagazineCatalog(Catalog):
 
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query =(magazine._id, 0)
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
+                tuple_for_insert_copy_query =(magazine._id, )
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
                 #update magazine quantity in database
@@ -708,18 +710,18 @@ class AlbumCatalog(Catalog):
              }
 
     @staticmethod
-    def get_instance(database):
+    def get_instance():
         """ Static access method. """
         if AlbumCatalog._instance is None:
-            AlbumCatalog(database)
+            AlbumCatalog._instance = AlbumCatalog()
         return AlbumCatalog._instance
 
-    def __init__(self, database):
+    def __init__(self):
         if AlbumCatalog._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             AlbumCatalog._instance = self
-            self.db = database
+            self.db = DatabaseContainer.get_instance()
             self._albums = {}
 
     def get_all(self):

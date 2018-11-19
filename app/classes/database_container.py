@@ -63,6 +63,9 @@ class DatabaseContainer(object):
         # Create new cursor
         cursor = self.connection.cursor()
 
+        print(sqlQuery)
+        print(inputParameters)
+
         if inputParameters == None:
             cursor.execute(sqlQuery)
         else:
@@ -75,7 +78,7 @@ class DatabaseContainer(object):
     def close_connection(self):
         try:
             self.connection.close()
-        except Error as e:
+        except sqlite3.Error as e:
             print(e)
 
     def print_path(self):
