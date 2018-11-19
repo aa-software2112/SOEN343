@@ -9,6 +9,7 @@ from app.classes.database_container import DatabaseContainer
 from app.controllers.catalog_controller import CatalogController
 import time
 
+
 class AdminController(Controller):
     """
     This class uses the Singleton pattern.
@@ -37,16 +38,16 @@ class AdminController(Controller):
 
             self._db_loaded = False
 
-
-
     def get_all_logged_admins(self):
+        all_admins = list(self._admin_catalog.get_all().values())
+        logged_admins = [admin for admin in all_admins if admin._is_logged == 1]
+        return logged_admins
 
-        return list(self._admin_catalog.get_all().values())
 
     def get_all_active_admins(self):
+        """ not really needed, but can be useful"""
         all_admins = list(self._admin_catalog.get_all().values())
-        # active_admins = [admin for admin in all_admins if admin._is_logged == 1]
-        # For the sake of testing, we can define an active user as one who has logged in in the past 24 hours; otherwise use above commented line.
+        # "active admin" => admin that logged in the past 24 hours.
         active_admins = [admin for admin in all_admins if time.time() - admin._last_logged < 86400]
         return active_admins
 

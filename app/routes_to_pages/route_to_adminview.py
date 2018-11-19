@@ -29,7 +29,7 @@ def userCreator():
 @login_required
 @admin_required
 def adminViewUserRegistry():
-    list_of_clients = admin_controller.get_all_active_admins() + client_controller.get_all_active_clients()
+    list_of_clients = admin_controller.get_all_logged_admins() + client_controller.get_all_logged_clients()
 
     return render_template('admin_view_user_registry.html', list_of_clients=list_of_clients)
 
