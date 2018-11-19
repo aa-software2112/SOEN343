@@ -69,6 +69,15 @@ class AdminController(Controller):
         # for k, v in self._admin_catalog.get_all().items():
         #    print(v)
 
+    def login_admin(self, username):
+        admin = self.get_admin_by_username(username)
+
+        if len(admin) == 1:
+            admin = admin[0]
+            admin._is_logged = 1
+            admin._last_logged = time.time()
+            self._admin_catalog.modify(admin)
+
     def logout_admin(self, username):
         admin = self.get_admin_by_username(username)
 

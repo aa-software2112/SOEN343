@@ -27,8 +27,6 @@ class User:
         self._cart = Cart()
         self._loan_list = []
 
-    def set_last_logged(self, _last_logged):
-        self._last_logged = _last_logged
 
     def get_cart_set(self):
         return self._cart.get_set()

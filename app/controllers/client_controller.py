@@ -114,6 +114,15 @@ class ClientController(Controller):
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
 
+    def login_client(self, username):
+        client = self.get_client_by_username(username)
+
+        if len(client) == 1:
+            client = client[0]
+            client._is_logged = 1
+            client._last_logged = time.time()
+            self._client_catalog.modify(client)
+
     # function takes self and username
     # updates value in attribute isLogged to 0.
     def logout_client(self, username):
