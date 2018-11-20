@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+   Transaction History
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+   <div class="row">
+      <div class="col-md-12">
+         <table class="table table-hover">
+            <thead>
+            <tr>
+               <th></th>
+               <th scope="col"> ID</th>
+               <th scope="col"> Type</th>
+               <th scope="col"> Record Name</th>
+               <th scope="col"> User</th>
+               <th scope="col"> Loan start date</th>
+               <th scope="col"> Loan due date</th>
+               <th scope="col"> Loan return date</th>
+               <th scope="col"> Returned</th>
+               <th></th>
+               <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for loan in loan_history %}
+               <tr>
+                     <td></td>
+                     <td>{{ loan.get_id() }}</td>
+                     <td>{{ loan.get_record_type() }}</td>
+                     <td>{{ loan.get_record_title() }}</td>
+                     <td>{{ loan.get_owner_name() }}</td>
+                     <td>{{ epoch_converter(loan._loan_time) }}</td>
+                     <td>{{ epoch_converter(loan._due_time) }}</td>
+                     <td>{{ epoch_converter(loan._return_time) }}</td>
+                     {% if loan._is_returned == 1 %}
+                        <td>YES</td>
+                     {% else %}
+                        <td>NO</td>
+                     {% endif %}
+               </tr>
+            {% endfor %}
+            </tbody>
+         </table>
+      </div>
+   </div>
+
+{% endblock %}

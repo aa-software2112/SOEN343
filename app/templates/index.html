@@ -34,6 +34,8 @@
                     {% if g.user %}
                         {% if g.user["_is_admin"] != 1 %}
                             <a class="nav-item nav-link" href="/myLoans"> My Loans </a>
+                        {%  else %}
+                           <a class="nav-item nav-link" href="/transactionHistory"> Transaction History </a>
                         {% endif %}
                     {% endif %}
                </li>

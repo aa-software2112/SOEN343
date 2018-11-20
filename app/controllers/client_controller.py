@@ -106,6 +106,18 @@ class ClientController(Controller):
 
         return found_client
 
+    def get_client_by_id(self, id):
+        found_client = []
+
+        clients = self._client_catalog.get_all()
+
+        for id, clientObj in clients.items():
+
+            if clientObj._id == id:
+                found_client.append(clientObj)
+
+        return found_client
+
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
 

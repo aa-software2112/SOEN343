@@ -95,6 +95,9 @@ class User:
         for loan_obj in self._loan_list:
             if loan_obj.get_id() == loan_id:
                 self._loan_list.remove(loan_obj)
+
+    def get_username(self):
+        return self._username
         
 class Admin(User):
 

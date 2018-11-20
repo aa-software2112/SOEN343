@@ -13,7 +13,7 @@ class Loan:
         """
         # The loan times are added here manually,
 
-        self.id = -1
+        self._id = -1
 
         self._user_id = user_obj.get_id()
 
@@ -75,6 +75,14 @@ class Loan:
     def get_table_name(self):
         return self._table_name
 
+    def get_record_title(self):
+        return self._record.get_title()
+
+    def get_owner_name(self):
+        return self._user.get_username()
+
+    def get_record_type(self):
+        return self._record.get_type()
 
 
     def __str__(self):
