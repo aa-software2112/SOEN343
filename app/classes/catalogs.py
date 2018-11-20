@@ -136,6 +136,7 @@ class BookCatalog(Catalog):
         return self._books
 
     def get(self, id):
+
         return self._books[id]
 
     def modify(self, modified_book):
