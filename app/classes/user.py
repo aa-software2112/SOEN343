@@ -83,6 +83,18 @@ class User:
 
     def delete_from_cart(self, o_id):
         return self._cart.delete_by_id(o_id)
+
+    def set_loan_list(self, loan_list):
+        self._loan_list = loan_list
+
+    def get_loaned_items(self):
+        print('returning loaned items list')
+        return self._loan_list
+
+    def remove_loan(self, loan_id):
+        for loan_obj in self._loan_list:
+            if loan_obj.get_id() == loan_id:
+                self._loan_list.remove(loan_obj)
         
 class Admin(User):
 
