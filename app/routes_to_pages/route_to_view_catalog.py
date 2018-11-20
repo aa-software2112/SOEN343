@@ -152,6 +152,12 @@ def delete_cart():
     #get the id of item to be deleted
     o_id = request.form["id"]
     user_id = g.user["_id"]
-    current_cart = client_controller.delete_from_cart(o_id, user_id)
-    flash("Deleted successfully.", 'success')
-    return render_template('view_cart.html', current_cart=current_cart)
+    message = client_controller.delete_from_cart(o_id, user_id)
+    if message == "success":
+        flash("Item from cart deleted successfully.", 'success')
+        current_cart = client_controller.get_all_cart_items(user_id)
+        return render_template('view_cart.html', current_cart=current_cart)
+    else:
+        error = "Unable to delete the Item from cart."
+        current_cart = client_controller.get_all_cart_items(user_id)
+        return render_template('view_cart.html', current_cart=current_cart, error=error)
