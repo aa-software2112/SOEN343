@@ -1,9 +1,8 @@
 from app.controllers.controller import Controller
-from app.classes.catalogs import UserCatalog
+import app.classes.catalogs
 from app.classes.user import Admin, Client
-from app.classes.user_container import User
 from app.classes.database_container import DatabaseContainer
-from app.controllers.catalog_controller import CatalogController
+import app.controllers.catalog_controller
 import time
 
 class ClientController(Controller):
@@ -28,8 +27,8 @@ class ClientController(Controller):
             Controller.__init__(self, DatabaseContainer.get_instance())
 
             self._db_loaded = False
-            self._client_catalog = UserCatalog()
-            self._catalog_controller = CatalogController.get_instance()
+            self._client_catalog = app.classes.catalogs.UserCatalog()
+            self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
 
     def load_database_into_memory(self):
 
@@ -204,4 +203,16 @@ class ClientController(Controller):
 
     # returns the cart set from the specific client with 'client_id'
     def get_all_cart_items(self, client_id):
-        return self._client_catalog.get_cart_set(client_id)
+      
+        # Extract the user
+        client = self._client_catalog.get(client_id)
+
+        # Extract the cart
+        cart_set = client.get_cart_set()
+
+        return cart_set
+
+    # deletes the item specified by 'o_id' from cart and returns the updated cart
+    def delete_from_cart(self, o_id, user_id):
+        usr = self._client_catalog.get(user_id)
+        usr.delete_from_cart(o_id)

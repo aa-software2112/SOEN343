@@ -3,6 +3,7 @@ from app.common_definitions.helper_functions import convert_date_time_to_epoch a
 from app.common_definitions.helper_functions import search_catalog
 from app.common_definitions import helper_functions
 from app.common_definitions.helper_functions import sort_records
+from app.controllers.client_controller import ClientController
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
@@ -104,12 +105,6 @@ class UserCatalog(Catalog):
 
     def search(self, search_string):
         return search_catalog(self._users, search_string)
-
-    # takes a user id and gets his cart set
-    def get_cart_set(self, user_id):
-        user = self.get(user_id)
-        return user.get_cart_set()
-
 
 
 class BookCatalog(Catalog):
@@ -305,7 +300,6 @@ class BookCatalog(Catalog):
 
         return helper_functions.filter(transformed_dict, last_searched_list)
 
-
 class MovieCatalog(Catalog):
     """
         This class uses the Singleton pattern.
@@ -393,8 +387,6 @@ class MovieCatalog(Catalog):
                 movie._id = existing_movie_id_fetched[0]
                 movie._total_quantity = existing_movie_id_fetched[1] + 1
                 movie._quantity_available = existing_movie_id_fetched[2] + 1
-                #print(movie._id , movie._total_quantity, movie._quantity_available)
-
 
                 #insert movie into movie_copy table
                 insert_new_movie_copy_query = 'INSERT INTO movie_copy(movie_id, isLoaned)' \
@@ -500,7 +492,6 @@ class MovieCatalog(Catalog):
 
         return helper_functions.filter(transformed_dict, last_searched_list)
 
-
 class MagazineCatalog(Catalog):
     """
         This class uses the Singleton pattern.
@@ -542,7 +533,6 @@ class MagazineCatalog(Catalog):
         return self._magazines[id]
 
     def add(self, magazine, add_to_db):
-
 
         if add_to_db is True:
 
@@ -751,8 +741,7 @@ class AlbumCatalog(Catalog):
                 tuple_for_insert_query = (album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN, album._total_quantity, album._quantity_available)
 
                 # getting the id of the last inserted album
-                new_album_id = self.db.execute_query_write(
-                insert_new_album_query, tuple_for_insert_query).lastrowid
+                new_album_id = self.db.execute_query_write(insert_new_album_query, tuple_for_insert_query).lastrowid
                 # since the object created has by default id = 0, we have to set
                 # its id to the id obtained above
                 album._id = new_album_id
@@ -771,13 +760,12 @@ class AlbumCatalog(Catalog):
                 album._id = existing_album_id_fetched[0]
                 album._total_quantity = existing_album_id_fetched[1] + 1
                 album._quantity_available = existing_album_id_fetched[2] + 1
-                # print(album._id , album._total_quantity, album._quantity_available)
-
-
+                
                 #insert album into album_copy table
                 insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
                 'VALUES(?,?)'
                 tuple_for_insert_copy_query =(album._id, 0)
+
                 self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
 
                 #update album quantity in database
@@ -874,3 +862,130 @@ class AlbumCatalog(Catalog):
             transformed_dict[ self.Filters[k] ] = v
 
         return helper_functions.filter(transformed_dict, last_searched_list)
+
+class LoanCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
+
+    Filters = { }
+
+    Sorts = { }
+
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if LoanCatalog._instance is None:
+            LoanCatalog._instance = LoanCatalog()
+        return LoanCatalog._instance
+
+    def __init__(self):
+        """
+        This initializer creates all the catalogs necessary
+        for making loans appropriately; setting a loan to "returned" should
+        return the copy
+        """
+
+        if LoanCatalog._instance is not None:
+
+            raise Exception("This class is a singleton!")
+
+        else:
+
+            # Catalogs necessary for making and returning loans
+            self.book_catalog = BookCatalog.get_instance()
+            self.album_catalog = AlbumCatalog.get_instance()
+            self.movie_catalog = MovieCatalog.get_instance()
+            self.client_controller = ClientController.get_instance()
+
+            LoanCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._loans = {}
+
+
+    def get_all(self):
+        return self._loans
+
+    def get(self, id):
+        return self._loans[id]
+
+    def add(self, loan_obj, add_to_db):
+
+        if add_to_db is True:
+
+            # Add the object into the database
+            # Note; all *_time attributes were set before the call to this method was made
+            insert_new_loan_query = 'INSERT INTO loan(user_id, record_id, table_name, loan_time, due_time, return_time, is_returned)' \
+            'VALUES(?,?,?,?,?,?,?)'
+
+
+            tuple_for_insert_query = (loan_obj._user_id, loan_obj._record_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
+                                      loan_obj._return_time, loan_obj._is_returned)
+
+            # getting the id of the last inserted loan
+            new_loan_id = self.db.execute_query_write(insert_new_loan_query, tuple_for_insert_query).lastrowid
+
+            # since the object created has by default id = -1, we have to set
+            # its id to that found in the database
+            loan_obj.set_loan_id(new_loan_id)
+
+            # Add the loan to the dictionary of loans
+            self._loans[loan_obj.get_id()] = loan_obj
+
+        else:
+            self._loans[loan_obj.get_id()] = loan_obj
+
+
+
+    def modify(self, modified_loan):
+        """
+        Modifies the values in the loan table
+        :param modified_loan: The loan object with attributes to replace a previous one, based on
+        the id property
+        :return: N/A
+        """
+
+        print("Needs implementation")
+
+        #modify_loans_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
+        #tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
+        #                          modified_album._label, to_epoch(modified_album._release_date), modified_album._ASIN, int(modified_album._id))
+        #self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
+        #self._albums[int(modified_album.get_id())] = modified_album
+
+
+    def remove(self, id):
+        """
+        This function simply removes a loan from the list of loans; cannot remove
+        the object if the item is still out as loaned!
+        :param id: the id of the loan to remove
+        :return: None if no object was removed, otherwise, object that was removed
+        """
+
+        loan = self._loans[id]
+
+        # Loan was returned, OK to remove from database & memory
+        if loan._is_returned == 1:
+
+            remove_album = 'DELETE FROM loan WHERE id = ?'
+
+            # Remove the loan from the database
+            self.db.execute_query_write(remove_album, (id,))
+
+            return self._loans.pop(id, None)
+
+        return None
+
+    def display(self):
+
+        for k, v in self._loans.items():
+            print(v)
+
+    def search(self, search_string):
+
+        search_list = []
+
+        print("Implementation needed")
+
+        return search_list

@@ -8,6 +8,7 @@ class DatabaseContainer(object):
     This class uses the Singleton pattern.
     """
     _instance = None
+    commit_lock = False
 
     @staticmethod
     def get_instance():
@@ -63,17 +64,20 @@ class DatabaseContainer(object):
         # Create new cursor
         cursor = self.connection.cursor()
 
-        print(sqlQuery)
-        print(inputParameters)
-
         if inputParameters == None:
             cursor.execute(sqlQuery)
         else:
             cursor.execute(sqlQuery, inputParameters)
 
-        self.connection.commit()
+        # To control the commits (namely for using batch writes during database initialization)
+        if not DatabaseContainer.commit_lock:
+            self.connection.commit()
 
         return cursor
+
+    def commit_db(self):
+
+        self.connection.commit()
 
     def close_connection(self):
         try:

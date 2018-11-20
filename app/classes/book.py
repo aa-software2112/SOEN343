@@ -1,5 +1,7 @@
 class Book:
     record_type = "Book"
+    copy_table_name = "book_copy"
+
     # Book can be loaned for 1 week (converted to seconds, #weeks x days/week x seconds/day)
     loan_time = 1 * 7 * 86400
 
@@ -17,6 +19,7 @@ class Book:
         self._pages = arguments['pages']
         self._publisher = arguments['publisher']
         # Make sure it is in integer format
+
         self._year_of_publication = int(arguments['year_of_publication'])
         self._language = arguments['language']
         self._ISBN10 = arguments['isbn_10']
@@ -38,10 +41,15 @@ class Book:
 
             self._quantity_available = 1
 
-
     def get_id(self):
         """Returns the id of the object"""
         return self._id
+
+    def get_copy_table_name(self):
+        return Book.copy_table_name
+
+    def get_loan_time(self):
+        return Book.loan_time
 
     def __str__(self):
         return "Book | ID: " + str(self._id) + " TITLE: " + self._title + " AUTHOR: " + self._author + " FORMAT: " + self._format + " PAGES: " + str(self._pages) + " PUBLISHER: " + self._publisher + " YEAR: " + str(self._year_of_publication) + \

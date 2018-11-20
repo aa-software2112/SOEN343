@@ -161,3 +161,13 @@ def viewCart():
     all_records = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
 
     return render_template("view_cart.html", user_cart = user_cart, records = all_records)
+
+@app.route('/deleteCart', methods=['POST'])
+@login_required
+def delete_cart():
+    #get the id of item to be deleted
+    o_id = request.form["id"]
+    user_id = g.user["_id"]
+    current_cart = client_controller.delete_from_cart(o_id, user_id)
+    flash("Deleted successfully.", 'success')
+    return render_template('view_cart.html', current_cart=current_cart)
