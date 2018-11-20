@@ -203,4 +203,11 @@ class ClientController(Controller):
 
     # returns the cart set from the specific client with 'client_id'
     def get_all_cart_items(self, client_id):
-        return self._client_catalog.get_cart_set(client_id)
+
+        # Extract the user
+        client = self._client_catalog.get(client_id)
+
+        # Extract the cart
+        cart_set = client.get_cart_set()
+
+        return cart_set

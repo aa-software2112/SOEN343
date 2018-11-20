@@ -106,10 +106,6 @@ class UserCatalog(Catalog):
     def search(self, search_string):
         return search_catalog(self._users, search_string)
 
-    # takes a user id and gets his cart set
-    def get_cart_set(self, user_id):
-        user = self.get(user_id)
-        return user.get_cart_set()
 
 class BookCatalog(Catalog):
     """
