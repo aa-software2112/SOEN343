@@ -1,5 +1,6 @@
 class Magazine:
     record_type = "Magazine"
+    copy_table_name = "magazine_copy"
 
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a
@@ -38,6 +39,9 @@ class Magazine:
     def get_id(self):
         """Returns the id of the object"""
         return self._id
+
+    def get_copy_table_name(self):
+        return Magazine.copy_table_name
 
     def __str__(self):
 

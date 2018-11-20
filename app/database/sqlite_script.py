@@ -219,7 +219,6 @@ def initializeAndFillDatabase():
                                     FOREIGN KEY(album_id) REFERENCES album(id)
                                 );""",
 
-    # TODO: issue here; record_id needs to be a foreign key, but there are four copy tables...
     "loan_table" : """CREATE TABLE IF NOT EXISTS loan (
                                     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                                     user_id INTEGER NOT NULL,

@@ -914,7 +914,35 @@ class LoanCatalog(Catalog):
     def get(self, id):
         return self._loans[id]
 
-    def add(self, album, add_to_db):
+    def add(self, loan_obj, add_to_db):
+
+        if add_to_db is True:
+
+            # Add the object into the database
+            # Note; all *_time attributes were set before the call to this method was made
+            insert_new_loan_query = 'INSERT INTO loan(user_id, record_id, table_name, loan_time, due_time, return_time, is_returned)' \
+            'VALUES(?,?,?,?,?,?,?)'
+
+
+            tuple_for_insert_query = (loan_obj._user_id, loan_obj._record_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
+                                      loan_obj._return_time, loan_obj._is_returned)
+
+            # getting the id of the last inserted album
+            new_album_id = self.db.execute_query_write(insert_new_album_query, tuple_for_insert_query).lastrowid
+            # since the object created has by default id = 0, we have to set
+            # its id to the id obtained above
+            album._id = new_album_id
+            self._albums[new_album_id] = album
+
+            #insert album into album_copy table
+            insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
+            'VALUES(?,?)'
+            tuple_for_insert_copy_query = (new_album_id, 0)
+            self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
+
+
+        else:
+            self._albums[album._id] = album
 
         print ("Missing implementation")
 
