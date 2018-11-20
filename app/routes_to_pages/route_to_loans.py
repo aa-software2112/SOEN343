@@ -1,27 +1,33 @@
-from flask import render_template, request
-
+from flask import render_template, request, g, redirect
 from app import app
 from app.common_definitions.helper_functions import login_required
+from app import client_controller
 
 
 @app.route('/myLoans')
 @login_required
 def my_loans():
 	"""Function that get the user's loans and display them on a page"""
-	# get loans, these are temporary example while the loan logic gets implemented
-	loan1 = {'_id': 1, '_name': 'My first loan'}
-	loan2 = {'_id': 2, '_name': 'My second loan'}
-	loan3 = {'_id': 3, '_name': 'My third loan'}
-	user_loans = [loan1, loan2, loan3]
-	err = None
+
+
+	user_loans = client_controller.get_loaned_items(g.user["_id"])
+
 	if len(user_loans) == 0:
-		err = "You have no loans on record"
+		err = "There are no items to return"
+	else:
+		err = None
+
 	return render_template('my_loans.html', loans=user_loans, errorMessage=err)
 
 
 @app.route('/returnLoans', methods=['POST'])
 def return_loans():
-	# do logic to return the loans
-	data = request.form
-	print(data)
-	return render_template('return_loans.html')
+
+	#returns the id(selected) as a list
+	return_items_id = request.form.getlist('id')
+
+	client_controller.return_loaned_items(return_items_id, g.user["_id"])
+	err = None
+	if len(return_items_id) == 0 :
+		err = "Please, select items to return"
+	return render_template('return_loans.html', error=err)
