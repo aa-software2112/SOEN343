@@ -203,7 +203,7 @@ class ClientController(Controller):
 
     # returns the cart set from the specific client with 'client_id'
     def get_all_cart_items(self, client_id):
-
+      
         # Extract the user
         client = self._client_catalog.get(client_id)
 
@@ -211,3 +211,9 @@ class ClientController(Controller):
         cart_set = client.get_cart_set()
 
         return cart_set
+
+    # deletes the item specified by 'o_id' from cart and returns the updated cart
+    def delete_from_cart(self, o_id, user_id):
+        usr = self._client_catalog.get(user_id)
+        usr.delete_from_cart(o_id)
+        return self._client_catalog.get_cart_set(user_id)

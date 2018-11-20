@@ -144,3 +144,14 @@ def backToList():
             last_searched_list = client_controller.get_last_searched_list(g.user["_id"])
 
     return render_template(url_string, records=last_searched_list, filters=filters, sorting_criteria=sorting_criteria)
+
+
+@app.route('/deleteCart', methods=['POST'])
+@login_required
+def delete_cart():
+    #get the id of item to be deleted
+    o_id = request.form["id"]
+    user_id = g.user["_id"]
+    current_cart = client_controller.delete_from_cart(o_id, user_id)
+    flash("Deleted successfully.", 'success')
+    return render_template('view_cart.html', current_cart=current_cart)
