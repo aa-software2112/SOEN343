@@ -171,3 +171,12 @@ def delete_cart():
     current_cart = client_controller.delete_from_cart(o_id, user_id)
     flash("Deleted successfully.", 'success')
     return render_template('view_cart.html', current_cart=current_cart)
+
+@app.route('/makeLoan' , methods=['POST'])
+@login_required
+def make_loan():    
+    # succes_list= list(client_controller.make_loan(g.user["_id"]))
+    #Testing 
+    success_list = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
+    return render_template("make_loan.html", succes_loans=success_list, fail_loans=[])
+
