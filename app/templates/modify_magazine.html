@@ -33,11 +33,11 @@ Modify a Magazine
       </div>
       <div class="form-group">
         <label for="isbn_10">ISBN 10</label>
-        <input type="text" class="form-control" name="isbn_10" value='{{magazine._ISBN10}}'>
+        <input type="text" class="form-control" name="isbn_10" value='{{magazine._ISBN10}}' pattern="\d*-\d*-\d*-\d*">
       </div>
       <div class="form-group">
         <label for="isbn_13">ISBN 13</label>
-        <input type="text" class="form-control" name="isbn_13" value='{{magazine._ISBN13}}'>
+        <input type="text" class="form-control" name="isbn_13" value='{{magazine._ISBN13}}' pattern="\d*-\d*-\d*-\d*-\d*">
       </div>
       <div class="float-right mt-4">
         <button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
