@@ -1,9 +1,8 @@
 from app.controllers.controller import Controller
-from app.classes.catalogs import UserCatalog
+import app.classes.catalogs
 from app.classes.user import Admin, Client
-from app.classes.user_container import User
 from app.classes.database_container import DatabaseContainer
-from app.controllers.catalog_controller import CatalogController
+import app.controllers.catalog_controller
 
 class ClientController(Controller):
     """
@@ -27,8 +26,8 @@ class ClientController(Controller):
             Controller.__init__(self, DatabaseContainer.get_instance())
 
             self._db_loaded = False
-            self._client_catalog = UserCatalog()
-            self._catalog_controller = CatalogController.get_instance()
+            self._client_catalog = app.classes.catalogs.UserCatalog()
+            self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
 
     def load_database_into_memory(self):
 

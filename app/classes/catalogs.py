@@ -901,7 +901,7 @@ class LoanCatalog(Catalog):
             self.book_catalog = BookCatalog.get_instance()
             self.album_catalog = AlbumCatalog.get_instance()
             self.movie_catalog = MovieCatalog.get_instance()
-            self.client_catalog = ClientController.get_instance()
+            self.client_controller = ClientController.get_instance()
 
             LoanCatalog._instance = self
             self.db = DatabaseContainer.get_instance()
@@ -927,32 +927,30 @@ class LoanCatalog(Catalog):
             tuple_for_insert_query = (loan_obj._user_id, loan_obj._record_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
                                       loan_obj._return_time, loan_obj._is_returned)
 
-            # getting the id of the last inserted album
-            new_album_id = self.db.execute_query_write(insert_new_album_query, tuple_for_insert_query).lastrowid
-            # since the object created has by default id = 0, we have to set
-            # its id to the id obtained above
-            album._id = new_album_id
-            self._albums[new_album_id] = album
+            # getting the id of the last inserted loan
+            new_loan_id = self.db.execute_query_write(insert_new_loan_query, tuple_for_insert_query).lastrowid
 
-            #insert album into album_copy table
-            insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
-            'VALUES(?,?)'
-            tuple_for_insert_copy_query = (new_album_id, 0)
-            self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
+            # since the object created has by default id = -1, we have to set
+            # its id to that found in the database
+            loan_obj.set_loan_id(new_loan_id)
 
+            # Add the loan to the dictionary of loans
+            self._loans[loan_obj.get_id()] = loan_obj
 
         else:
-            self._albums[album._id] = album
-
-        print ("Missing implementation")
+            self._loans[loan_obj.get_id()] = loan_obj
 
 
-    def modify(self, modified_album):
+
+    def modify(self, modified_loan):
         """
         Modifies the values in the loan table
-        :param modified_album:
-        :return:
+        :param modified_loan: The loan object with attributes to replace a previous one, based on
+        the id property
+        :return: N/A
         """
+
+        print("Needs implementation")
 
         #modify_loans_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
         #tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
@@ -995,4 +993,3 @@ class LoanCatalog(Catalog):
         print("Implementation needed")
 
         return search_list
-

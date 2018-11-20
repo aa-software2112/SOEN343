@@ -2,12 +2,17 @@ import sqlite3
 import sys
 from sqlite3 import Error
 from faker import Faker
+import app.classes.database_container
 from app.controllers.catalog_controller import CatalogController
 from app.controllers.admin_controller import AdminController
 from app.controllers.client_controller import ClientController
-from app.classes.user import Admin, Client, User
-from app.classes.catalogs import *
-from app.classes.user import User
+from app.classes.user import Admin, Client
+from app.classes.loan import Loan
+from app.classes.book import Book
+from app.classes.album import Album
+from app.classes.magazine import Magazine
+from app.classes.movie import Movie
+from app.classes.catalogs import LoanCatalog, AlbumCatalog, MovieCatalog, BookCatalog, MagazineCatalog
 from app.common_definitions.common_paths import PATH_TO_DATABASE
 
 import time
@@ -110,8 +115,8 @@ def initializeAndFillDatabase():
     if len(glob.glob(PATH_TO_DATABASE)) == 1:
         return False
 
-    database = DatabaseContainer.get_instance()
-    DatabaseContainer.commit_lock = True
+    database = app.classes.database_container.DatabaseContainer.get_instance()
+    app.classes.database_container.DatabaseContainer.commit_lock = True
 
     print("- Filling database -")
 
@@ -237,7 +242,7 @@ def initializeAndFillDatabase():
     for table_name, table_sql in table_creation_dict.items():
         database.execute_query(table_sql)
 
-    DatabaseContainer.commit_lock = False
+    app.classes.database_container.DatabaseContainer.commit_lock = False
     database.commit_db()
 
     COPIES = 3
@@ -258,6 +263,8 @@ def initializeAndFillDatabase():
     magazine_catalog = MagazineCatalog.get_instance()
     album_catalog = AlbumCatalog.get_instance()
     movie_catalog = MovieCatalog.get_instance()
+    loan_catalog = LoanCatalog.get_instance()
+
 
     # Create controllers in order to create users
     admin_controller = AdminController.get_instance()
@@ -274,8 +281,7 @@ def initializeAndFillDatabase():
 
 
     # Don't commit until the end
-    DatabaseContainer.commit_lock = True
-
+    app.classes.database_container.DatabaseContainer.commit_lock = True
 
     # Fake data generator
     f = Faker()
@@ -381,8 +387,16 @@ def initializeAndFillDatabase():
 
     print("- Finished filling database -")
 
+    b = list(book_catalog.get_all().values())[0]
+    c = list(client_controller._client_catalog.get_all().values())[0]
+    print(b)
+
+    nl = Loan(c, b)
+
+    loan_catalog.add(nl, True)
+
     # Turn off commit lock
-    DatabaseContainer.commit_lock = False
+    app.classes.database_container.DatabaseContainer.commit_lock = False
     database.commit_db()
 
     return True

@@ -3,7 +3,7 @@ from app.classes.album import Album
 from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
-from app.classes.catalogs import *
+from app.classes.catalogs import LoanCatalog, AlbumCatalog, MovieCatalog, BookCatalog, MagazineCatalog
 from app.classes.database_container import DatabaseContainer
 
 class CatalogController(Controller):
