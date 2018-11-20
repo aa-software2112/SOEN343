@@ -387,14 +387,6 @@ def initializeAndFillDatabase():
 
     print("- Finished filling database -")
 
-    b = list(book_catalog.get_all().values())[0]
-    c = list(client_controller._client_catalog.get_all().values())[0]
-    print(b)
-
-    nl = Loan(c, b)
-
-    loan_catalog.add(nl, True)
-
     # Turn off commit lock
     app.classes.database_container.DatabaseContainer.commit_lock = False
     database.commit_db()
