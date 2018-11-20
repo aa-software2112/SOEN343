@@ -126,14 +126,6 @@ class UserCatalog(Catalog):
         self._rwl.end_read()
         return temp
 
-    # takes a user id and gets his cart set
-    def get_cart_set(self, user_id):
-        self._rwl.start_read()
-        user = self.get(user_id)
-        temp = user.get_cart_set()
-        self._rwl.end_read()
-        return temp
-
 class BookCatalog(Catalog):
     """
         This class uses the Singleton pattern.

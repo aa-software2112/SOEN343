@@ -81,7 +81,8 @@ class User:
                 return i
             i = i+1
 
-
+    def delete_from_cart(self, o_id):
+        return self._cart.delete_by_id(o_id)
         
 class Admin(User):
 
