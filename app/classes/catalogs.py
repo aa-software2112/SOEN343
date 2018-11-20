@@ -104,6 +104,9 @@ class UserCatalog(Catalog):
         user = self.get(user_id)
         return user.get_cart_set()
 
+    def add_to_cart(self, user_id, object_id):
+        user = self.get(user_id)
+        user.add_to_user_cart(object_id)
 
 
 class BookCatalog(Catalog):
