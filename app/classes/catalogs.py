@@ -172,9 +172,9 @@ class BookCatalog(Catalog):
         return temp
 
     def get(self, id):
-        self._rwl.start_read
+        self._rwl.start_read()
         temp = self._books[id]
-        self._rwl.end_read
+        self._rwl.end_read()
         return temp
 
     def modify(self, modified_book):
