@@ -214,6 +214,7 @@ class ClientController(Controller):
 
     # deletes the item specified by 'o_id' from cart and returns the updated cart
     def delete_from_cart(self, o_id, user_id):
+
         usr = self._client_catalog.get(user_id)
+
         usr.delete_from_cart(o_id)
-        return self._client_catalog.get_cart_set(user_id)
