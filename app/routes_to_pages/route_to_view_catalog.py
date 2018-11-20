@@ -169,5 +169,5 @@ def delete_cart():
     o_id = request.form["id"]
     user_id = g.user["_id"]
     message = client_controller.delete_from_cart(o_id, user_id)
-    current_cart = client_controller.get_all_cart_items(user_id)
-    return render_template('view_cart.html', current_cart=current_cart, message=message)
+    current_cart = list(client_controller.get_all_cart_items(user_id))
+    return render_template('view_cart.html', user_cart=current_cart, message=message)
