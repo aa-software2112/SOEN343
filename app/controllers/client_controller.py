@@ -196,6 +196,18 @@ class ClientController(Controller):
     def add_to_cart(self, catalog_type, object_id, user_id):
 
         print(catalog_type)
+
         o = self._catalog_controller.get_catalog_entry_by_id(catalog_type, object_id)
-        
-        self._client_catalog.add_to_cart(user_id, o)
+        print(o)
+        old, new = self._client_catalog.add_to_cart(user_id, o)
+        if old - new == 0:
+
+            return "Item already exist  "
+        else:
+
+            return "Item added successfully"
+
+
+
+
+
