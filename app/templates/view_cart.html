@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+<p class="text-center pb-4">My Cart</p>
+{% endblock %}
+
+{% block content %}
+<div class="card p-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8" style="font-size: 24px"> <span class="text-monospace">Shopping Cart</span> </div>
+        </div>
+        <hr>
+
+        <!-- Change records to user_cart when add_to_cart is implemented -->
+        {% for record in records %}
+
+
+        <div class="row" id="cart-list">
+            <div class="col-8">
+                {% if (record.record_type == "Book") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._author }}</small></p>
+                <p class="font-weight-light small"> {{ record._format }} </p>
+
+                {% elif (record.record_type == "Movie") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._director }}</small></p>
+                <p class="font-weight-light small"> {{ record._release_date }} </p>
+
+                {% elif (record.record_type == "Album") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._artist }}</small></p>
+                <p class="font-weight-light small"> {{ record._release_date }} </p>
+
+                {% elif (record.record_type == "Magazine") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._publisher }}</small></p>
+                <p class="font-weight-light small"> {{ record._year_of_publication }} </p>
+
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-1">
+                        <form action="" method="POST">
+                            <button type="submit" class="btn btn-link text-info">
+                                <span class="small"> Delete </span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-1">
+                        <button type="button" class="btn btn-link text-info">
+                            <span class="small"> Details </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+        {% endfor %}
+        <div>
+            <form action="" method="POST">
+                <button type="submit" class="btn btn-outline-info float-right mt-3 "> Proceed to Checkout </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    #cart-list p {
+        margin: 0
+    }
+
+    #cart-list .title {
+        font-size: 18px;
+        padding-right: 6px;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{{ details.book('book', author=record._author, title=record._title,
+format=record._format, pages=record._pages, publisher=record._publisher,
+year_of_publication = record._year_of_publication, language = record._language,
+ISBN10 = record._ISBN10, ISBN13 = record._ISBN13 )}}
