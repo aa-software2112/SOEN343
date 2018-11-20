@@ -5,12 +5,11 @@
     <input type="hidden" name="catalog_type" value="2">
     <div class="my-4">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter movie title" name="search_value"aria-label="movie-search"
+            <input type="text" class="form-control" placeholder="Enter movie title" name="search_value" aria-label="movie-search"
                 aria-describedby="movie-search-btn">
             <div class="input-group-prepend" id="movie-search-btn">
                 <button class="btn btn-outline-info" type="submit">Search</button>
-                <button class="btn btn-info" data-toggle="collapse" data-target="#movie-search-box"
-                    type="button">
+                <button class="btn btn-info" data-toggle="collapse" data-target="#movie-search-box" type="button">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -36,8 +35,12 @@
             <th scope="col"> Dubbed </th>
             <th scope="col"> Release Date </th>
             <th scope="col"> Run Time </th>
+            {% if g.user["_is.admin"] == 1 %}
             <th></th>
             <th></th>
+            {% else %}
+            <th></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -68,8 +71,8 @@
             <td class="px-2">
                 <form action="/adminView/modifyCatalogForm" method="post">
                     <input type="hidden" name="type" value="2">
-                    <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog"
-                        value={{catalog_item._id}} class="btn btn-info" style="cursor:pointer">
+                    <button type="submit" href="{{url_for('modify_catalog_form')}}" name="modify_catalog" value={{catalog_item._id}}
+                        class="btn btn-info" style="cursor:pointer">
                         <i class="far fa-edit"></i>
                     </button>
                 </form>
@@ -80,6 +83,16 @@
                     <input type="hidden" name="type" value="2">
                     <button type="submit" class="btn btn-outline-info" style="cursor: pointer">
                         <i class="far fa-trash-alt"></i>
+                    </button>
+                </form>
+            </td>
+            {% else %}
+            <td>
+                <form action="/" method="post">
+                    <input type="hidden" id="{{catalog_item._id}}" name="id" value="{{ catalog_item._id }}">
+                    <input type="hidden" id="type" name="type" value="2">
+                    <button type="button" class="btn btn-outline-info result" id="btn-add-to-cart" onclick="add_to_cart('{{catalog_item._id}}');"
+                        data-toggle="popover"> <span><i class="fas fa-cart-arrow-down"></i></span>
                     </button>
                 </form>
             </td>

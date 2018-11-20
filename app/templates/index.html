@@ -46,6 +46,7 @@
                     <a class="nav-item nav-link" href="/adminView"> {{ g.user["_username"] }} </a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                       {% else %}
+                    <a class="nav-item nav-link mr-5" href="/viewCart"><i class="fas fa-shopping-cart"></i> <span class="p-1">Cart</span> </a>
                     <a class="nav-item nav-link" href="/viewCatalog"> {{ g.user["_username"] }} </a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                      {% endif %}
@@ -56,7 +57,7 @@
             </div>
          </div>
       </nav>
-      <main role="main" class="container my-5">
+      <main role="main" class="container-fluid my-5">
          <div class="starter-template">
             {% if g.user %}
             <h1 class="display-4">
@@ -69,7 +70,7 @@
 
         {% include '/includes/messages.html' %}
 
-        <div id="main-content-area" class="container">
+        <div id="main-content-area" class="container-fluid" style="width: 65%">
          {% block content %}
 
          {% endblock %}
