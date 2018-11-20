@@ -12,9 +12,9 @@ class Cart:
 		for item in self._items:
 			if item.get_id() == id:
 				self._items.discard(item)
-				return "success"
+				return "Item successfully removed from cart"
 			else:
-				return "error"
+				return "Item could not be found in cart"
 
 	def make_loan(self):
 		print("implementation required")
