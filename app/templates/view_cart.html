@@ -6,6 +6,11 @@
 {% endblock %}
 
 {% block content %}
+
+{% if message %}
+    <div class="alert alert-warning"> {{ message }} </div>
+{% endif %}
+
 <div class="card p-3">
     <div class="card-body">
         <div class="row">
@@ -43,7 +48,8 @@
 
                 <div class="row">
                     <div class="col-1">
-                        <form action="" method="POST">
+                       <form action="/deleteCart" method="post">
+                            <input type="hidden" name="id" value="{{record._id}}">
                             <button type="submit" class="btn btn-link text-info">
                                 <span class="small"> Delete </span>
                             </button>
