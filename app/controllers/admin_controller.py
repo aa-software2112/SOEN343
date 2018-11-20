@@ -225,3 +225,8 @@ class AdminController(Controller):
         usr = self._admin_catalog.get(admin_id)
         index = usr.get_index_from_object(record_object)
         usr.set_index_last_searched(index)
+
+    def search_transaction_by(self, search_transaction_key_values):
+        
+        lst = self._catalog_controller.search_transaction_by(self, search_transaction_key_values)
+        return lst
