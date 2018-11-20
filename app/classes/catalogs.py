@@ -346,6 +346,16 @@ class BookCatalog(Catalog):
 
         return temp
 
+    def set_available(self, book_copy_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id ?'
+        self.db.execute_query_write(update_copy_query, (book_copy_id,))
+
+        update_book_available = 'UPATE book SET quantity_available = quantity_available +1 INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ?'
+        self.db.execute_query_write(update_book_available,(book_copy_id,))
+        self._rwl.end_write()
+
+
 class MovieCatalog(Catalog):
     """
         This class uses the Singleton pattern.
@@ -567,6 +577,15 @@ class MovieCatalog(Catalog):
         self._rwl.end_read()
         return temp
 
+    def set_available(self, movie_copy_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id ?'
+        self.db.execute_query_write(update_copy_query, (movie_copy_id,))
+
+        update_book_available = 'UPATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
+        self.db.execute_query_write(update_book_available, (movie_copy_id,))
+        self._rwl.end_write()
+
 class MagazineCatalog(Catalog):
     """
         This class uses the Singleton pattern.
@@ -781,6 +800,8 @@ class MagazineCatalog(Catalog):
         temp = helper_functions.filter(transformed_dict, last_searched_list)
         self._rwl.end_read()
         return temp
+
+
 
 class AlbumCatalog(Catalog):
     """
@@ -997,6 +1018,15 @@ class AlbumCatalog(Catalog):
         self._rwl.end_read()
         return temp
 
+    def set_available(self, album_copy_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id ?'
+        self.db.execute_query_write(update_copy_query, (album_copy_id,))
+
+        update_book_available = 'UPATE album SET quantity_available = quantity_available +1 INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ?'
+        self.db.execute_query_write(update_book_available, (album_copy_id,))
+        self._rwl.end_write()
+
 class LoanCatalog(Catalog):
     """
     This class uses the Singleton pattern.
@@ -1139,3 +1169,19 @@ class LoanCatalog(Catalog):
         print("Implementation needed")
 
         return search_list
+
+    def return_loaned_items(self, loan_id):
+        loan = self.get(loan_id)
+        loan.set_loan_as_returned()
+        record_type = loan.get_table_name()
+
+        if record_type == "book_copy":
+            self.book_catalog.set_available(loan.get_record_id)
+
+        elif record_type == "album_copy":
+            self.album_catalog.set_available(loan.get_record_id)
+
+        elif record_type == "movie_copy":
+            self.movie_catalog.set_available(loan.get_record_id)
+
+

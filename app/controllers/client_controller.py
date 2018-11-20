@@ -29,6 +29,7 @@ class ClientController(Controller):
             self._db_loaded = False
             self._client_catalog = app.classes.catalogs.UserCatalog()
             self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
+            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
 
     def load_database_into_memory(self):
 
@@ -216,3 +217,24 @@ class ClientController(Controller):
     def delete_from_cart(self, o_id, user_id):
         usr = self._client_catalog.get(user_id)
         usr.delete_from_cart(o_id)
+
+    def get_loaned_items(self, client_id):
+        usr = self._client_catalog.get(client_id)
+
+        '''Test'''
+        loan1 = {'_id': 1, '_name': 'My first loan'}
+        loan2 = {'_id': 2, '_name': 'My second loan'}
+        loan3 = {'_id': 3, '_name': 'My third loan'}
+        user_loans = [loan1, loan2, loan3]
+        usr.set_loan_list(user_loans)
+        ''''''
+
+        loaned_items = usr.get_loaned_items()
+
+        return loaned_items
+
+    def return_loaned_items(self, loaned_items_ids, client_id):
+        usr = self._client_catalog.get(client_id)
+        for loan_id in loaned_items_ids:
+            self._loan_catalog.return_loaned_items(loan_id)
+            usr.remove_loan(loan_id)

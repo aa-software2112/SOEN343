@@ -68,6 +68,14 @@ class Loan:
         """
         return self._id
 
+    def get_record_id(self):
+
+        return self._record_id
+
+    def get_table_name(self):
+        return self._table_name
+
+
 
     def __str__(self):
         return "Loan | ID: " + str(self._id) + "UserID: " + self._user_id + "RecordID: " + self._record_id + "Table Name: " + self._table_name \
