@@ -392,7 +392,6 @@ class MovieCatalog(Catalog):
                 movie._total_quantity = existing_movie_id_fetched[1] + 1
                 movie._quantity_available = existing_movie_id_fetched[2] + 1
 
-
                 #insert movie into movie_copy table
                 insert_new_movie_copy_query = 'INSERT INTO movie_copy(movie_id, isLoaned)' \
                 'VALUES(?,?)'
@@ -765,6 +764,7 @@ class AlbumCatalog(Catalog):
                 album._id = existing_album_id_fetched[0]
                 album._total_quantity = existing_album_id_fetched[1] + 1
                 album._quantity_available = existing_album_id_fetched[2] + 1
+                
                 #insert album into album_copy table
                 insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
                 'VALUES(?,?)'
