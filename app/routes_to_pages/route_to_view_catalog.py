@@ -3,6 +3,8 @@ from app import app
 from app.common_definitions.helper_functions import login_required
 from app import client_controller, admin_controller, catalog_controller
 from app.controllers.catalog_controller import CatalogController
+from app.classes.book import Book
+
 
 # Needs to be redone
 @app.route('/viewCatalog', methods=['GET', 'POST'])
@@ -50,9 +52,8 @@ def viewCatalogTab():
 
 @app.route("/addToCart", methods=['GET', 'POST'])
 def addToCart():
-    if request.method == "POST":
-        catalog_id = request.form["catalog_id"]
-        catalog_type = request.form["catalog_type"]
+    catalog_id = request.form["catalog_id"]
+    catalog_type = request.form["catalog_type"]
     return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
 
 # To-do - Filters
@@ -156,6 +157,6 @@ def backToList():
 @app.route("/viewCart", methods=['GET', 'POST'])
 def viewCart():
     user_cart = client_controller.get_all_cart_items(g.user["_id"])
-    all_records = list(catalog_controller.get_records_by_catalog(CatalogController.BOOK_TYPE).values())
+    all_records = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
 
     return render_template("view_cart.html", user_cart = user_cart, records = all_records)

@@ -1,0 +1,27 @@
+<!-- BOOK -->
+{%- macro book(name, id='', type='', author='', title='', format='', pages='', publisher='', year_of_publication='', language='',
+ISBN10='', ISBN13='') -%}
+<p><span class="text-monospace text-info font-weight-bold">{{ title }}</span><small class="font-weight-light">
+        by {{ author }}</small></p>
+<p class="font-weight-light"> {{ format }} </p>
+<div>
+        <button type="submit" class="btn btn-link text-info">
+            <span class="small"> Delete </span>
+        </button>
+        <span class="font-weight-light"> | </span>
+        <button type="button" class="btn btn-link text-info">
+            <span class="small"> Details </span>
+        </button>
+    </div>
+{%- endmacro %}
+
+<!-- MOVIE -->
+{%- macro movie(name, id='', type='', title='', director='', producers='', actors='', language='', subtitles='', dubbed='',
+release_date='', runtime='') -%}
+
+{%- endmacro %}
+
+<!-- ALBUM -->
+{%- macro album(name, type='', title='', artist='', label='', release_date='', ASIN='') -%}
+
+{%- endmacro %}
