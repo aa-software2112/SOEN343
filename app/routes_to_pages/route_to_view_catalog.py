@@ -156,7 +156,8 @@ def backToList():
 
 @app.route("/viewCart", methods=['GET', 'POST'])
 def viewCart():
-    user_cart = client_controller.get_all_cart_items(g.user["_id"])
+    user_cart = list(client_controller.get_all_cart_items(g.user["_id"]))
+    # Testing
     all_records = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
 
     return render_template("view_cart.html", user_cart = user_cart, records = all_records)
