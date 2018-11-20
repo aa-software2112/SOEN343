@@ -27,6 +27,21 @@ class User:
         self._cart = Cart()
         self._loan_list = []
 
+    def get_session_dict(self):
+        session_dict = {
+            "_id": self._id,
+            "_first_name": self._first_name,
+            "_last_name": self._last_name,
+            "_physical_address": self._physical_address,
+            "_email": self._email,
+            "_phone_number": self._phone_number,
+            "_username": self._username,
+            "_password": self._password,
+            "_is_admin": self._is_admin,
+            "_is_logged": self._is_logged,
+            "_last_logged": self._last_logged
+        }
+        return session_dict
 
     def get_cart_set(self):
         return self._cart.get_set()
