@@ -6,6 +6,11 @@
 {% endblock %}
 
 {% block content %}
+
+{% if message %}
+    <div class="alert alert-warning"> {{ message }} </div>
+{% endif %}
+
 <div class="card p-3">
     <div class="card-body">
         <div class="row">
