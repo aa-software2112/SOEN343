@@ -43,10 +43,9 @@
             <div class="navbar-nav ml-4">
                 {% if g.user %}
                      {% if g.user["_is_admin"] == 1 %}
-                    <a class="nav-item nav-link" href="/adminView"> {{ g.user["_username"] }} </a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                       {% else %}
-                    <a class="nav-item nav-link" href="/viewCatalog"> {{ g.user["_username"] }} </a>
+                    <a class="nav-item nav-link mr-5" href="/viewCart"><i class="fas fa-shopping-cart"></i> <span class="p-1">Cart</span> </a>
                     <a class="nav-item nav-link" href="/logout"> Logout </a>
                      {% endif %}
                 {% else %}
@@ -56,7 +55,7 @@
             </div>
          </div>
       </nav>
-      <main role="main" class="container my-5">
+      <main role="main" class="container-fluid my-5">
          <div class="starter-template">
             {% if g.user %}
             <h1 class="display-4">
@@ -69,21 +68,9 @@
 
         {% include '/includes/messages.html' %}
 
-        <div id="main-content-area" class="container">
+        <div id="main-content-area" class="container-fluid" style="width: 65%">
          {% block content %}
-            {% for book in books %}
-            <div class="card mb-3">
-               <div class="card-header">
-                  Featured
-               </div>
 
-               <div class="card-body">
-                  <h5 class="card-title"> {{ book.title }} </h5>
-                  <p class="card-text"> {{ book.author }} </p>
-                  <a href="#" class="btn btn-primary"> Rent this book </a>
-               </div>
-            </div>
-            {% endfor %}
          {% endblock %}
         </div>
       </main>

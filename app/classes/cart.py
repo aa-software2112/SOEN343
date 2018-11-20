@@ -9,7 +9,12 @@ class Cart:
 		self._items.add(item)
 
 	def delete_by_id(self, id):
-		print("implementation required")
+		for item in self._items:
+			if item.get_id() == id:
+				self._items.discard(item)
+				return "Item successfully removed from cart"
+			else:
+				return "Item could not be found in cart"
 
 	def make_loan(self):
 		print("implementation required")

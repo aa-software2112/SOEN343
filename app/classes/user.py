@@ -27,6 +27,21 @@ class User:
         self._cart = Cart()
         self._loan_list = []
 
+    def get_session_dict(self):
+        session_dict = {
+            "_id": self._id,
+            "_first_name": self._first_name,
+            "_last_name": self._last_name,
+            "_physical_address": self._physical_address,
+            "_email": self._email,
+            "_phone_number": self._phone_number,
+            "_username": self._username,
+            "_password": self._password,
+            "_is_admin": self._is_admin,
+            "_is_logged": self._is_logged,
+            "_last_logged": self._last_logged
+        }
+        return session_dict
 
     def get_cart_set(self):
         return self._cart.get_set()
@@ -66,7 +81,20 @@ class User:
                 return i
             i = i+1
 
+    def delete_from_cart(self, o_id):
+        return self._cart.delete_by_id(o_id)
 
+    def set_loan_list(self, loan_list):
+        self._loan_list = loan_list
+
+    def get_loaned_items(self):
+        print('returning loaned items list')
+        return self._loan_list
+
+    def remove_loan(self, loan_id):
+        for loan_obj in self._loan_list:
+            if loan_obj.get_id() == loan_id:
+                self._loan_list.remove(loan_obj)
         
 class Admin(User):
 
