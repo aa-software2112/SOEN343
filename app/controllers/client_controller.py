@@ -222,7 +222,7 @@ class ClientController(Controller):
         old, new = self._client_catalog.add_to_cart(user_id, o)
         if old - new == 0:
 
-            return "Item already exist  "
+            return "Item already exist in cart "
         else:
 
             return "Item added successfully"

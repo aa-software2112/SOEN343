@@ -165,17 +165,15 @@ def backToList():
 @app.route("/viewCart", methods=['GET', 'POST'])
 def viewCart():
     user_cart = list(client_controller.get_all_cart_items(g.user["_id"]))
-    # Testing
-    all_records = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
-
-    return render_template("view_cart.html", user_cart = user_cart, records = all_records)
+    
+    return render_template("view_cart.html", user_cart = user_cart)
 
 @app.route('/deleteCart', methods=['POST'])
 @login_required
 def delete_cart():
     #get the id of item to be deleted
-    o_id = request.form["id"]
-    user_id = g.user["_id"]
+    o_id = int(request.form["id"])
+    user_id = int(g.user["_id"])
     message = client_controller.delete_from_cart(o_id, user_id)
     current_cart = list(client_controller.get_all_cart_items(user_id))
     return render_template('view_cart.html', user_cart=current_cart, message=message)
