@@ -15,8 +15,8 @@ class Cart:
 			if item.get_id() == id:
 				self._items.discard(item)
 				return "Item successfully removed from cart"
-			else:
-				return "Item could not be found in cart"
+			
+		return "Item could not be found in cart"
 
 	def make_loan(self):
 		print("implementation required")
