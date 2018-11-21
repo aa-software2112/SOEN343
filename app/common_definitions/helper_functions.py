@@ -125,3 +125,7 @@ def search_catalog(catalog, search_string):
             lst.append(v)
 
     return lst
+
+def search_transaction_by(criteria, catalog_records):
+    lst = []
+    return lst
