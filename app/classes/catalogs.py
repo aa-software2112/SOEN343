@@ -351,7 +351,7 @@ class BookCatalog(Catalog):
         update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id ?'
         self.db.execute_query_write(update_copy_query, (book_copy_id,))
 
-        update_book_available = 'UPATE book SET quantity_available = quantity_available +1 INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ?'
+        update_book_available = 'UPDATE book SET quantity_available = quantity_available +1 INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ?'
         self.db.execute_query_write(update_book_available,(book_copy_id,))
         self._rwl.end_write()
 
@@ -582,8 +582,8 @@ class MovieCatalog(Catalog):
         update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id ?'
         self.db.execute_query_write(update_copy_query, (movie_copy_id,))
 
-        update_book_available = 'UPATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
-        self.db.execute_query_write(update_book_available, (movie_copy_id,))
+        update_movie_available = 'UPDATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
+        self.db.execute_query_write(update_movie_available, (movie_copy_id,))
         self._rwl.end_write()
 
 class MagazineCatalog(Catalog):
@@ -1023,8 +1023,8 @@ class AlbumCatalog(Catalog):
         update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id ?'
         self.db.execute_query_write(update_copy_query, (album_copy_id,))
 
-        update_book_available = 'UPATE album SET quantity_available = quantity_available +1 INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ?'
-        self.db.execute_query_write(update_book_available, (album_copy_id,))
+        update_album_available = 'UPDATE album SET quantity_available = quantity_available +1 INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ?'
+        self.db.execute_query_write(update_album_available, (album_copy_id,))
         self._rwl.end_write()
 
 class LoanCatalog(Catalog):
