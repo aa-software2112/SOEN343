@@ -1,8 +1,9 @@
 from app.controllers.controller import Controller
-from app.classes.catalogs import UserCatalog
+import app.classes.catalogs
 from app.classes.user import Admin, Client
-from app.classes.user_container import User
-
+from app.classes.database_container import DatabaseContainer
+import app.controllers.catalog_controller
+import time
 
 class ClientController(Controller):
     """
@@ -14,20 +15,21 @@ class ClientController(Controller):
     def get_instance():
         """ Static access method. """
         if ClientController._instance is None:
-            ClientController()
+            ClientController._instance = ClientController()
         return ClientController._instance
 
-    def __init__(self, database, catalog_controller):
+    def __init__(self):
         if ClientController._instance is not None:
             raise Exception("This class is a singleton!")
 
         else:
             ClientController._instance = self
-            Controller.__init__(self, database)
+            Controller.__init__(self, DatabaseContainer.get_instance())
 
             self._db_loaded = False
-            self._client_catalog = UserCatalog(database)
-            self._catalog_controller = catalog_controller
+            self._client_catalog = app.classes.catalogs.UserCatalog()
+            self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
+            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
 
     def load_database_into_memory(self):
 
@@ -49,8 +51,10 @@ class ClientController(Controller):
         #    print(v)
 
     def get_all_logged_clients(self):
+        all_clients = list(self._client_catalog.get_all().values())
+        logged_clients = [client for client in all_clients if client._is_logged == 1]
+        return logged_clients
 
-        return list(self._client_catalog.get_all().values())
 
     # function takes self and a string "username" to get the user from the client table.
     # returns list with client information or emptylist if client doesn't
@@ -104,6 +108,15 @@ class ClientController(Controller):
 
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
+
+    def login_client(self, username):
+        client = self.get_client_by_username(username)
+
+        if len(client) == 1:
+            client = client[0]
+            client._is_logged = 1
+            client._last_logged = time.time()
+            self._client_catalog.modify(client)
 
     # function takes self and username
     # updates value in attribute isLogged to 0.
@@ -191,7 +204,14 @@ class ClientController(Controller):
 
     # returns the cart set from the specific client with 'client_id'
     def get_all_cart_items(self, client_id):
-        return self._client_catalog.get_cart_set(client_id)
+       
+        # Extract the user
+        client = self._client_catalog.get(client_id)
+
+        # Extract the cart
+        cart_set = client.get_cart_set()
+
+        return cart_set
 
     def add_to_cart(self, catalog_type, object_id, user_id):
 
@@ -207,7 +227,29 @@ class ClientController(Controller):
 
             return "Item added successfully"
 
+    # deletes the item specified by 'o_id' from cart and returns the updated cart
+    def delete_from_cart(self, o_id, user_id):
+        usr = self._client_catalog.get(user_id)
+        # returns the message passed success/error
+        return usr.delete_from_cart(o_id)
 
+    def get_loaned_items(self, client_id):
+        usr = self._client_catalog.get(client_id)
 
+        '''Test'''
+        loan1 = {'_id': 1, '_name': 'My first loan'}
+        loan2 = {'_id': 2, '_name': 'My second loan'}
+        loan3 = {'_id': 3, '_name': 'My third loan'}
+        user_loans = [loan1, loan2, loan3]
+        usr.set_loan_list(user_loans)
+        ''''''
 
+        loaned_items = usr.get_loaned_items()
 
+        return loaned_items
+
+    def return_loaned_items(self, loaned_items_ids, client_id):
+        usr = self._client_catalog.get(client_id)
+        for loan_id in loaned_items_ids:
+            self._loan_catalog.return_loaned_items(loan_id)
+            usr.remove_loan(loan_id)

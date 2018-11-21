@@ -3,11 +3,13 @@ from app.common_definitions.helper_functions import convert_date_time_to_epoch a
 from app.common_definitions.helper_functions import search_catalog
 from app.common_definitions import helper_functions
 from app.common_definitions.helper_functions import sort_records
+from app.controllers.client_controller import ClientController
 from app.classes.book import Book
 from app.classes.movie import Movie
 from app.classes.magazine import Magazine
 from app.classes.album import Album
-
+from app.classes.database_container import DatabaseContainer
+from app.classes.lock import ReadWriteLock
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -45,18 +47,32 @@ class Catalog(abc.ABC):
 
 # Can be used to store either administrators or clients
 class UserCatalog(Catalog):
-    
-    def __init__(self, database):
-        self.db = database
+    """
+        This class does NOT use the Singleton pattern as
+        multiple instances of this class may be created (due to there
+        being an admin and client - two separate entities)
+        """
+
+    def __init__(self):
+
+        self.db = DatabaseContainer.get_instance()
         self._users = {}
+        self._rwl = ReadWriteLock()
         
     def get_all(self):
-        return self._users
+        self._rwl.start_read()
+        temp = self._users
+        self._rwl.end_read()
+        return temp
         
     def get(self, id):
-        return self._users[id]
+        self._rwl.start_read()
+        temp = self._users[id]
+        self._rwl.end_read()
+        return temp
         
     def modify(self, modified_user):
+        self._rwl.start_write()
 
         modify_user_query = 'UPDATE client SET firstName = ?, lastName = ?, physicalAddress = ?, email = ?, phoneNumber = ?, username = ?' \
             ', password = ?, isAdmin = ?, isLogged = ?, lastLogged = ? WHERE id = ?'
@@ -68,7 +84,10 @@ class UserCatalog(Catalog):
         self.db.execute_query_write(modify_user_query, tuple_for_modify_query)
         self._users[int(modified_user.get_id())] = modified_user
 
+        self._rwl.end_write()
+
     def add(self, user, add_to_db):
+        self._rwl.start_write()
 
         if add_to_db is True:
 
@@ -89,17 +108,25 @@ class UserCatalog(Catalog):
         else:
             self._users[user._id] = user
 
+        self._rwl.end_write()
+
     def remove(self, id):
+        self._rwl.start_write()
         remove_user = 'DELETE FROM client WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_user, (id,))
-        return self._users.pop(id, None)
+        temp = self._users.pop(id, None)
+        self._rwl.end_write()
+        return temp
 
     def search(self, search_string):
-        return search_catalog(self._users, search_string)
+        self._rwl.start_read()
+        temp = search_catalog(self._users, search_string)
+        self._rwl.end_read()
+        return temp
 
-    # takes a user id and gets his cart set
+     # takes a user id and gets his cart set
     def get_cart_set(self, user_id):
         user = self.get(user_id)
         return user.get_cart_set()
@@ -110,9 +137,11 @@ class UserCatalog(Catalog):
         old, new = user.add_to_user_cart(record_object)
         return old, new
 
-
-
 class BookCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Author":"_author",
                 "Title":"_title",
@@ -130,27 +159,48 @@ class BookCatalog(Catalog):
              "Descending Year":"_year_of_publication"
              }
 
-    def __init__(self, database):
-        self.db = database
-        # private variable convention in python have '_' prefix
-        self._books = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if BookCatalog._instance is None:
+            BookCatalog._instance = BookCatalog()
+        return BookCatalog._instance
+
+    def __init__(self):
+        if BookCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            BookCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            # private variable convention in python have '_' prefix
+            self._books = {}
+            self._rwl = ReadWriteLock()
 
     def get_all(self):
-        return self._books
+        self._rwl.start_read()
+        temp = self._books
+        self._rwl.end_read()
+        return temp
 
     def get(self, id):
-
-        return self._books[id]
+        self._rwl.start_read()
+        temp = self._books[id]
+        self._rwl.end_read()
+        return temp
 
     def modify(self, modified_book):
+        self._rwl.start_write()
         modify_book_query = 'UPDATE book SET author = ?, title = ?, format = ?, pages = ?, publisher = ?, year_of_publication = ?' \
             ', language = ?, isbn_10 = ?, isbn_13 = ? WHERE id = ? '
         tuple_for_modify_query = (modified_book._author, modified_book._title, modified_book._format, modified_book._pages, modified_book._publisher,
                                   modified_book._year_of_publication, modified_book._language, modified_book._ISBN10, modified_book._ISBN13, modified_book._id)
         self.db.execute_query_write(modify_book_query, tuple_for_modify_query)
         self._books[int(modified_book.get_id())] = modified_book
+        self._rwl.end_write()
 
     def add(self, book, add_to_db):
+
+        self._rwl.start_write()
 
         if add_to_db is True:
 
@@ -193,7 +243,7 @@ class BookCatalog(Catalog):
                 book._id = existing_book_id_fetched[0]
                 book._total_quantity = existing_book_id_fetched[1] + 1
                 book._quantity_available = existing_book_id_fetched[2] + 1
-                print(book._id , book._total_quantity, book._quantity_available)
+                #print(book._id , book._total_quantity, book._quantity_available)
 
 
                 #insert book into book_copy table
@@ -211,7 +261,10 @@ class BookCatalog(Catalog):
         else:
             self._books[book._id] = book
 
+        self._rwl.end_write()
+
     def get_copies(self, id):
+        self._rwl.start_read()
 
         # get all copies of a selected book by ID. The query looks for all copies by referencing the book_id from the book-copy table to the id from book table.
         # Each copy is stored in a book object and has the same attributes as the original book (main table) with its own id as an exception, 'book_copy.id'.
@@ -225,17 +278,22 @@ class BookCatalog(Catalog):
         for row in all_records:
             found_records.append(Book(row))
 
+        self._rwl.end_read()
         return found_records
 
     # 05/10/18 - This should probably be removed.
     def remove(self, id):
+        self._rwl.start_write()
         remove_book = 'DELETE FROM book WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_book, (id,))
-        return self._books.pop(id, None)
+        temp = self._books.pop(id, None)
+        self._rwl.end_write()
+        return temp
 
     def remove_copy(self, id):
+        self._rwl.start_write()
         fetched_book = []
         get_id_tuple = (id,)
 
@@ -259,6 +317,7 @@ class BookCatalog(Catalog):
         update_book_quantity_query = """ UPDATE book SET total_quantity = ?, quantity_available = ? WHERE id = ? """
         update_book_quantity_tuple = (_total_quantity, _available_quantity, _id)
         self.db.execute_query_write(update_book_quantity_query, update_book_quantity_tuple)
+        self._rwl.end_write()
 
     def display(self):
 
@@ -267,19 +326,23 @@ class BookCatalog(Catalog):
 
 
     def search(self, search_string):
-
-        return search_catalog(self._books, search_string)
+        self._rwl.start_read()
+        temp = search_catalog(self._books, search_string)
+        self._rwl.end_read()
+        return temp
 
     def sort(self, sort_key_values, last_searched_list):
+        self._rwl.start_read()
         # The sort_key_values is a string, not a dict
 
         transformed_sort_key_value = {}
-
         transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
-
-        return sort_records(transformed_sort_key_value, last_searched_list)
+        temp = sort_records(transformed_sort_key_value, last_searched_list)
+        self._rwl.end_read()
+        return temp
 
     def filter(self, filter_key_values, last_searched_list):
+        self._rwl.start_read()
 
         transformed_dict = {}
 
@@ -289,10 +352,26 @@ class BookCatalog(Catalog):
             # attribute of the objects stored in this catalog
             transformed_dict[ self.Filters[k] ] = v
 
-        return helper_functions.filter(transformed_dict, last_searched_list)
+        temp = helper_functions.filter(transformed_dict, last_searched_list)
+        self._rwl.end_read()
+
+        return temp
+
+    def set_available(self, book_copy_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id ?'
+        self.db.execute_query_write(update_copy_query, (book_copy_id,))
+
+        update_book_available = 'UPATE book SET quantity_available = quantity_available +1 INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ?'
+        self.db.execute_query_write(update_book_available,(book_copy_id,))
+        self._rwl.end_write()
 
 
 class MovieCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Director": "_director",
                "Title": "_title",
@@ -310,18 +389,37 @@ class MovieCatalog(Catalog):
              "Descending Runtime":"_runtime"
              }
 
-    def __init__(self, database):
-        self.db = database
-        self._movies = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if MovieCatalog._instance is None:
+            MovieCatalog._instance = MovieCatalog()
+        return MovieCatalog._instance
+
+    def __init__(self):
+        if MovieCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            MovieCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._movies = {}
+            self._rwl = ReadWriteLock()
 
     def get_all(self):
-        return self._movies
+        self._rwl.start_read()
+        temp = self._movies
+        self._rwl.end_read()
+        return temp
 
     def get(self, id):
-        return self._movies[id]
+        self._rwl.start_read()
+        temp = self._movies[id]
+        self._rwl.end_read()
+        return temp
 
 
     def add(self, movie, add_to_db):
+        self._rwl.start_write()
 
         if add_to_db is True:
 
@@ -364,8 +462,6 @@ class MovieCatalog(Catalog):
                 movie._id = existing_movie_id_fetched[0]
                 movie._total_quantity = existing_movie_id_fetched[1] + 1
                 movie._quantity_available = existing_movie_id_fetched[2] + 1
-                print(movie._id , movie._total_quantity, movie._quantity_available)
-
 
                 #insert movie into movie_copy table
                 insert_new_movie_copy_query = 'INSERT INTO movie_copy(movie_id, isLoaned)' \
@@ -382,9 +478,12 @@ class MovieCatalog(Catalog):
         else:
             self._movies[movie._id] = movie
 
+        self._rwl.end_write()
+
 
 
     def modify(self, modified_movie):
+        self._rwl.start_write()
 
         modify_movie_query = 'UPDATE movie SET title = ?, director = ?, producers = ?, actors = ?, language = ?, subtitles = ?' \
             ', dubbed = ?, release_date = ?, run_time = ? WHERE id = ?'
@@ -393,7 +492,10 @@ class MovieCatalog(Catalog):
         self.db.execute_query_write(modify_movie_query, tuple_for_modify_query)
         self._movies[int(modified_movie.get_id())] = modified_movie
 
+        self._rwl.end_write()
+
     def get_copies(self, id):
+        self._rwl.start_read()
 
         # get all copies of a selected movie by ID. The query looks for all copies by referencing the movie_id from the movie-copy table to the id from movie table.
         # Each copy is stored in a movie object and has the same attributes as the original movie (main table) with its own id as an exception, 'movie_copy.id'.
@@ -407,16 +509,21 @@ class MovieCatalog(Catalog):
         for row in all_records:
             found_records.append(Movie(row))
 
+        self._rwl.end_read()
         return found_records
 
     def remove(self, id):
+        self._rwl.start_write()
         remove_movie = 'DELETE FROM movie WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_movie, (id,))
-        return self._movies.pop(id, None)
+        temp = self._movies.pop(id, None)
+        self._rwl.end_write()
+        return temp
 
     def remove_copy(self, id):
+        self._rwl.start_write()
         fetched_movie = []
         get_id_tuple = (id,)
 
@@ -441,25 +548,33 @@ class MovieCatalog(Catalog):
 
         self.db.execute_query_write(update_movie_quantity_query, update_movie_quantity_tuple)
 
+        self._rwl.end_write()
+
     def display(self):
 
         for k, v in self._movies.items():
             print(v)
 
     def search(self, search_string):
-
-        return search_catalog(self._movies, search_string)
+        self._rwl.start_read()
+        temp = search_catalog(self._movies, search_string)
+        self._rwl.end_read()
+        return temp
 
     def sort(self, sort_key_values, last_searched_list):
+        self._rwl.start_read()
         # The sort_key_values is a string, not a dict
 
         transformed_sort_key_value = {}
 
         transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
 
-        return sort_records(transformed_sort_key_value, last_searched_list)
+        temp = sort_records(transformed_sort_key_value, last_searched_list)
+        self._rwl.end_read()
+        return temp
 
     def filter(self, filter_key_values, last_searched_list):
+        self._rwl.start_read()
 
         transformed_dict = {}
 
@@ -469,10 +584,24 @@ class MovieCatalog(Catalog):
             # attribute of the objects stored in this catalog
             transformed_dict[ self.Filters[k] ] = v
 
-        return helper_functions.filter(transformed_dict, last_searched_list)
+        temp = helper_functions.filter(transformed_dict, last_searched_list)
+        self._rwl.end_read()
+        return temp
 
+    def set_available(self, movie_copy_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id ?'
+        self.db.execute_query_write(update_copy_query, (movie_copy_id,))
+
+        update_book_available = 'UPATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
+        self.db.execute_query_write(update_book_available, (movie_copy_id,))
+        self._rwl.end_write()
 
 class MagazineCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Title": "_title",
                "Publisher": "_publisher",
@@ -487,17 +616,36 @@ class MagazineCatalog(Catalog):
              "Descending Year":"_year_of_publication"
              }
 
-    def __init__(self, database):
-        self.db = database
-        self._magazines = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if MagazineCatalog._instance is None:
+            MagazineCatalog._instance = MagazineCatalog()
+        return MagazineCatalog._instance
+
+    def __init__(self):
+        if MagazineCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            MagazineCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._magazines = {}
+            self._rwl = ReadWriteLock()
 
     def get_all(self):
-        return self._magazines
+        self._rwl.start_read()
+        temp = self._magazines
+        self._rwl.end_read()
+        return temp
 
     def get(self, id):
-        return self._magazines[id]
+        self._rwl.start_read()
+        temp = self._magazines[id]
+        self._rwl.end_read()
+        return temp
 
     def add(self, magazine, add_to_db):
+        self._rwl.start_write()
 
         if add_to_db is True:
 
@@ -528,9 +676,9 @@ class MagazineCatalog(Catalog):
                 self._magazines[new_magazine_id] = magazine
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query = (new_magazine_id, 0)
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
+                tuple_for_insert_copy_query = (new_magazine_id,)
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
             #else already exist. Need to add new magazine in second table and update quantity of first table
@@ -540,13 +688,13 @@ class MagazineCatalog(Catalog):
                 magazine._id = existing_magazine_id_fetched[0]
                 magazine._total_quantity = existing_magazine_id_fetched[1] + 1
                 magazine._quantity_available = existing_magazine_id_fetched[2] + 1
-                print(magazine._id , magazine._total_quantity, magazine._quantity_available)
+                #print(magazine._id , magazine._total_quantity, magazine._quantity_available)
 
 
                 #insert magazine into magazine_copy table
-                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id, isLoaned)' \
-                'VALUES(?,?)'
-                tuple_for_insert_copy_query =(magazine._id, 0)
+                insert_new_magazine_copy_query = 'INSERT INTO magazine_copy(magazine_id)' \
+                'VALUES(?)'
+                tuple_for_insert_copy_query =(magazine._id, )
                 self.db.execute_query_write(insert_new_magazine_copy_query, tuple_for_insert_copy_query)
 
                 #update magazine quantity in database
@@ -558,8 +706,11 @@ class MagazineCatalog(Catalog):
         else:
             self._magazines[magazine._id] = magazine
 
+        self._rwl.end_write()
+
 
     def modify(self, modified_magazine):
+        self._rwl.start_write()
         modify_magazine_query = 'UPDATE magazine SET title = ?, publisher = ?, year_of_publication = ?, language = ?, isbn_10 = ?, isbn_13 = ?' \
             'WHERE id = ? '
         tuple_for_modify_query = (modified_magazine._title, modified_magazine._publisher, modified_magazine._year_of_publication,
@@ -567,8 +718,10 @@ class MagazineCatalog(Catalog):
         self.db.execute_query_write(
             modify_magazine_query, tuple_for_modify_query)
         self._magazines[int(modified_magazine.get_id())] = modified_magazine
+        self._rwl.end_write()
 
     def get_copies(self, id):
+        self._rwl.start_read()
 
         found_records = []
         get_magazine_records_by_id_tuple = (id,)
@@ -579,17 +732,21 @@ class MagazineCatalog(Catalog):
 
         for row in all_records:
             found_records.append(Magazine(row))
-
+        self._rwl.end_read()
         return found_records
 
     def remove(self, id):
+        self._rwl.start_write()
         remove_magazine = 'DELETE FROM magazine WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_magazine, (id,))
-        return self._magazines.pop(id, None)
+        temp = self._magazines.pop(id, None)
+        self._rwl.end_write()
+        return temp
 
     def remove_copy(self, id):
+        self._rwl.start_write()
         fetched_magazine = []
         get_id_tuple = (id,)
 
@@ -614,25 +771,34 @@ class MagazineCatalog(Catalog):
 
         self.db.execute_query_write(update_magazine_quantity_query, update_magazine_quantity_tuple)
 
+        self._rwl.end_write()
+
     def display(self):
 
         for k, v in self._magazines.items():
             print(v)
 
     def search(self, search_string):
+        self._rwl.start_read()
 
-        return search_catalog(self._magazines, search_string)
+        temp = search_catalog(self._magazines, search_string)
+        self._rwl.end_read()
+        return temp
 
     def sort(self, sort_key_values, last_searched_list):
+        self._rwl.start_read()
         # The sort_key_values is a string, not a dict
 
         transformed_sort_key_value = {}
 
         transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
 
-        return sort_records(transformed_sort_key_value, last_searched_list)
+        temp = sort_records(transformed_sort_key_value, last_searched_list)
+        self._rwl.end_read()
+        return temp
 
     def filter(self, filter_key_values, last_searched_list):
+        self._rwl.start_read()
 
         transformed_dict = {}
 
@@ -642,9 +808,17 @@ class MagazineCatalog(Catalog):
             # attribute of the objects stored in this catalog
             transformed_dict[ self.Filters[k] ] = v
 
-        return helper_functions.filter(transformed_dict, last_searched_list)
+        temp = helper_functions.filter(transformed_dict, last_searched_list)
+        self._rwl.end_read()
+        return temp
+
+
 
 class AlbumCatalog(Catalog):
+    """
+        This class uses the Singleton pattern.
+        """
+    _instance = None
 
     Filters = {"Title": "_title",
                "Artist": "_artist",
@@ -659,17 +833,36 @@ class AlbumCatalog(Catalog):
              "Descending Label":"_label"
              }
 
-    def __init__(self, database):
-        self.db = database
-        self._albums = {}
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if AlbumCatalog._instance is None:
+            AlbumCatalog._instance = AlbumCatalog()
+        return AlbumCatalog._instance
+
+    def __init__(self):
+        if AlbumCatalog._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            AlbumCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._albums = {}
+            self._rwl = ReadWriteLock()
 
     def get_all(self):
-        return self._albums
+        self._rwl.start_read()
+        temp = self._albums
+        self._rwl.end_read()
+        return temp
 
     def get(self, id):
-        return self._albums[id]
+        self._rwl.start_read()
+        temp = self._albums[id]
+        self._rwl.end_read()
+        return temp
 
     def add(self, album, add_to_db):
+        self._rwl.start_write()
 
         if add_to_db is True:
 
@@ -691,8 +884,7 @@ class AlbumCatalog(Catalog):
                 tuple_for_insert_query = (album._type, album._title, album._artist, album._label, to_epoch(album._release_date), album._ASIN, album._total_quantity, album._quantity_available)
 
                 # getting the id of the last inserted album
-                new_album_id = self.db.execute_query_write(
-                insert_new_album_query, tuple_for_insert_query).lastrowid
+                new_album_id = self.db.execute_query_write(insert_new_album_query, tuple_for_insert_query).lastrowid
                 # since the object created has by default id = 0, we have to set
                 # its id to the id obtained above
                 album._id = new_album_id
@@ -711,13 +903,12 @@ class AlbumCatalog(Catalog):
                 album._id = existing_album_id_fetched[0]
                 album._total_quantity = existing_album_id_fetched[1] + 1
                 album._quantity_available = existing_album_id_fetched[2] + 1
-                print(album._id , album._total_quantity, album._quantity_available)
-
-
+                
                 #insert album into album_copy table
                 insert_new_album_copy_query = 'INSERT INTO album_copy(album_id, isLoaned)' \
                 'VALUES(?,?)'
                 tuple_for_insert_copy_query =(album._id, 0)
+
                 self.db.execute_query_write(insert_new_album_copy_query, tuple_for_insert_copy_query)
 
                 #update album quantity in database
@@ -729,15 +920,22 @@ class AlbumCatalog(Catalog):
         else:
             self._albums[album._id] = album
 
+        self._rwl.end_write()
+
 
     def modify(self, modified_album):
+        self._rwl.start_write()
+
         modify_album_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
         tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
                                   modified_album._label, to_epoch(modified_album._release_date), modified_album._ASIN, int(modified_album._id))
         self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
         self._albums[int(modified_album.get_id())] = modified_album
 
+        self._rwl.end_write()
+
     def get_copies(self, id):
+        self._rwl.start_read()
 
         # get all copies of a selected album by ID. The query looks for all copies by referencing the album_id from the album-copy table to the id from album table.
         # Each copy is stored in a album object and has the same attributes as the original album (main table) with its own id as an exception, 'album_copy.id'.
@@ -750,17 +948,21 @@ class AlbumCatalog(Catalog):
 
         for row in all_records:
             found_records.append(Album(row))
-
+        self._rwl.end_read()
         return found_records
 
     def remove(self, id):
+        self._rwl.start_write()
         remove_album = 'DELETE FROM album WHERE id = ?'
         # the comma after id is because the execute query from sqlite takes
         # only tuples as second parameters
         self.db.execute_query_write(remove_album, (id,))
-        return self._albums.pop(id, None)
+        temp = self._albums.pop(id, None)
+        self._rwl.end_write()
+        return temp
 
     def remove_copy(self, id):
+        self._rwl.start_write()
         fetched_album = []
         get_id_tuple = (id,)
 
@@ -785,25 +987,35 @@ class AlbumCatalog(Catalog):
 
         self.db.execute_query_write(update_album_quantity_query, update_album_quantity_tuple)
 
+        self._rwl.end_write()
+
     def display(self):
 
         for k, v in self._albums.items():
             print(v)
 
     def search(self, search_string):
+        self._rwl.start_read()
 
-        return search_catalog(self._albums, search_string)
+        temp = search_catalog(self._albums, search_string)
+
+        self._rwl.end_read()
+        return temp
 
     def sort(self, sort_key_values, last_searched_list):
+        self._rwl.start_read()
         # The sort_key_values is a string, not a dict
 
         transformed_sort_key_value = {}
 
         transformed_sort_key_value[sort_key_values.split(" ")[0].lower()] = self.Sorts[sort_key_values]
 
-        return sort_records(transformed_sort_key_value, last_searched_list)
+        temp = sort_records(transformed_sort_key_value, last_searched_list)
+        self._rwl.end_read()
+        return temp
 
     def filter(self, filter_key_values, last_searched_list):
+        self._rwl.start_read()
 
         transformed_dict = {}
 
@@ -813,4 +1025,174 @@ class AlbumCatalog(Catalog):
             # attribute of the objects stored in this catalog
             transformed_dict[ self.Filters[k] ] = v
 
-        return helper_functions.filter(transformed_dict, last_searched_list)
+        temp = helper_functions.filter(transformed_dict, last_searched_list)
+        self._rwl.end_read()
+        return temp
+
+    def set_available(self, album_copy_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id ?'
+        self.db.execute_query_write(update_copy_query, (album_copy_id,))
+
+        update_book_available = 'UPATE album SET quantity_available = quantity_available +1 INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ?'
+        self.db.execute_query_write(update_book_available, (album_copy_id,))
+        self._rwl.end_write()
+
+class LoanCatalog(Catalog):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
+
+    Filters = { }
+
+    Sorts = { }
+
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if LoanCatalog._instance is None:
+            LoanCatalog._instance = LoanCatalog()
+        return LoanCatalog._instance
+
+    def __init__(self):
+        """
+        This initializer creates all the catalogs necessary
+        for making loans appropriately; setting a loan to "returned" should
+        return the copy
+        """
+
+        if LoanCatalog._instance is not None:
+
+            raise Exception("This class is a singleton!")
+
+        else:
+
+            # Catalogs necessary for making and returning loans
+            self.book_catalog = BookCatalog.get_instance()
+            self.album_catalog = AlbumCatalog.get_instance()
+            self.movie_catalog = MovieCatalog.get_instance()
+            self.client_controller = ClientController.get_instance()
+
+            LoanCatalog._instance = self
+            self.db = DatabaseContainer.get_instance()
+            self._loans = {}
+            self._rwl = ReadWriteLock()
+
+
+    def get_all(self):
+        self._rwl.start_read()
+        temp = self._loans
+        self._rwl.end_read()
+
+    def get(self, id):
+        self._rwl.start_read()
+        temp = self._loans[id]
+        self._rwl.end_read()
+        return temp
+
+    def add(self, loan_obj, add_to_db):
+        self._rwl.start_write()
+
+        if add_to_db is True:
+
+            # Add the object into the database
+            # Note; all *_time attributes were set before the call to this method was made
+            insert_new_loan_query = 'INSERT INTO loan(user_id, record_id, table_name, loan_time, due_time, return_time, is_returned)' \
+            'VALUES(?,?,?,?,?,?,?)'
+
+
+            tuple_for_insert_query = (loan_obj._user_id, loan_obj._record_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
+                                      loan_obj._return_time, loan_obj._is_returned)
+
+            # getting the id of the last inserted loan
+            new_loan_id = self.db.execute_query_write(insert_new_loan_query, tuple_for_insert_query).lastrowid
+
+            # since the object created has by default id = -1, we have to set
+            # its id to that found in the database
+            loan_obj.set_loan_id(new_loan_id)
+
+            # Add the loan to the dictionary of loans
+            self._loans[loan_obj.get_id()] = loan_obj
+
+        else:
+            self._loans[loan_obj.get_id()] = loan_obj
+        self._rwl.end_write()
+
+
+
+    def modify(self, modified_loan):
+        self._rwl.start_write()
+        """
+        Modifies the values in the loan table
+        :param modified_loan: The loan object with attributes to replace a previous one, based on
+        the id property
+        :return: N/A
+        """
+
+        print("Needs implementation")
+
+        #modify_loans_query = 'UPDATE album SET type = ? , title = ?, artist = ?, label = ?, release_date = ?, asin = ? WHERE id = ?'
+        #tuple_for_modify_query = (modified_album._type, modified_album._title, modified_album._artist,
+        #                          modified_album._label, to_epoch(modified_album._release_date), modified_album._ASIN, int(modified_album._id))
+        #self.db.execute_query_write(modify_album_query, tuple_for_modify_query)
+        #self._albums[int(modified_album.get_id())] = modified_album
+        self._rwl.end_write()
+
+    def remove(self, id):
+        self._rwl.start_write()
+        """
+        This function simply removes a loan from the list of loans; cannot remove
+        the object if the item is still out as loaned!
+        :param id: the id of the loan to remove
+        :return: None if no object was removed, otherwise, object that was removed
+        """
+
+        loan = self._loans[id]
+
+        # Loan was returned, OK to remove from database & memory
+        if loan._is_returned == 1:
+
+            remove_album = 'DELETE FROM loan WHERE id = ?'
+
+            # Remove the loan from the database
+            self.db.execute_query_write(remove_album, (id,))
+
+            temp = self._loans.pop(id, None)
+
+            self._rwl.end_write()
+
+        self._rwl.end_write()
+        return None
+
+    def display(self):
+        self._rwl.start_read()
+
+        for k, v in self._loans.items():
+            print(v)
+
+        self._rwl.end_read()
+
+    def search(self, search_string):
+
+        search_list = []
+
+        print("Implementation needed")
+
+        return search_list
+
+    def return_loaned_items(self, loan_id):
+        loan = self.get(loan_id)
+        loan.set_loan_as_returned()
+        record_type = loan.get_table_name()
+
+        if record_type == "book_copy":
+            self.book_catalog.set_available(loan.get_record_id)
+
+        elif record_type == "album_copy":
+            self.album_catalog.set_available(loan.get_record_id)
+
+        elif record_type == "movie_copy":
+            self.movie_catalog.set_available(loan.get_record_id)
+
+

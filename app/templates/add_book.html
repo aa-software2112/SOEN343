@@ -38,7 +38,7 @@ Book
             </div>
             <div class="form-group">
                 <label for="year_of_publication">Year of Publication</label>
-                <input type="text" class="form-control" name="year_of_publication" placeholder="" pattern=".{4,}" title="Please use 4 numbers" required>
+                <input type="text" class="form-control" name="year_of_publication" placeholder="" pattern="\d{4}" title="Please use 4 numbers" required>
             </div>
             <div class="form-group">
                 <label for="language">Language</label>
@@ -46,15 +46,15 @@ Book
             </div>
             <div class="form-group">
                 <label for="isbn_10">ISBN 10</label>
-                <input type="text" class="form-control" name="isbn_10" placeholder="" required>
+                <input type="text" class="form-control" name="isbn_10" placeholder="" pattern="\d*-\d*-\d*-\d*" required>
             </div>
             <div class="form-group">
                 <label for="isbn_13">ISBN 13</label>
-                <input type="text" class="form-control" name="isbn_13" placeholder="" required>
+                <input type="text" class="form-control" name="isbn_13" placeholder="" pattern="\d*-\d*-\d*-\d*-\d*" required>
             </div>
             <button type="submit" name="save" class="btn btn-info">Save</button>
             <form action="#" method="post">
-                <a href="#" class="btn btn-danger">Cancel</a>
+                <a href="http://localhost:5000/viewCatalog" class="btn btn-danger">Cancel</a>
             </form>
         </form>
     </div>

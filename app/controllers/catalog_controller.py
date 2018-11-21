@@ -3,8 +3,8 @@ from app.classes.album import Album
 from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
-from app.classes.catalogs import *
-
+from app.classes.catalogs import LoanCatalog, AlbumCatalog, MovieCatalog, BookCatalog, MagazineCatalog
+from app.classes.database_container import DatabaseContainer
 
 class CatalogController(Controller):
     """
@@ -21,19 +21,19 @@ class CatalogController(Controller):
     def get_instance():
         """ Static access method. """
         if CatalogController._instance is None:
-            CatalogController()
+            CatalogController._instance = CatalogController()
         return CatalogController._instance
 
-    def __init__(self, database):
+    def __init__(self):
         if CatalogController._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             CatalogController._instance = self
-            Controller.__init__(self, database)
-            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog(database),
-                               CatalogController.MOVIE_TYPE: MovieCatalog(database),
-                               CatalogController.MAGAZINE_TYPE: MagazineCatalog(database),
-                               CatalogController.ALBUM_TYPE: AlbumCatalog(database)}
+            Controller.__init__(self, DatabaseContainer.get_instance())
+            self._inventory = {CatalogController.BOOK_TYPE: BookCatalog.get_instance(),
+                               CatalogController.MOVIE_TYPE: MovieCatalog.get_instance(),
+                               CatalogController.MAGAZINE_TYPE: MagazineCatalog.get_instance(),
+                               CatalogController.ALBUM_TYPE: AlbumCatalog.get_instance()}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
@@ -88,6 +88,9 @@ class CatalogController(Controller):
         return self._constructors[catalog_type]
 
     def add_entry_to_catalog(self, catalog_type, record_key_values):
+
+        print(catalog_type)
+        print(record_key_values)
 
         # Create the new record based on catalog_type and key_values
         new_record = self.get_constructor(catalog_type)(record_key_values)
