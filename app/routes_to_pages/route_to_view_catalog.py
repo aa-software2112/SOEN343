@@ -48,12 +48,19 @@ def viewCatalogTab():
 
     return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria )
 
+
 @app.route("/addToCart", methods=['GET', 'POST'])
 def addToCart():
     if request.method == "POST":
         catalog_id = request.form["catalog_id"]
+        int_catalog_id = int(catalog_id)
         catalog_type = request.form["catalog_type"]
-    return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
+        user_id = g.user["_id"]
+        int_user_id = int(user_id)
+        message = client_controller.add_to_cart(catalog_type, int_catalog_id, int_user_id)
+        print(message)
+
+    return message
 
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])

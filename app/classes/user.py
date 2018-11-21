@@ -31,6 +31,14 @@ class User:
         """Returns the id of the object"""
         return self._id
 
+    def add_to_user_cart(self, record_object):
+        print(record_object)
+        oldsize = (self._cart.length_of_cart())
+        self._cart.add_to_cart(record_object)
+        newsize = (self._cart.length_of_cart())
+        return oldsize, newsize
+
+
     def __str__(self):
 
         return "USER | ID: " + str(self._id) + " FIRST_NAME: " + self._first_name + " LAST_NAME: " + self._last_name + " PHYSICAL ADDRESS: " + self._physical_address +\

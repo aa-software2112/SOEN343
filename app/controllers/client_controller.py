@@ -192,3 +192,22 @@ class ClientController(Controller):
     # returns the cart set from the specific client with 'client_id'
     def get_all_cart_items(self, client_id):
         return self._client_catalog.get_cart_set(client_id)
+
+    def add_to_cart(self, catalog_type, object_id, user_id):
+
+        print(catalog_type)
+
+        o = self._catalog_controller.get_catalog_entry_by_id(catalog_type, object_id)
+        print(o)
+        old, new = self._client_catalog.add_to_cart(user_id, o)
+        if old - new == 0:
+
+            return "Item already exist  "
+        else:
+
+            return "Item added successfully"
+
+
+
+
+
