@@ -89,8 +89,8 @@ class User:
                 return i
             i = i+1
 
-    def delete_from_cart(self, o_id):
-        return self._cart.delete_by_id(o_id)
+    def delete_from_cart(self, o_id, record_type):
+        return self._cart.delete_by_id(o_id, record_type)
 
     def set_loan_list(self, loan_list):
         self._loan_list = loan_list
