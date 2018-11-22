@@ -246,7 +246,11 @@ class ClientController(Controller):
         return loaned_items
 
     def return_loaned_items(self, loaned_items_ids, client_id):
-        usr = self._client_catalog.get(client_id)
+
         for loan_id in loaned_items_ids:
-            self._loan_catalog.return_loaned_items(loan_id)
+            self._loan_catalog.return_loaned_item(loan_id)
+
+        usr = self._client_catalog.get(client_id)
+
+        for loan_id in loaned_items_ids:
             usr.remove_loan(loan_id)

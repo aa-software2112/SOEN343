@@ -348,11 +348,20 @@ class BookCatalog(Catalog):
 
     def set_available(self, book_copy_id):
         self._rwl.start_write()
-        update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id ?'
+        update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id = ?'
         self.db.execute_query_write(update_copy_query, (book_copy_id,))
+        self._rwl.end_write()
 
-        update_book_available = 'UPATE book SET quantity_available = quantity_available +1 INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ?'
-        self.db.execute_query_write(update_book_available,(book_copy_id,))
+        self._rwl.start_read()
+        get_book_id_from_copy = 'SELECT book_id FROM book_copy WHERE book_copy.id = ?'
+        cursor = self.db.execute_query(get_book_id_from_copy, (book_copy_id,))
+        book_id_of_copy = cursor.fetchone()[0]
+        print(book_id_of_copy)
+        self._rwl.end_read()
+
+        self._rwl.start_write()
+        update_book_available = 'UPDATE book SET quantity_available = quantity_available + 1 WHERE book.id = ?'
+        self.db.execute_query_write(update_book_available, (book_id_of_copy,))
         self._rwl.end_write()
 
 
@@ -578,12 +587,22 @@ class MovieCatalog(Catalog):
         return temp
 
     def set_available(self, movie_copy_id):
-        self._rwl.start_write()
-        update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id ?'
-        self.db.execute_query_write(update_copy_query, (movie_copy_id,))
 
-        update_book_available = 'UPATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
-        self.db.execute_query_write(update_book_available, (movie_copy_id,))
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (movie_copy_id,))
+        self._rwl.end_write()
+
+        self._rwl.start_read()
+        get_movie_id_from_copy = 'SELECT movie_id FROM movie_copy WHERE movie_copy.id = ?'
+        cursor = self.db.execute_query(get_movie_id_from_copy, (movie_copy_id,))
+        movie_id_of_copy = cursor.fetchone()[0]
+        print(movie_id_of_copy)
+        self._rwl.end_read()
+
+        self._rwl.start_write()
+        update_movie_available = 'UPDATE movie SET quantity_available = quantity_available + 1 WHERE movie.id = ?'
+        self.db.execute_query_write(update_movie_available, (movie_id_of_copy,))
         self._rwl.end_write()
 
 class MagazineCatalog(Catalog):
@@ -1020,11 +1039,20 @@ class AlbumCatalog(Catalog):
 
     def set_available(self, album_copy_id):
         self._rwl.start_write()
-        update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id ?'
+        update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id = ?'
         self.db.execute_query_write(update_copy_query, (album_copy_id,))
+        self._rwl.end_write()
 
-        update_book_available = 'UPATE album SET quantity_available = quantity_available +1 INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ?'
-        self.db.execute_query_write(update_book_available, (album_copy_id,))
+        self._rwl.start_read()
+        get_album_id_from_copy = 'SELECT album_id FROM album_copy WHERE album_copy.id = ?'
+        cursor = self.db.execute_query(get_album_id_from_copy, (album_copy_id,))
+        album_id_of_copy = cursor.fetchone()[0]
+        print(album_id_of_copy)
+        self._rwl.end_read()
+
+        self._rwl.start_write()
+        update_album_available = 'UPDATE album SET quantity_available = quantity_available + 1 WHERE album.id = ?'
+        self.db.execute_query_write(update_album_available, (album_id_of_copy,))
         self._rwl.end_write()
 
 class LoanCatalog(Catalog):
@@ -1170,18 +1198,20 @@ class LoanCatalog(Catalog):
 
         return search_list
 
-    def return_loaned_items(self, loan_id):
+    def return_loaned_item(self, loan_id):
         loan = self.get(loan_id)
         loan.set_loan_as_returned()
         record_type = loan.get_table_name()
+        # tested
+        # record_type = Movie.copy_table_name
+        # loan.get_record_id = 1
 
-        if record_type == "book_copy":
+        if record_type == Book.copy_table_name:
             self.book_catalog.set_available(loan.get_record_id)
-
-        elif record_type == "album_copy":
+        elif record_type == Album.copy_table_name:
             self.album_catalog.set_available(loan.get_record_id)
 
-        elif record_type == "movie_copy":
+        elif record_type == Movie.copy_table_name:
             self.movie_catalog.set_available(loan.get_record_id)
 
 

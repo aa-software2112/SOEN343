@@ -33,7 +33,7 @@ def return_loans():
 	print(request.form)
 	#returns the id(selected) as a list
 	return_items_id = request.form.getlist('id')
-
+	print(return_items_id)
 	client_controller.return_loaned_items(return_items_id, g.user["_id"])
 	err = None
 	if len(return_items_id) == 0 :
