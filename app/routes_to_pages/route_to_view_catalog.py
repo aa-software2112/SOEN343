@@ -50,11 +50,19 @@ def viewCatalogTab():
 
     return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria )
 
+
 @app.route("/addToCart", methods=['GET', 'POST'])
 def addToCart():
-    catalog_id = request.form["catalog_id"]
-    catalog_type = request.form["catalog_type"]
-    return "Entry - " + catalog_id + " has been added to cart! Catalog type - " + catalog_type 
+    if request.method == "POST":
+        catalog_id = request.form["catalog_id"]
+        int_catalog_id = int(catalog_id)
+        catalog_type = request.form["catalog_type"]
+        user_id = g.user["_id"]
+        int_user_id = int(user_id)
+        message = client_controller.add_to_cart(catalog_type, int_catalog_id, int_user_id)
+        print(message)
+
+    return message
 
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
@@ -157,18 +165,17 @@ def backToList():
 @app.route("/viewCart", methods=['GET', 'POST'])
 def viewCart():
     user_cart = list(client_controller.get_all_cart_items(g.user["_id"]))
-    # Testing
-    all_records = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
-
-    return render_template("view_cart.html", user_cart = user_cart, records = all_records)
+    
+    return render_template("view_cart.html", user_cart = user_cart)
 
 @app.route('/deleteCart', methods=['POST'])
 @login_required
 def delete_cart():
     #get the id of item to be deleted
-    o_id = request.form["id"]
-    user_id = g.user["_id"]
-    message = client_controller.delete_from_cart(o_id, user_id)
+    o_id = int(request.form["id"])
+    user_id = int(g.user["_id"])
+    record_type = (request.form["record_type"])
+    message = client_controller.delete_from_cart(o_id, user_id, record_type)
     current_cart = list(client_controller.get_all_cart_items(user_id))
     return render_template('view_cart.html', user_cart=current_cart, message=message)
 
