@@ -1295,7 +1295,7 @@ class LoanCatalog(Catalog):
         if record_type == Book.copy_table_name:
             copy_id = self.book_catalog.get_available_copy(item_id)
             if copy_id is not None:
-                book = self.book_catalog.get(copy_id)
+                book = self.book_catalog.get(item_id)
                 self.book_catalog.set_loaned(copy_id, item_id)
                 loan = Loan(client, book, copy_id)
                 self.add(loan, True)
@@ -1303,7 +1303,7 @@ class LoanCatalog(Catalog):
         if record_type == Movie.copy_table_name:
             copy_id = self.movie_catalog.get_available_copy(item_id)
             if copy_id is not None:
-                movie = self.movie_catalog.get(copy_id)
+                movie = self.movie_catalog.get(item_id)
                 self.movie_catalog.set_loaned(copy_id, item_id)
                 loan = Loan(client, movie, copy_id)
                 self.add(loan, True)
@@ -1311,7 +1311,7 @@ class LoanCatalog(Catalog):
         if record_type == Album.copy_table_name:
             copy_id = self.album_catalog.get_available_copy(item_id)
             if copy_id is not None:
-                album = self.album_catalog.get(copy_id)
+                album = self.album_catalog.get(item_id)
                 self.album_catalog.set_loaned(copy_id, item_id)
                 loan = Loan(client, album, copy_id)
                 self.add(loan, True)
