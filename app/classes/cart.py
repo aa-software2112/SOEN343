@@ -24,7 +24,14 @@ class Cart:
         return "Item could not be found in cart"
 
     def commit_cart(self):
+        """
+        This function attempts to commit every cart item; and will return three lists:
+        loans: a list of the loans that were (successfully) made.
+        successful_commits: a list of the cart items that were committed successfully.
+        failed_commits: a list of the cart items that were committed unsuccessfully.
+        """
         successful_commits = []
+        loans = []
         failed_commits = []
         items_to_delete = []
 
@@ -33,6 +40,7 @@ class Cart:
 
             if loaned_item is not None:
                 successful_commits.append(item)
+                loans.append(loaned_item)
                 items_to_delete.append(item)
             else:
                 failed_commits.append(item)
@@ -40,4 +48,4 @@ class Cart:
         for item in items_to_delete:
             self.delete_by_id(item.get_id(), item.record_type)
 
-        return [successful_commits, failed_commits]
+        return [loans, successful_commits, failed_commits]

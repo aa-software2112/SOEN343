@@ -109,12 +109,13 @@ class User:
         if len(self._loan_list) + len(self._cart.get_set()) > User.LOAN_LIMIT:
             return []
 
-        commits = self._cart.commit_cart()
-        successful_commits = commits[0]
+        commit_results = self._cart.commit_cart()
+        loans_to_add = commit_results[0]
 
-        self._loan_list = self._loan_list + successful_commits
+        self._loan_list = self._loan_list + loans_to_add
 
-        return commits
+        # return successful/unsuccessful commits (list of records) for displaying on front end
+        return commit_results[1:]
 
                 
 class Admin(User):
