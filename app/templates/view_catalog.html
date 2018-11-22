@@ -37,8 +37,12 @@ Catalog Viewer
             if (this.readyState == 4 && this.status == 200) {
                 loanedMessage = this.responseText;
                 $(result[id - 1]).popover({
+                    trigger: 'focus',
                     placement: 'right',
-                    content: loanedMessage
+                    content: function() {
+                        var message = loanedMessage;
+                        return message
+                    }
                 }).popover('show')
             } 
         }
