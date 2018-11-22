@@ -182,3 +182,19 @@ def delete_catalog():
 
     flash("Entry deleted succesfully.", 'success')
     return redirect('viewCatalog')
+
+@app.route('/viewHistoricalRecords', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def viewHistoricalRecords():
+
+    loan_list = admin_controller.view_transaction_history()
+    return redirect("page.html", loan_list=loan_list)
+
+@app.route('/searchHistoricalRecords', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def searchHistoricalRecords():
+
+    loan_list = admin_controller.search_transaction_by(catalog_type, search_transaction_key_values)
+    return redirect("page.html", loan_list=loan_list)
