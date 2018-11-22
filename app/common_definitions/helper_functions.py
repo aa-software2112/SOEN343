@@ -11,6 +11,9 @@ def convert_epoch_to_datetime(epoch_time):
     """Returns time in 'month/day/year hour:minute:second' format given the epoch time"""
     return time.strftime("%m/%d/%Y %H:%M:%S %Z", time.localtime(epoch_time))
 
+def convert_epoch_to_date(epoch_time):
+    """Returns time in 'month/day/year hour:minute:second' format given the epoch time"""
+    return time.strftime("%m/%d/%Y", time.localtime(epoch_time))
 
 def convert_date_time_to_epoch(date_time_string):
     """ Expects a string in the form mm/dd/yyyy, otherwise returns
@@ -126,6 +129,62 @@ def search_catalog(catalog, search_string):
 
     return lst
 
-def search_transaction_by(criteria, catalog_records):
+def search_transaction_by(criteria, list_of_loan_records):
     lst = []
+    print(criteria)
+    
+    key = list(criteria.keys())[0]
+    value = list(criteria.values())[0]
+    new_key = ""
+    new_value ="" 
+    date = ""
+    
+    if key == "Username":
+        for v in list_of_loan_records:
+            if v._user._username == value:
+                lst.append(v)
+            break
+
+    elif key == "Title":
+        for v in list_of_loan_records:
+            if v._record._title == value: 
+                lst.append(v)
+            break
+    
+    elif key == "Loan time":
+        for v in list_of_loan_records:
+            date = convert_epoch_to_date(v._loan_time)
+            if date == value: 
+                lst.append(v)
+            break
+
+    elif key == "Due Time":
+        for v in list_of_loan_records:
+            date = convert_epoch_to_date(v._due_time)
+            if date == value: 
+                lst.append(v)
+            break
+            
+    elif key == "Return Time":
+        for v in list_of_loan_records:
+            date = convert_epoch_to_date(v._return_time)
+            if date == value: 
+                lst.append(v)
+            break
+
+    return lst
+        
+    #takes two parameter as input criteria as dictionary and loan_records as list and match the criteria value in
+    #catalog record to the search value if match is found add it inside the empty list and return it .
+    for v in list_of_loan_records:
+        for a, b in criteria.items():
+            print(v)
+
+            if a == ("username" or "title"):
+                b = new_value
+
+            if b.strip().lower() in v.__dict__[a].lower():
+                print("Match found! entering into the list")
+                lst.append(v)
+                break
     return lst

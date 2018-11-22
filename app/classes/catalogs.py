@@ -132,7 +132,6 @@ class BookCatalog(Catalog):
         """
     _instance = None
 
-    Filters = {"Author":"_author",
                 "Title":"_title",
                 "Publisher":"_publisher",
                 "Language":"_language"
@@ -1033,17 +1032,16 @@ class LoanCatalog(Catalog):
     """
     _instance = None
 
-    Filters = { }
+    #For Email, you need to get email from user. For Title, you need to get title from object.
+    Filters = {"Username":"_username",
+                "Title":"_title",
+                "Loan Time":"_loan_time",
+                "Due Time":"_due_time",
+                "Return Time":"_return_time"
+                }
 
     Sorts = { }
-    
-    #For Email, you need to get email from user. For Title, you need to get title from object.
-    Transactions = {"Email":"_user",
-                    "Title":"_title",
-                    "Loan Time":"_loan_time",
-                    "Due Time":"_due_time",
-                    "Return Time":"_return_time"
-                    }
+
 
     @staticmethod
     def get_instance():
@@ -1085,9 +1083,9 @@ class LoanCatalog(Catalog):
 
             # Converts the front-end key to a key representing the
             # attribute of the objects stored in this catalog
-            transformed_dict[ self.Transactions[k] ] = v
+            transformed_dict[ self.Filters[k] ] = v
 
-        return helper_functions.search_transaction(transformed_dict, list_of_loan_history)
+        return helper_functions.search_transaction(transformed_dict, list_of_loan_records)
 
 
     def get_all(self):
