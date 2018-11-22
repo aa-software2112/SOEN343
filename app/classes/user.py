@@ -107,7 +107,7 @@ class User:
     def make_loan(self):
 
         if len(self._loan_list) + len(self._cart.get_set()) > User.LOAN_LIMIT:
-            return []
+            return [ [], list(self._cart.get_set()) ]
 
         commit_results = self._cart.commit_cart()
         loans_to_add = commit_results[0]
@@ -116,6 +116,19 @@ class User:
 
         # return successful/unsuccessful commits (list of records) for displaying on front end
         return commit_results[1:]
+
+    def set_id(self, id):
+        """
+        Sets the current id of the user in this object, and the cart itself
+
+        :param id:
+        :return:
+        """
+
+
+        self._id = id
+
+        self._cart.set_user_owner_id(id)
 
                 
 class Admin(User):

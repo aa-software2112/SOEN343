@@ -183,5 +183,6 @@ def delete_cart():
 @login_required
 def make_loan():    
     user_id = g.user["_id"]
+    print("User Id in make_loan() --> " + str(user_id))
     commits = client_controller.make_loan(user_id)
     return render_template("make_loan.html", successful_commits = commits[0], failed_commits = commits[1])

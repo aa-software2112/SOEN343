@@ -17,7 +17,11 @@ class Loan:
 
         self._user_id = user_obj.get_id()
 
+        # The specification record
         self._record_id = record_obj.get_id()
+
+        # The record-copy id
+        self._copy_id = copy_id
 
         self._table_name = record_obj.get_copy_table_name()
 

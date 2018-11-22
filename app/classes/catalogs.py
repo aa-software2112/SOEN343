@@ -67,6 +67,8 @@ class UserCatalog(Catalog):
         return temp
         
     def get(self, id):
+        print("User Id -- > " + str(id))
+
         self._rwl.start_read()
         temp = self._users[id]
         self._rwl.end_read()
@@ -103,7 +105,7 @@ class UserCatalog(Catalog):
                 new_book_id = self.db.execute_query_write(insert_new_user_query, tuple_for_insert_query).lastrowid
                 # since the object created has by default id = 0, we have to set
                 # its id to the id obtained above
-                user._id = new_book_id
+                user.set_id(new_book_id)
                 self._users[new_book_id] = user
 
         else:
@@ -1193,7 +1195,7 @@ class LoanCatalog(Catalog):
             'VALUES(?,?,?,?,?,?,?)'
 
 
-            tuple_for_insert_query = (loan_obj._user_id, loan_obj._record_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
+            tuple_for_insert_query = (loan_obj._user_id, loan_obj._copy_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
                                       loan_obj._return_time, loan_obj._is_returned)
 
             # getting the id of the last inserted loan
@@ -1289,6 +1291,7 @@ class LoanCatalog(Catalog):
     def loan_item(self, cart_item, client_id):
         record_type = cart_item.get_copy_table_name()
         item_id = cart_item.get_id()
+        print("Loan_item client_id --> " + str(client_id))
         client = self.client_controller._client_catalog.get(client_id)
         loan = None
 
