@@ -30,10 +30,9 @@ class Cart:
         successful_commits: a list of the cart items that were committed successfully.
         failed_commits: a list of the cart items that were committed unsuccessfully.
         """
-        successful_commits = []
         loans = []
+        successful_commits = []
         failed_commits = []
-        items_to_delete = []
 
         for item in self._items:
             loaned_item = self._loan_catalog.loan_item(item, self._client_id)
@@ -41,11 +40,10 @@ class Cart:
             if loaned_item is not None:
                 successful_commits.append(item)
                 loans.append(loaned_item)
-                items_to_delete.append(item)
             else:
                 failed_commits.append(item)
 
-        for item in items_to_delete:
+        for item in successful_commits:
             self.delete_by_id(item.get_id(), item.record_type)
 
         return [loans, successful_commits, failed_commits]
