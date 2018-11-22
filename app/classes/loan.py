@@ -2,7 +2,7 @@ import time
 
 class Loan:
 
-    def __init__(self, user_obj, record_obj):
+    def __init__(self, user_obj, record_obj, copy_id):
         """
         The loan constructor takes the attributes user user_obj and record_obj
         that are associated with the loan; all values will be set according to those
@@ -17,7 +17,11 @@ class Loan:
 
         self._user_id = user_obj.get_id()
 
+        # The specification record
         self._record_id = record_obj.get_id()
+
+        # The record-copy id
+        self._copy_id = copy_id
 
         self._table_name = record_obj.get_copy_table_name()
 

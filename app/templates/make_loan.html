@@ -12,9 +12,9 @@
         <hr>
 
         <!-- Change records to user_cart when add_to_cart is implemented -->
-        	{% for record in succes_loans %}
-        
-        <div class="row" id="cart-list">        	
+        	{% for record in successful_commits %}
+
+        <div class="row" id="cart-list">
             <div class="col-8">
                 {% if (record.record_type == "Book") %}
                 <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
@@ -34,9 +34,9 @@
                 {% endif %}
         	</div>
         	<div class="col-4" style="color: green" title="Success"><span><i class="fas fa-check-circle"></i></span></div>
-        </div> 
+        </div>
         	{% endfor %}
-    	
+
 
         <div class="row">
             <div class="col-8" style="font-size: 24px"> <span class="text-monospace">Fail Loan(s)</span> </div>
@@ -44,9 +44,9 @@
         <hr>
 
         <!-- Change records to user_cart when add_to_cart is implemented -->
-        	{% for record in succes_loans %}
+        	{% for record in failed_commits %}
         <div class="row" id="cart-list">
-        	
+
             <div class="col-8">
                 {% if (record.record_type == "Book") %}
                 <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
@@ -64,18 +64,18 @@
                 <p class="font-weight-light small"> {{ record._release_date }} </p>
 
                 {% endif %}
-                
+
         	</div>
         	<div class="col-4" style="color: red" title="Fail"><span><i class="fas fa-exclamation-triangle"></i></span></div>
-        	        	
+
     	</div>
     	<hr>
-    	{% endfor %}           	
+    	{% endfor %}
 
     	<form action="/viewCart" method="POST">
         <button type="submit" class="btn btn-primary btn-info btn-lg btn-block"> Back to Cart </button>
         </form>
 	</div>
 </div>
-        
+
 {% endblock %}
