@@ -10,6 +10,12 @@ This repository holds the web application for the SOEN 343-H term project.
    * [SQLite](https://www.sqlite.org)
    * [Bootstrap](https://getbootstrap.com/)
 
+
+## Installation
+   0. Install Python3
+   1. Run the installation script `python3 ./install_dependencies/install_dependencies.py` to install the required libraries.
+   2. To start the web app `python3 run.py`
+
 ## Group Info
 
 | Name | Email | Student ID | Github |
