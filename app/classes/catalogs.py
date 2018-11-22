@@ -10,6 +10,7 @@ from app.classes.magazine import Magazine
 from app.classes.album import Album
 from app.classes.database_container import DatabaseContainer
 from app.classes.lock import ReadWriteLock
+from app.classes.loan import Loan
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -366,6 +367,35 @@ class BookCatalog(Catalog):
         self.db.execute_query_write(update_book_available,(book_copy_id,))
         self._rwl.end_write()
 
+    def get_available_copy(self, book_id):
+        self._rwl.start_read()
+
+        get_available_book_query = """ SELECT book_copy.id
+                                        FROM book, book_copy 
+                                        WHERE book.id = ? AND book.id = book_copy.book_id AND book_copy.isLoaned = 0
+                                    """
+        cursor = self.db.execute_query(get_available_book_query, (book_id,))
+
+        copy = cursor.fetchone()
+        self._rwl.end_read()
+        if copy is not None:
+            return copy["id"]
+        else:
+            return None
+
+    def set_loaned(self, book_copy_id, book_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE book_copy SET isLoaned = 1 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (book_copy_id,))
+
+        # sqlite UPDATE does not support joins
+        update_book_available = """
+                                    UPDATE book
+                                    SET quantity_available = quantity_available - 1
+                                    WHERE id = ?
+                                """
+        self.db.execute_query_write(update_book_available, (book_id,))
+        self._rwl.end_write()
 
 class MovieCatalog(Catalog):
     """
@@ -595,6 +625,37 @@ class MovieCatalog(Catalog):
 
         update_book_available = 'UPATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
         self.db.execute_query_write(update_book_available, (movie_copy_id,))
+        self._rwl.end_write()
+
+    def get_available_copy(self, movie_id):
+        self._rwl.start_read()
+
+        get_available_movie_query = """ 
+                                        SELECT movie_copy.id
+                                        FROM movie, movie_copy 
+                                        WHERE movie.id = ? AND movie.id = movie_copy.movie_id AND movie_copy.isLoaned = 0
+                                    """
+        cursor = self.db.execute_query(get_available_movie_query, (movie_id,))
+
+        copy = cursor.fetchone()
+        self._rwl.end_read()
+        if copy is not None:
+            return copy["id"]
+        else:
+            return None
+
+    def set_loaned(self, movie_copy_id, movie_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE movie_copy SET isLoaned = 1 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (movie_copy_id,))
+
+        # sqlite UPDATE does not support joins
+        update_movie_available = """
+                                    UPDATE movie
+                                    SET quantity_available = quantity_available - 1
+                                    WHERE id = ?
+                                """
+        self.db.execute_query_write(update_movie_available, (movie_id,))
         self._rwl.end_write()
 
 class MagazineCatalog(Catalog):
@@ -1038,6 +1099,36 @@ class AlbumCatalog(Catalog):
         self.db.execute_query_write(update_book_available, (album_copy_id,))
         self._rwl.end_write()
 
+    def get_available_copy(self, album_id):
+        self._rwl.start_read()
+
+        get_available_album_query = """ SELECT album_copy.id
+                                        FROM album, album_copy 
+                                        WHERE album.id = ? AND album.id = album_copy.album_id AND album_copy.isLoaned = 0
+                                    """
+        cursor = self.db.execute_query(get_available_album_query, (album_id,))
+
+        copy = cursor.fetchone()
+        self._rwl.end_read()
+        if copy is not None:
+            return copy["id"]
+        else:
+            return None
+
+    def set_loaned(self, album_copy_id, album_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE album_copy SET isLoaned = 1 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (album_copy_id,))
+
+        # sqlite UPDATE does not support joins
+        update_album_available = """
+                                    UPDATE album
+                                    SET quantity_available = quantity_available - 1
+                                    WHERE id = ?
+                                """
+        self.db.execute_query_write(update_album_available, (album_id,))
+        self._rwl.end_write()
+
 class LoanCatalog(Catalog):
     """
     This class uses the Singleton pattern.
@@ -1194,5 +1285,38 @@ class LoanCatalog(Catalog):
 
         elif record_type == "movie_copy":
             self.movie_catalog.set_available(loan.get_record_id)
+
+    def loan_item(self, cart_item, client_id):
+        record_type = cart_item.get_copy_table_name()
+        item_id = cart_item.get_id()
+        client = self.client_controller._client_catalog.get(client_id)
+        loan = None
+
+        if record_type == Book.copy_table_name:
+            copy_id = self.book_catalog.get_available_copy(item_id)
+            if copy_id is not None:
+                book = self.book_catalog.get(copy_id)
+                self.book_catalog.set_loaned(copy_id, item_id)
+                loan = Loan(client, book, copy_id)
+                self.add(loan, True)
+
+        if record_type == Movie.copy_table_name:
+            copy_id = self.movie_catalog.get_available_copy(item_id)
+            if copy_id is not None:
+                movie = self.movie_catalog.get(copy_id)
+                self.movie_catalog.set_loaned(copy_id, item_id)
+                loan = Loan(client, movie, copy_id)
+                self.add(loan, True)
+
+        if record_type == Album.copy_table_name:
+            copy_id = self.album_catalog.get_available_copy(item_id)
+            if copy_id is not None:
+                album = self.album_catalog.get(copy_id)
+                self.album_catalog.set_loaned(copy_id, item_id)
+                loan = Loan(client, album, copy_id)
+                self.add(loan, True)
+
+        return loan
+
 
 

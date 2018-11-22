@@ -182,7 +182,6 @@ def delete_cart():
 @app.route('/makeLoan' , methods=['POST'])
 @login_required
 def make_loan():    
-    # succes_list= list(client_controller.make_loan(g.user["_id"]))
-    #Testing 
-    success_list = list(catalog_controller.get_records_by_catalog(CatalogController.MOVIE_TYPE).values())
-    return render_template("make_loan.html", succes_loans=success_list, fail_loans=[])
+    user_id = g.user["_id"]
+    commits = client_controller.make_loan(user_id)
+    return render_template("make_loan.html", successful_commits = commits[0], failed_commits = commits[1])

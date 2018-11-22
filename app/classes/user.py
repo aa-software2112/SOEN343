@@ -24,7 +24,7 @@ class User:
         
         self._last_searched_list = []
         self._index_of_last_searched_list = 0
-        self._cart = Cart()
+        self._cart = Cart(self._id)
         self._loan_list = []
 
     def get_session_dict(self):
@@ -103,7 +103,20 @@ class User:
         for loan_obj in self._loan_list:
             if loan_obj.get_id() == loan_id:
                 self._loan_list.remove(loan_obj)
-        
+
+    def make_loan(self):
+
+        if len(self._loan_list) + len(self._cart.get_set()) > User.LOAN_LIMIT:
+            return []
+
+        commits = self._cart.commit_cart()
+        successful_commits = commits[0]
+
+        self._loan_list = self._loan_list + successful_commits
+
+        return commits
+
+                
 class Admin(User):
 
     def __init__(self, arguments):
