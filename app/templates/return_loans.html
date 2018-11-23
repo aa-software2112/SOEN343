@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+<!-- Replace Title -->
+{% block pageTitle %}
+   Return Loans
+{% endblock %}
+<!-- Replace Content -->
+{% block content %}
+   {% if err %}
+            <div class="alert alert-danger" role="alert"> {{ err }}</div>
+   {% endif %}
+    <form action="/myLoans" method="GET">
+        <button type="submit" class="btn btn-primary btn-info btn-lg btn-block"> Back to My Loans </button>
+        </form>
+{% endblock %}

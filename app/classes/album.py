@@ -5,8 +5,8 @@ class Album:
     record_type = "Album"
     copy_table_name = "album_copy"
 
-    # Album can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
-    loan_time = 2 * 7 * 86400
+    # Album can be loaned for 2 days (converted to seconds, days x seconds/day)
+    loan_time = 2 * 86400
     
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a

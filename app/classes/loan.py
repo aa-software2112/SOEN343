@@ -52,9 +52,9 @@ class Loan:
 
         self._is_returned = 1
 
-        self._record = None
-
-        self._user = None
+        # self._record = None
+        #
+        # self._user = None
 
     def set_loan_id(self, id):
         """
@@ -88,7 +88,33 @@ class Loan:
     def get_record_type(self):
         return self._record.get_type()
 
+    def get_user_id(self):
+        return self._user_id
+
+    def get_copy_id(self):
+        return self._copy_id
+
+    def get_return_time(self):
+        return self._return_time
+
+    def get_is_returned(self):
+        return self._is_returned
+
+    def set_is_returned(self, is_returned):
+        self._is_returned = is_returned
+
+    def set_loan_time(self, loan_time):
+        self._loan_time = loan_time
+
+    def set_due_time(self, due_time):
+        self._due_time = due_time
+
+    def set_return_time(self, return_time):
+        self._return_time = return_time
+
 
     def __str__(self):
-        return "Loan | ID: " + str(self._id) + "UserID: " + self._user_id + "RecordID: " + self._record_id + "Table Name: " + self._table_name \
-                + "Loan Time: " + self._loan_time + "Due Time: "+ self._due_time + "Return Time: "+ self._return_time + "Is Returned: " + self._is_returned
+        return "Loan | ID: " + str(self._id) + " UserID: " + str(self._user_id) + " RecordID: " + str(
+            self._record_id) + " Table Name: " + self._table_name \
+               + " Loan Time: " + str(self._loan_time) + " Due Time: " + str(self._due_time) + " Return Time: " +str(
+            self._return_time) + " Is Returned: " + str(self._is_returned)
