@@ -2,69 +2,88 @@
 
 <!-- Replace Title -->
 {% block pageTitle %}
-<p class="text-center pb-4">My Cart</p>
 {% endblock %}
 
 {% block content %}
+
+{% if message %}
+<div class="alert alert-warning"> {{ message }} </div>
+{% endif %}
+
 <div class="card p-3">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-8" style="font-size: 24px"> <span class="text-monospace">Shopping Cart</span> </div>
+    <div class="card-body px-5">
+        <div class="row mb-4">
+            <div class="col-9" style="font-size: 32px"> <span class="text-monospace">My Cart</span> </div>
+            <div class="col-3">
+            <form action="/makeLoan" method="POST">
+                <button type="submit" class="btn btn-outline-info float-right "> Proceed to Checkout </button>
+            </form>
         </div>
-        <hr>
+        </div>
 
         <!-- Change records to user_cart when add_to_cart is implemented -->
-        {% for record in records %}
+        {% for record in user_cart %}
 
+        <hr>
+        <div class="row pt-3" id="cart-list">
+            <div class="col-10">
+                <div class="row">
+                    <div class="col-2">
+                        <button class="btn btn-outline-info btn-sm disabled mt-2" style="width:80%">{{record.record_type}}</button>
+                    </div>
+                    <div class="col-10">
+                        {% if (record.record_type == "Book") %}
 
-        <div class="row" id="cart-list">
-            <div class="col-8">
-                {% if (record.record_type == "Book") %}
-                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
-                        by {{ record._author }}</small></p>
-                <p class="font-weight-light small"> {{ record._format }} </p>
+                        <p><span class="text-monospace text-info title">{{ record._title }}</span><span class="font-weight-light">
+                                Copyright © {{ record._year_of_publication }} by {{ record._author }}</span></p>
+                        <p class="font-weight-light small"> ISBN{{ record._ISBN13 }} ({{ record._format }}) </p>
 
-                {% elif (record.record_type == "Movie") %}
-                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
-                        by {{ record._director }}</small></p>
-                <p class="font-weight-light small"> {{ record._release_date }} </p>
+                        {% elif (record.record_type == "Movie") %}
+                        <p><span class="text-monospace text-info title">{{ record._title }}</span><span class="font-weight-light">
+                                Directed by {{ record._director }} </span></p>
+                        <p class="font-weight-light small"><b>Actors:</b> {{ record._actors }}</p>
+                        <p class="font-weight-light small"> <b>Release Date:</b> {{ record._release_date }}</p>
 
-                {% elif (record.record_type == "Album") %}
-                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
-                        by {{ record._artist }}</small></p>
-                <p class="font-weight-light small"> {{ record._release_date }} </p>
+                        {% elif (record.record_type == "Album") %}
+                        <p><span class="text-monospace text-info title">{{ record._title }}</span><span class="font-weight-light">
+                                Copyright © {{ record._release_date }} by {{ record._artist }}</span></p>
+                        <p class="font-weight-light small"> ASIN{{ record._asin }} ({{ record._type }} - {{
+                            record._label }}) </p>
 
-                {% elif (record.record_type == "Magazine") %}
-                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
-                        by {{ record._publisher }}</small></p>
-                <p class="font-weight-light small"> {{ record._year_of_publication }} </p>
+                        {% elif (record.record_type == "Magazine") %}
+                        <p><span class="text-monospace text-info title">{{ record._title }}</span><span class="font-weight-light">
+                                Copyright © {{ record._year_of_publication }} by {{ record._publisher }}</span></p>
+                        <p class="font-weight-light small"> ISBN{{ record._ISBN13 }} ({{ record._language }}) </p>
 
-                {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
 
                 <div class="row">
-                    <div class="col-1">
-                        <form action="" method="POST">
-                            <button type="submit" class="btn btn-link text-info">
+                    <div class="offset-2 col-1">
+                        <form action="/deleteCart" method="post">
+                            <input type="hidden" name="id" value="{{record._id}}">
+                            <input type="hidden" name="record_type" value="{{record.record_type}}">
+                            <button type="submit" class="btn btn-link text-info px-0">
                                 <span class="small"> Delete </span>
                             </button>
                         </form>
                     </div>
-                    <div class="col-1">
-                        <button type="button" class="btn btn-link text-info">
-                            <span class="small"> Details </span>
-                        </button>
-                    </div>
+                    <!-- <div class="col-1">
+                        <form action="/viewCatalog/viewDetails" method="post">
+                            <input type="hidden" name="catalog_type" value="{{record.record_type}}">
+                            <input type="hidden" name="id" value="{{record._id}}">
+                            <button type="submit" class="btn btn-link text-info">
+                                <span class="small"> Details </span>
+                            </button>
+                        </form>
+                    </div> -->
                 </div>
             </div>
         </div>
-        <hr>
 
         {% endfor %}
-        <div>
-            <form action="" method="POST">
-                <button type="submit" class="btn btn-outline-info float-right mt-3 "> Proceed to Checkout </button>
-            </form>
-        </div>
+        
     </div>
 </div>
 
@@ -74,15 +93,10 @@
     }
 
     #cart-list .title {
-        font-size: 18px;
+        font-size: 22px;
         padding-right: 6px;
         letter-spacing: 1px;
         font-weight: bold;
     }
 </style>
 {% endblock %}
-
-{{ details.book('book', author=record._author, title=record._title,
-format=record._format, pages=record._pages, publisher=record._publisher,
-year_of_publication = record._year_of_publication, language = record._language,
-ISBN10 = record._ISBN10, ISBN13 = record._ISBN13 )}}
