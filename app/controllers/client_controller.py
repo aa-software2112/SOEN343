@@ -2,6 +2,10 @@ from app.controllers.controller import Controller
 import app.classes.catalogs
 from app.classes.user import Admin, Client
 from app.classes.database_container import DatabaseContainer
+from app.classes.loan import Loan
+from app.classes.book import Book
+from app.classes.album import Album
+from app.classes.movie import Movie
 import app.controllers.catalog_controller
 import time
 
@@ -29,7 +33,9 @@ class ClientController(Controller):
             self._db_loaded = False
             self._client_catalog = app.classes.catalogs.UserCatalog()
             self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
-            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
+            self._loan_catalog = app.classes.catalogs.LoanCatalog.get_instance()
+            print(app.classes.catalogs.LoanCatalog.get_instance())
+            print(app.classes.catalogs.LoanCatalog.get_instance())
 
     def load_database_into_memory(self):
 
@@ -245,32 +251,86 @@ class ClientController(Controller):
         # returns the message passed success/error
         return usr.delete_from_cart(o_id, record_type)
 
+    def load_loans_db_to_memory(self):
+        # Database cannot be loaded into RAM more than once.
+        if not self._db_loaded:
+            self._db_loaded = True
+
+        # Add all objects form database into catalogs
+        sql_query = """ SELECT * FROM loan """
+
+        all_rows = self.db.execute_query(sql_query).fetchall()
+
+        # Create an object for each row
+        for row in all_rows:
+            # transforming the row from the query to a dictionary for easier method to access columns.
+            row = dict(row)
+            print(row['is_returned'])
+            record_type = row['table_name']
+            copy_id = row['record_id']
+            # have to check the type of record in the loan table to then get a record obj, since Loan object requires an user obj and record obj as parameter
+            if record_type == Book.copy_table_name:
+                record_id = self._catalog_controller.get_record_id_by_copy_id(self._catalog_controller.BOOK_TYPE, row['record_id'])
+                record_obj = self._catalog_controller.get_catalog_entry_by_id(self._catalog_controller.BOOK_TYPE,
+                                                                              record_id)
+                usr_obj = self._client_catalog.get(row['user_id'])
+                loan = Loan(usr_obj, record_obj, copy_id)
+                loan.set_loan_id(row['id'])
+                loan.set_loan_time(row['loan_time'])
+                loan.set_due_time(row['due_time'])
+                loan.set_return_time(row['return_time'])
+                loan.set_is_returned(row['is_returned'])
+                usr_obj.add_to_loan_list(loan)
+                self._loan_catalog.add(loan, False)
+            if record_type == Album.copy_table_name:
+                record_id = self._catalog_controller.get_record_id_by_copy_id(self._catalog_controller.ALBUM_TYPE,
+                                                                              row['record_id'])
+                record_obj = self._catalog_controller.get_catalog_entry_by_id(self._catalog_controller.ALBUM_TYPE,
+                                                                              record_id)
+                usr_obj = self._client_catalog.get(row['user_id'])
+                loan = Loan(usr_obj, record_obj, copy_id)
+                loan.set_loan_id(row['id'])
+                loan.set_loan_time(row['loan_time'])
+                loan.set_due_time(row['due_time'])
+                loan.set_return_time(row['return_time'])
+                loan.set_is_returned(row['is_returned'])
+                usr_obj.add_to_loan_list(loan)
+                self._loan_catalog.add(loan, False)
+            if record_type == Movie.copy_table_name:
+                record_id = self._catalog_controller.get_record_id_by_copy_id(self._catalog_controller.MOVIE_TYPE,
+                                                                              row['record_id'])
+                record_obj = self._catalog_controller.get_catalog_entry_by_id(self._catalog_controller.MOVIE_TYPE,
+                                                                              record_id)
+                usr_obj = self._client_catalog.get(row['user_id'])
+                loan = Loan(usr_obj, record_obj, copy_id)
+                loan.set_loan_id(row['id'])
+                loan.set_loan_time(row['loan_time'])
+                loan.set_due_time(row['due_time'])
+                loan.set_return_time(row['return_time'])
+                loan.set_is_returned(row['is_returned'])
+                usr_obj.add_to_loan_list(loan)
+                self._loan_catalog.add(loan, False)
+
+        # Uncomment these two lines to see all objects in all catalogs
+        # for k, v in self._client_catalog.get_all().items():
+        #    print(v)
+
     def get_loaned_items(self, client_id):
+
         usr = self._client_catalog.get(client_id)
-
-        '''Test'''
-        loan1 = {'_id': 1, '_name': 'My first loan'}
-        loan2 = {'_id': 2, '_name': 'My second loan'}
-        loan3 = {'_id': 3, '_name': 'My third loan'}
-        user_loans = [loan1, loan2, loan3]
-        usr.set_loan_list(user_loans)
-        ''''''
-
         loaned_items = usr.get_loaned_items()
 
         return loaned_items
 
     def return_loaned_items(self, loaned_items_ids, client_id):
-
+        print("from client controller")
+        print(self._loan_catalog)
         for loan_id in loaned_items_ids:
             self._loan_catalog.return_loaned_item(loan_id)
 
         usr = self._client_catalog.get(client_id)
 
         for loan_id in loaned_items_ids:
-
-            usr.remove_loan(loan_id)
-            self._loan_catalog.return_loaned_items(loan_id)
             usr.remove_loan(loan_id)
 
     def make_loan(self, client_id):

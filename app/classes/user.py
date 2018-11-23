@@ -101,9 +101,8 @@ class User:
 
     def remove_loan(self, loan_id):
         for loan_obj in self._loan_list:
-            if loan_obj.get_id() == loan_id:
+            if loan_obj.get_id() == int(loan_id):
                 self._loan_list.remove(loan_obj)
-
 
     def get_username(self):
         return self._username
@@ -134,6 +133,9 @@ class User:
         self._id = id
 
         self._cart.set_user_owner_id(id)
+
+    def add_to_loan_list(self, loan):
+        self._loan_list.append(loan)
 
 class Admin(User):
 

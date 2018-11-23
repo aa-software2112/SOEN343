@@ -21,6 +21,7 @@
                  </thead>
                 <tbody>
                     {% for loan in loans %}
+                        {% if loan._is_returned == 0 %}
                         <tr>
                             <td class="text-center"><input class="form-check-input" type="checkbox" name='id' value="{{ loan._id }}" id="checkbox-{{ loan._id }}"></td>
                             <td class="text-center"> <label class="form-check-label" for="checkbox-{{ loan._id }}"> {{ loan._record.record_type}} </label></td>
@@ -28,6 +29,7 @@
                             <td class="text-center">{{convert_epoch_to_datetime(loan._loan_time|int)}}</td>
                             <td class="text-center">{{convert_epoch_to_datetime(loan._due_time|int)}}</td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
