@@ -71,7 +71,7 @@ def search_transaction():
 	# dictionary from the Search_Transaction_History_Communication_Diagram
 	search_Transaction_KeyValue = {key: value}
 
-	list = admin_controller.search_TransactionBy(search_Transaction_KeyValue)
+	list = admin_controller.search_transaction_by(search_Transaction_KeyValue)
 
 	error = None
 	if len(list) == 0:
