@@ -1,6 +1,10 @@
 import app.classes.catalogs
 
 class Cart:
+	"""
+	inv:
+		self._items -> isUnique(id)
+	"""
 	def __init__(self, client_id):
 		self._items = set()
 		self._client_id = client_id
@@ -32,6 +36,11 @@ class Cart:
 		loans: a list of the loans that were (successfully) made.
 		successful_commits: a list of the cart items that were committed successfully.
 		failed_commits: a list of the cart items that were committed unsuccessfully.
+
+		pre:
+			self._items -> size() > 0
+		post:
+			self._items -> size()  <= self._items -> size()@pre
 		"""
 		loans = []
 		successful_commits = []
