@@ -196,5 +196,5 @@ def viewHistoricalRecords():
 @admin_required
 def searchHistoricalRecords():
 
-    loan_list = admin_controller.search_transaction_by(catalog_type, search_transaction_key_values)
+    loan_list = admin_controller.search_transaction_by(search_transaction_key_values)
     return redirect("page.html", loan_list=loan_list)

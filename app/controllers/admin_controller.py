@@ -226,7 +226,12 @@ class AdminController(Controller):
         index = usr.get_index_from_object(record_object)
         usr.set_index_last_searched(index)
 
-    def search_transaction_by(self, catalog_type, search_transaction_key_values):
+    def search_transaction_by(self, search_transaction_key_values):
         
         lst = self._catalog_controller.search_transaction_by(self, catalog_type,search_transaction_key_values)
+        return lst
+
+    def view_transaction_history(self):
+
+        lst = self._catalog_controller.view_transaction_history()
         return lst
