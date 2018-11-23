@@ -144,14 +144,14 @@ def search_transaction(criteria, list_of_loan_records):
     if key == "Username":
         print(key)
         for v in list_of_loan_records:
-            if v._user._username in value:
+            if value.lower() in v._user._username.lower():
                 print(v._id)
                 lst.append(v)
 
     elif key == "Title":
         print(key)
         for v in list_of_loan_records:
-            if v._record._title in value: 
+            if value.lower() in v._record._title.lower(): 
                 print("inserted loan object of id:")
                 print (v._id)
                 lst.append(v)
@@ -167,87 +167,3 @@ def search_transaction(criteria, list_of_loan_records):
             
     print("returned the list")
     return lst
- 
-
-
-'''
-class Catalog_type(object):
-    id = 0
-    title = ""
-    author = ""
-
-    # The class "constructor" - It's actually an initializer 
-    def __init__(self, id, title, author):
-        self._id = id
-        self._title = title
-        self._author = author
-
-class Client_type(object):
-    id = 0
-    username = ""
-    firstname = ""
-
-    
-    # The class "constructor" - It's actually an initializer 
-    def __init__(self, id, username, firstname):
-        self._id = id
-        self._username = username
-        self._firstname = firstname
-
-class Loan_type(object):
-    id = 0
-    client_obj = object
-    book_obj = object
-    due_time = datetime
-
-
-    
-    # The class "constructor" - It's actually an initializer 
-    def __init__(self, id, client_obj, book_obj, due_time):
-        self._id = id
-        self._user = client_obj
-        self._record = book_obj
-        self._due_time = due_time
-
-"==================================================="
-
-def make_catalog_type(id, title, author):
-    catalog_type = Catalog_type(id, title, author)
-    return catalog_type
-
-record1 = make_catalog_type(1, "The dog", "Charlie")
-record2 = make_catalog_type(2, "The cat", "Joseph")
-record3 = make_catalog_type(3, "The mouse", "Gina")
-
-
-def make_client_type(id, username, firstname):
-    client_type = Client_type(id, username, firstname)
-    return client_type
-
-client1= make_client_type(1, "Batman", "Bruce")
-client2 = make_client_type(2, "Spiderman", "Peter")
-client3 = make_client_type(3, "Superman", "Clark")
-
-def make_loan_type(id, client_obj, book_obj, due_time):
-    loan_type = Loan_type(id, client_obj, book_obj, due_time)
-    return loan_type
-
-loan1 = make_loan_type(1, client3, record3, 1514764800 )
-loan2 = make_loan_type(2, client2, record2, 1483228800 )
-loan3 = make_loan_type(3, client1, record1, 1451606400)
-
-
-list_of_loan_records1 = [loan1, loan2, loan3]
-transaction_key_values_1 = {"Username": "Bruce"}
-transaction_key_values_2 = {"Title": "The mouse"}
-transaction_key_values_3 = {"Due Time": 1451606400}
-
-
-
-print("testing transaction_key_values_1")
-search_transaction_by(transaction_key_values_1, list_of_loan_records1)
-print("testing transaction_key_values_2")
-search_transaction_by(transaction_key_values_2, list_of_loan_records1)
-print("testing transaction_key_values_3")
-search_transaction_by(transaction_key_values_3, list_of_loan_records1)
-'''
