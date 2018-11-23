@@ -7,8 +7,12 @@
 
 <!-- Replace Content -->
 {% block content %}
+   {% if err %}
+   <div class="alert alert-danger" role="alert"> {{ err }}</div>
+   {% endif %}
    <div class="row">
       <div class="col-md-12">
+
          <form action="/searchTransaction" method="post">
             <div class="form-group">
               <label for="sel1">Select Search Criteria:</label>
