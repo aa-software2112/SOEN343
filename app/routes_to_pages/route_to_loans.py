@@ -48,5 +48,19 @@ def display_loans():
 	loan1 = Loan(client_controller.get_client_by_username('antman')[0],catalog_controller.get_catalog_entry_by_id("1",1))
 	loan2 =Loan(admin_controller.get_admin_by_username('catwoman')[0],catalog_controller.get_catalog_entry_by_id("2",1))
 
+
 	return render_template('transaction_history.html', epoch_converter=convert_epoch_to_datetime,
-						   loan_history=[loan1, loan2])
+						   all_loans=[loan1, loan2])
+
+@app.route('/searchTransaction', methods=['POST'])
+@login_required
+@admin_required
+def search_transaction():
+	search_option = request.form['search-option']
+	print(search_option)
+	value = request.form['search-keyword']
+	print(value)
+	loan = Loan(admin_controller.get_admin_by_username('catwoman')[0],catalog_controller.get_catalog_entry_by_id("2",1))
+	# get the proper loan list from the form
+	return render_template('transaction_history.html' , all_loans= [], search_loan_list = [loan], err=None,
+						   epoch_converter=convert_epoch_to_datetime)
