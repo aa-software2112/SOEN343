@@ -129,7 +129,7 @@ def search_catalog(catalog, search_string):
 
     return lst
 
-def search_transaction_by(criteria, list_of_loan_records):
+def search_transaction(criteria, list_of_loan_records):
     lst = []
     print(criteria)
     
@@ -145,7 +145,6 @@ def search_transaction_by(criteria, list_of_loan_records):
             if v._user._username in value:
                 print(v._id)
                 lst.append(v)
-            break
 
     elif key == "Title":
         print(key)
@@ -154,7 +153,6 @@ def search_transaction_by(criteria, list_of_loan_records):
                 print("inserted loan object of id:")
                 print (v._id)
                 lst.append(v)
-            break
 
     elif key == "Due Time":
         print(key)
@@ -164,7 +162,6 @@ def search_transaction_by(criteria, list_of_loan_records):
                 print("inserted loan object of id:")
                 print (v._id)
                 lst.append(v)
-            break
             
     print("returned the list")
     return lst

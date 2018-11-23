@@ -36,12 +36,12 @@ class CatalogController(Controller):
             self._inventory = {CatalogController.BOOK_TYPE: BookCatalog.get_instance(),
                                CatalogController.MOVIE_TYPE: MovieCatalog.get_instance(),
                                CatalogController.MAGAZINE_TYPE: MagazineCatalog.get_instance(),
-                               CatalogController.ALBUM_TYPE: AlbumCatalog.get_instance(),
+                               CatalogController.ALBUM_TYPE: AlbumCatalog.get_instance()}
                                #CatalogController.LOAN_TYPE: LoanCatalog.get_instance()}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
-                                  CatalogController.ALBUM_TYPE: Album,
+                                  CatalogController.ALBUM_TYPE: Album}
                                   #CatalogController.LOAN_TYPE: Loan}
             self._db_loaded = False
 
@@ -57,9 +57,8 @@ class CatalogController(Controller):
         queries = {CatalogController.BOOK_TYPE: """ SELECT * FROM book; """,
                    CatalogController.MOVIE_TYPE: """ SELECT * FROM movie; """,
                    CatalogController.MAGAZINE_TYPE: """ SELECT * FROM magazine; """,
-                   CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """,
+                   CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """}
                    #CatalogController.LOAN_TYPE: """ SELECT * FROM loan; """
-                   }
 
         # Iterate over all queries
         for catalog_type, query in queries.items():
@@ -84,7 +83,7 @@ class CatalogController(Controller):
                             "movies": self._inventory[CatalogController.MOVIE_TYPE].get_all(),
                             "magazines": self._inventory[CatalogController.MAGAZINE_TYPE].get_all(),
                             "albums": self._inventory[CatalogController.ALBUM_TYPE].get_all(),
-                            "loan": self._inventory[CatalogController.LOAN_TYPE].get_all()
+                            #"loan": self._inventory[CatalogController.LOAN_TYPE].get_all()
                             }
         return dict_of_catalogs
 

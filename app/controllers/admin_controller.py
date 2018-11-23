@@ -236,7 +236,7 @@ class AdminController(Controller):
         for k, v in loan_items.items():
             loan_list.append(v)
 
-        lst = self._loan_catalog.search_transaction_by(search_transaction_key_values, loan_list)
+        lst = self._loan_catalog.search_transaction(search_transaction_key_values, loan_list)
         return lst
     
     def view_transaction_history(self):

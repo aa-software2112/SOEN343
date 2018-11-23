@@ -1165,11 +1165,9 @@ class LoanCatalog(Catalog):
     _instance = None
 
     #For Email, you need to get email from user. For Title, you need to get title from object.
-    Filters = {"Username":"_username",
-                "Title":"_title",
-                "Loan Time":"_loan_time",
-                "Due Time":"_due_time",
-                "Return Time":"_return_time"
+    Filters = {"Username":"Username",
+                "Title":"Title",
+                "Due Time":"Due Time",
                 }
 
     Sorts = { }
@@ -1207,8 +1205,7 @@ class LoanCatalog(Catalog):
             self._rwl = ReadWriteLock()
 
     #!!!! NOT IMPLEMENTED: NEED TO GET THE LIST OF LOAN ITEMS and give to helper_function to search_transaction (i.e. filter the list with the key values).
-    def search_transaction(self, search_transaction_key_values):
-        list_of_loan_history = [] #METHOD MISSING HERE TO GET LIST
+    def search_transaction(self, search_transaction_key_values, loan_list):
         transformed_dict = {}
 
         for k, v in search_transaction_key_values.items():
@@ -1217,7 +1214,7 @@ class LoanCatalog(Catalog):
             # attribute of the objects stored in this catalog
             transformed_dict[ self.Filters[k] ] = v
 
-        return helper_functions.search_transaction(transformed_dict, list_of_loan_records)
+        return helper_functions.search_transaction(transformed_dict, loan_list)
 
 
     def get_all(self):
