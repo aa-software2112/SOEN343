@@ -4,8 +4,8 @@ from app.common_definitions.helper_functions import convert_epoch_to_datetime as
 class Movie:
     record_type = "Movie"
     copy_table_name = "movie_copy"
-    # Movie can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
-    loan_time = 2 * 7 * 86400
+    # Movie can be loaned for 2 days (converted to seconds. days x seconds/day)
+    loan_time = 2 * 86400
 
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a

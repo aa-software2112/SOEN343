@@ -36,7 +36,8 @@ class Cart:
 		loans = []
 		successful_commits = []
 		failed_commits = []
-
+		print("self in commit_Cart")
+		print(self._loan_catalog)
 		for item in self._items:
 			loaned_item = self._loan_catalog.loan_item(item, self._client_id)
 
