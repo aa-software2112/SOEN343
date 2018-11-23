@@ -107,7 +107,6 @@ class User:
 
     def get_username(self):
         return self._username
-       
 
     def make_loan(self):
 
