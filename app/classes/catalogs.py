@@ -1326,6 +1326,7 @@ class LoanCatalog(Catalog):
 
     def set_as_returned(self, loan):
         try:
+            loan.set_loan_as_returned()
             update_loan_query = "UPDATE loan SET return_time = ?, is_returned=? WHERE id = ? "
             return_time = loan.get_return_time()
             is_returned = loan.get_is_returned()
@@ -1337,7 +1338,6 @@ class LoanCatalog(Catalog):
 
     def return_loaned_item(self, loan_id):
         loan=self.get(int(loan_id))
-        loan.set_loan_as_returned()
         loan_copy_id = loan.get_copy_id()
         record_type = loan.get_table_name()
         # tested

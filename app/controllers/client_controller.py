@@ -278,7 +278,8 @@ class ClientController(Controller):
                 loan.set_due_time(row['due_time'])
                 loan.set_return_time(row['return_time'])
                 loan.set_is_returned(row['is_returned'])
-                usr_obj.add_to_loan_list(loan)
+                if row['is_returned'] == 0:
+                    usr_obj.add_to_loan_list(loan)
                 self._loan_catalog.add(loan, False)
             if record_type == Album.copy_table_name:
                 record_id = self._catalog_controller.get_record_id_by_copy_id(self._catalog_controller.ALBUM_TYPE,
@@ -292,7 +293,8 @@ class ClientController(Controller):
                 loan.set_due_time(row['due_time'])
                 loan.set_return_time(row['return_time'])
                 loan.set_is_returned(row['is_returned'])
-                usr_obj.add_to_loan_list(loan)
+                if row['is_returned'] == 0:
+                    usr_obj.add_to_loan_list(loan)
                 self._loan_catalog.add(loan, False)
             if record_type == Movie.copy_table_name:
                 record_id = self._catalog_controller.get_record_id_by_copy_id(self._catalog_controller.MOVIE_TYPE,
@@ -306,7 +308,8 @@ class ClientController(Controller):
                 loan.set_due_time(row['due_time'])
                 loan.set_return_time(row['return_time'])
                 loan.set_is_returned(row['is_returned'])
-                usr_obj.add_to_loan_list(loan)
+                if row['is_returned'] == 0:
+                    usr_obj.add_to_loan_list(loan)
                 self._loan_catalog.add(loan, False)
 
         # Uncomment these two lines to see all objects in all catalogs
@@ -327,9 +330,9 @@ class ClientController(Controller):
             if loan_id is not None:
                 loan = self._loan_catalog.get(loan_id)
                 failed_loans.append(loan)
+        print(failed_loans == [])
         if failed_loans == []:
             usr = self._client_catalog.get(client_id)
-
             for loan_id in loaned_items_ids:
                 usr.remove_loan(loan_id)
         return failed_loans
