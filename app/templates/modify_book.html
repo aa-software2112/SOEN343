@@ -30,7 +30,7 @@ Modify a Book
 		  </div>
 		  <div class="form-group">
 		    <label for="pages">Pages</label>
-		    <input type="text" class="form-control" name="pages" value='{{book._pages}}' >
+		    <input type="text" class="form-control" name="pages" value='{{book._pages}}' required pattern = "\d*">
 		  </div>
 		  <div class="form-group">
 		    <label for="publisher">Publisher</label>
@@ -38,7 +38,7 @@ Modify a Book
 		  </div>
 		  <div class="form-group">
 		    <label for="year_of_publication">Year of Publication</label>
-		    <input type="text" class="form-control" name="year_of_publication" value='{{book._year_of_publication}}' pattern=".{4,}" title="Please use 4 numbers">
+		    <input type="text" class="form-control" name="year_of_publication" value='{{book._year_of_publication}}' required pattern="\d{4}" title="Please use 4 numbers">
 		  </div>
 		  <div class="form-group">
 		    <label for="language">Language</label>
@@ -46,15 +46,15 @@ Modify a Book
 		  </div>
 			<div class="form-group">
 		    <label for="isbn_10">ISBN 10</label>
-		    <input type="text" class="form-control" name="isbn_10" value='{{book._ISBN10}}'>
+		    <input type="text" class="form-control" name="isbn_10" value='{{book._ISBN10}}' required pattern="\d*-\d*-\d*-\d*">
 		  </div>
 			<div class="form-group">
 		    <label for="isbn_13">ISBN 13</label>
-		    <input type="text" class="form-control" name="isbn_13" value='{{book._ISBN13}}'>
+		    <input type="text" class="form-control" name="isbn_13" value='{{book._ISBN13}}' required pattern="\d*-\d*-\d*-\d*-\d*">
 		  </div>
 			<div class="float-right mt-4">
 				<button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
-				<a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+				<a href="http://localhost:5000/viewCatalog" class="btn btn-outline-info">Cancel</a>
 			</div>
       </form>
     </div>

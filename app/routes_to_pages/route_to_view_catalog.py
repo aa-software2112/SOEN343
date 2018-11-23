@@ -3,6 +3,8 @@ from app import app
 from app.common_definitions.helper_functions import login_required
 from app import client_controller, admin_controller, catalog_controller
 from app.controllers.catalog_controller import CatalogController
+from app.classes.book import Book
+
 
 # Needs to be redone
 @app.route('/viewCatalog', methods=['GET', 'POST'])
@@ -27,25 +29,40 @@ def viewCatalog():
 # Separate the singular view catalog page into its respective page
 @app.route('/viewCatalog/viewCatalogTab', methods=['GET', 'POST'])
 def viewCatalogTab():
-    catalog_type = request.form["catalog_type"]
-    url_string=""
-    filters = catalog_controller.get_filters(catalog_type)
-    sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
-    all_records = list(catalog_controller.get_records_by_catalog(catalog_type).values())
-    if (catalog_type == "1"):
-        url_string = "view_books.html"
-    elif (catalog_type == "2"):
-        url_string = "view_movies.html"
-    elif (catalog_type == "3"):
-        url_string = "view_magazines.html"
-    elif (catalog_type == "4"):
-        url_string = "view_albums.html"
-    if g.user["_is_admin"] == 1:
-        admin_controller.add_list_to(g.user["_id"], all_records)
-    else:
-        client_controller.add_list_to(g.user["_id"], all_records)
+    if request.method == "POST":
+        catalog_type = request.form["catalog_type"]
+        url_string=""
+        filters = catalog_controller.get_filters(catalog_type)
+        sorting_criteria = catalog_controller.get_sorting_criteria(catalog_type)
+        all_records = list(catalog_controller.get_records_by_catalog(catalog_type).values())
+        if (catalog_type == "1"):
+            url_string = "view_books.html"
+        elif (catalog_type == "2"):
+            url_string = "view_movies.html"
+        elif (catalog_type == "3"):
+            url_string = "view_magazines.html"
+        elif (catalog_type == "4"):
+            url_string = "view_albums.html"
+        if g.user["_is_admin"] == 1:
+            admin_controller.add_list_to(g.user["_id"], all_records)
+        else:
+            client_controller.add_list_to(g.user["_id"], all_records)
 
-    return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria)
+    return render_template(url_string, records=all_records, filters=filters, sorting_criteria=sorting_criteria )
+
+
+@app.route("/addToCart", methods=['GET', 'POST'])
+def addToCart():
+    if request.method == "POST":
+        catalog_id = request.form["catalog_id"]
+        int_catalog_id = int(catalog_id)
+        catalog_type = request.form["catalog_type"]
+        user_id = g.user["_id"]
+        int_user_id = int(user_id)
+        message = client_controller.add_to_cart(catalog_type, int_catalog_id, int_user_id)
+        print(message)
+
+    return message
 
 # To-do - Filters
 @app.route('/viewCatalog/search', methods=['GET', 'POST'])
@@ -144,3 +161,28 @@ def backToList():
             last_searched_list = client_controller.get_last_searched_list(g.user["_id"])
 
     return render_template(url_string, records=last_searched_list, filters=filters, sorting_criteria=sorting_criteria)
+
+@app.route("/viewCart", methods=['GET', 'POST'])
+def viewCart():
+    user_cart = list(client_controller.get_all_cart_items(g.user["_id"]))
+    
+    return render_template("view_cart.html", user_cart = user_cart)
+
+@app.route('/deleteCart', methods=['POST'])
+@login_required
+def delete_cart():
+    #get the id of item to be deleted
+    o_id = int(request.form["id"])
+    user_id = int(g.user["_id"])
+    record_type = (request.form["record_type"])
+    message = client_controller.delete_from_cart(o_id, user_id, record_type)
+    current_cart = list(client_controller.get_all_cart_items(user_id))
+    return render_template('view_cart.html', user_cart=current_cart, message=message)
+
+@app.route('/makeLoan' , methods=['POST'])
+@login_required
+def make_loan():    
+    user_id = g.user["_id"]
+    print("User Id in make_loan() --> " + str(user_id))
+    commits = client_controller.make_loan(user_id)
+    return render_template("make_loan.html", successful_commits = commits[0], failed_commits = commits[1])

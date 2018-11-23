@@ -2,9 +2,11 @@ from app.common_definitions.helper_functions import convert_epoch_to_datetime as
 
 
 class Album:
-    record_type = "Album"  
-    # Album can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
-    loan_time = 2 * 7 * 86400
+    record_type = "Album"
+    copy_table_name = "album_copy"
+
+    # Album can be loaned for 2 days (converted to seconds, days x seconds/day)
+    loan_time = 2 * 86400
     
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a
@@ -46,6 +48,18 @@ class Album:
     def get_id(self):
         """Returns the id of the object"""
         return self._id
+
+    def get_copy_table_name(self):
+        return Album.copy_table_name
+
+    def get_title(self):
+        return self._title
+
+    def get_type(self):
+        return self.record_type
+
+    def get_loan_time(self):
+        return Album.loan_time
 
     def __str__(self):
 

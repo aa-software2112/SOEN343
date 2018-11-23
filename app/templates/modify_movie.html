@@ -44,15 +44,15 @@ Modify a Movie
          </div>
          <div class="form-group">
             <label for="release_date">Release Date</label>
-            <input type="text" class="form-control" name="release_date" value='{{movie._release_date}}'>
+            <input type="text" class="form-control" name="release_date" value='{{movie._release_date}}' required pattern="(?:(?:0[1-9]|1[0-2])/(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])/(?:30))|(?:(?:0[13578]|1[02])/31))/(?:19|20)[0-9]{2}" title="Enter a date in this format MM/DD/YYYY">
          </div>
          <div class="form-group">
             <label for="run_time">Runtime</label>
-            <input type="text" class="form-control" name="run_time" value='{{movie._runtime}}'>
+            <input type="text" class="form-control" name="run_time" value='{{movie._runtime}}' required pattern = "\d*">
          </div>
          <div class="float-right mt-4">
             <button type="submit" name="save" value="save" class="btn btn-info px-3">Save</button>
-            <a href="http://localhost:5000/adminView/adminViewCatalog" class="btn btn-outline-info">Cancel</a>
+            <a href="http://localhost:5000/viewCatalog" class="btn btn-outline-info">Cancel</a>
         </div>
       </form> 
    </div>

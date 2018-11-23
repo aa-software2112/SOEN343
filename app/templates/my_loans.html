@@ -1,29 +1,39 @@
 {% extends "index.html" %}
-
 <!-- Replace Title -->
 {% block pageTitle %}
-My Loans
+    My Loans
 {% endblock %}
-
 <!-- Replace Content -->
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-       <form action="/returnLoans" method="POST" id="return-loans-form">
-       {% if errorMessage %}
-          <div class="alert alert-danger" role="alert"> {{ errorMessage }}</div>
-       {% else %}
-          {% for loan in loans %}
-          <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="loan_id{{ loan._id }}" value="{{ loan._id }}" id="checkbox-{{ loan._id }}">
-              <label class="form-check-label" for="checkbox-{{ loan._id }}">
-                 {{ loan._name }}
-              </label>
-          </div>
-          {% endfor %}
-          <button type="submit" class="btn btn-primary">Return loans</button>
-       {% endif %}
-       </form>
-    </div>
-</div>
+    <form action="/returnLoans" method="POST" id="return-loans-form">
+        {% if errorMessage %}
+            <div class="alert alert-danger" role="alert"> {{ errorMessage }}</div>
+        {% else %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th scope="col"> Type </th>
+                        <th scope="col" class="text-center"> Title </th>
+                        <th scope="col" class="text-center"> Loan Time </th>
+                        <th scope="col" class="text-center"> Due Time </th>
+                    </tr>
+                 </thead>
+                <tbody>
+                    {% for loan in loans %}
+                        {% if loan._is_returned == 0 %}
+                        <tr>
+                            <td class="text-center"><input class="form-check-input" type="checkbox" name='id' value="{{ loan._id }}" id="checkbox-{{ loan._id }}"></td>
+                            <td class="text-center"> <label class="form-check-label" for="checkbox-{{ loan._id }}"> {{ loan._record.record_type}} </label></td>
+                            <td class="text-center">{{loan._record._title}}</td>
+                            <td class="text-center">{{convert_epoch_to_datetime(loan._loan_time|int)}}</td>
+                            <td class="text-center">{{convert_epoch_to_datetime(loan._due_time|int)}}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary btn-info btn-lg btn-block"> Return Loans </button>
+    {% endif %}
+</form>
 {% endblock %}

@@ -3,8 +3,9 @@ from app.common_definitions.helper_functions import convert_epoch_to_datetime as
 
 class Movie:
     record_type = "Movie"
-    # Movie can be loaned for 2 weeks (converted to seconds, #weeks x days/week x seconds/day)
-    loan_time = 2 * 7 * 86400
+    copy_table_name = "movie_copy"
+    # Movie can be loaned for 2 days (converted to seconds. days x seconds/day)
+    loan_time = 2 * 86400
 
     def __init__(self, arguments):
         # Currently from CatalogController, the .fetchall() returns a
@@ -28,7 +29,6 @@ class Movie:
             self._release_date = to_datetime(arguments['release_date']).split(" ")[0]
         self._runtime = arguments['run_time']
 
-
         if 'total_quantity' in dict(arguments):
 
             self._total_quantity = arguments["total_quantity"]
@@ -46,10 +46,21 @@ class Movie:
             self._quantity_available = 1
 
 
-
     def get_id(self):
         """Returns the id of the object"""
         return self._id
+
+    def get_copy_table_name(self):
+        return Movie.copy_table_name
+
+    def get_loan_time(self):
+        return Movie.loan_time
+
+    def get_title(self):
+        return self._title
+
+    def get_type(self):
+        return self.record_type
 
     def __str__(self):
 
