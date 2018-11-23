@@ -154,7 +154,7 @@ class CatalogController(Controller):
         return self.view_catalog_inventory()[catalog_type].search(search_value)
 
     
-    def search_transaction_by(self, catalog_type, search_transaction_key_values):
+    def search_transaction_by(self, search_transaction_key_values):
 
         # Remove the keys with no value
         transformed_search_transaction_key_values = {}
@@ -170,6 +170,14 @@ class CatalogController(Controller):
         if len(transformed_search_transaction_key_values) == 0:
             return empty_list
         
-        lst = self.view_catalog_inventory()[catalog_type].search_transaction(transformed_search_transaction_key_values)
+        lst = self.view_catalog_inventory()["5"].search_transaction(transformed_search_transaction_key_values)
         
+        return lst
+
+    def view_transaction_history(self):
+        loan_catalog = self.view_catalog_inventory()["5"]
+        lst = []
+        for k, v in loan_catalog.items():
+            lst.append(v)
+
         return lst
