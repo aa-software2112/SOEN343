@@ -1320,8 +1320,6 @@ class LoanCatalog(Catalog):
 
             temp = self._loans.pop(id, None)
 
-            self._rwl.end_write()
-
         self._rwl.end_write()
         return None
 
