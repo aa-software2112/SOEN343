@@ -34,8 +34,6 @@ class ClientController(Controller):
             self._client_catalog = app.classes.catalogs.UserCatalog()
             self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
             self._loan_catalog = app.classes.catalogs.LoanCatalog.get_instance()
-            print(app.classes.catalogs.LoanCatalog.get_instance())
-            print(app.classes.catalogs.LoanCatalog.get_instance())
 
     def load_database_into_memory(self):
 
@@ -319,19 +317,22 @@ class ClientController(Controller):
 
         usr = self._client_catalog.get(client_id)
         loaned_items = usr.get_loaned_items()
-
+        print(loaned_items)
         return loaned_items
 
     def return_loaned_items(self, loaned_items_ids, client_id):
-        print("from client controller")
-        print(self._loan_catalog)
+        failed_loans = []
         for loan_id in loaned_items_ids:
-            self._loan_catalog.return_loaned_item(loan_id)
+            loan_id = self._loan_catalog.return_loaned_item(loan_id)
+            if loan_id is not None:
+                loan = self._loan_catalog.get(loan_id)
+                failed_loans.append(loan)
+        if failed_loans == []:
+            usr = self._client_catalog.get(client_id)
 
-        usr = self._client_catalog.get(client_id)
-
-        for loan_id in loaned_items_ids:
-            usr.remove_loan(loan_id)
+            for loan_id in loaned_items_ids:
+                usr.remove_loan(loan_id)
+        return failed_loans
 
     def make_loan(self, client_id):
         usr = self._client_catalog.get(client_id)

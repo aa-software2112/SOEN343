@@ -369,7 +369,6 @@ class BookCatalog(Catalog):
         return temp
 
     def set_available(self, book_copy_id):
-        print(type(book_copy_id))
         self._rwl.start_write()
         update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id = ?'
         self.db.execute_query_write(update_copy_query, (int(book_copy_id),))
@@ -379,7 +378,6 @@ class BookCatalog(Catalog):
         get_book_id_from_copy = 'SELECT book_id FROM book_copy WHERE book_copy.id = ?'
         cursor = self.db.execute_query(get_book_id_from_copy, (int(book_copy_id),))
         book_id_of_copy = cursor.fetchone()[0]
-        print(book_id_of_copy)
         self._rwl.end_read()
 
         self._rwl.start_write()
@@ -1212,13 +1210,13 @@ class LoanCatalog(Catalog):
 
         else:
 
+            LoanCatalog._instance = self
             # Catalogs necessary for making and returning loans
             self.book_catalog = BookCatalog.get_instance()
             self.album_catalog = AlbumCatalog.get_instance()
             self.movie_catalog = MovieCatalog.get_instance()
             self.client_controller = ClientController.get_instance()
 
-            LoanCatalog._instance = self
             self.db = DatabaseContainer.get_instance()
             self._loans = {}
             self._rwl = ReadWriteLock()
@@ -1231,10 +1229,6 @@ class LoanCatalog(Catalog):
 
     def get(self, id):
         self._rwl.start_read()
-        print(id)
-        print("viewing get: ")
-        for k,v in self._loans.items():
-            print(v)
         temp = self._loans[id]
         self._rwl.end_read()
         return temp
@@ -1261,20 +1255,12 @@ class LoanCatalog(Catalog):
             loan_obj.set_loan_id(new_loan_id)
 
             # Add the loan to the dictionary of loans
-            print(loan_obj)
             self._loans[loan_obj.get_id()] = loan_obj
 
         else:
             self._loans[loan_obj.get_id()] = loan_obj
 
-        print("Viewing All Loans")
         self._rwl.end_write()
-        #print(self.get(loan_obj.get_id()))
-
-        for k, v in self._loans.items():
-            print(v)
-
-       # self._rwl.end_write()
 
 
 
@@ -1339,19 +1325,17 @@ class LoanCatalog(Catalog):
         return search_list
 
     def set_as_returned(self, loan):
-        update_loan_query = "UPDATE loan SET return_time = ?, is_returned=? WHERE id = ? "
-        return_time = loan.get_return_time()
-        is_returned = loan.get_is_returned()
-        id = loan.get_id()
-        update_loan_tuple =(return_time, is_returned,id )
-        self.db.execute_query_write(update_loan_query,update_loan_tuple)
+        try:
+            update_loan_query = "UPDATE loan SET return_time = ?, is_returned=? WHERE id = ? "
+            return_time = loan.get_return_time()
+            is_returned = loan.get_is_returned()
+            id = loan.get_id()
+            update_loan_tuple =(return_time, is_returned,id )
+            self.db.execute_query_write(update_loan_query,update_loan_tuple)
+        except:
+            return id
 
     def return_loaned_item(self, loan_id):
-        #loan = LoanCatalog.get_instance().get(int(loan_id))
-        print("printing loan catalog display")
-        print(self)
-        print("printing get instance display")
-        print(LoanCatalog.get_instance())
         loan=self.get(int(loan_id))
         loan.set_loan_as_returned()
         loan_copy_id = loan.get_copy_id()
@@ -1360,16 +1344,17 @@ class LoanCatalog(Catalog):
         # record_type = Movie.copy_table_name
         # loan.get_record_id = 1
 
-        if record_type == Book.copy_table_name:
-            self.book_catalog.set_available(loan_copy_id)
-        elif record_type == Album.copy_table_name:
-            self.album_catalog.set_available(loan_copy_id)
+        failed_id = self.set_as_returned(loan)
+        if failed_id is None:
+            if record_type == Book.copy_table_name:
+                self.book_catalog.set_available(loan_copy_id)
+            elif record_type == Album.copy_table_name:
+                self.album_catalog.set_available(loan_copy_id)
 
-        elif record_type == Movie.copy_table_name:
-            self.movie_catalog.set_available(loan_copy_id)
+            elif record_type == Movie.copy_table_name:
+                self.movie_catalog.set_available(loan_copy_id)
 
-        self.set_as_returned(loan)
-        return
+        return failed_id
 
     def loan_item(self, cart_item, client_id):
         record_type = cart_item.get_copy_table_name()
@@ -1377,8 +1362,6 @@ class LoanCatalog(Catalog):
         print("Loan_item client_id --> " + str(client_id))
         client = self.client_controller._client_catalog.get(client_id)
         loan = None
-        print("self in loan items")
-        print(self)
         if record_type == Book.copy_table_name:
             copy_id = self.book_catalog.get_available_copy(item_id)
             if copy_id is not None:

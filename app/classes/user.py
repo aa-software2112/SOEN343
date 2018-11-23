@@ -100,7 +100,8 @@ class User:
         return self._loan_list
 
     def remove_loan(self, loan_id):
-        for loan_obj in self._loan_list:
+        loan_list_copy = self._loan_list.copy()
+        for loan_obj in loan_list_copy:
             if loan_obj.get_id() == int(loan_id):
                 self._loan_list.remove(loan_obj)
 
