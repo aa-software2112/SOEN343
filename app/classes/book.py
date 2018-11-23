@@ -48,6 +48,12 @@ class Book:
     def get_copy_table_name(self):
         return Book.copy_table_name
 
+    def get_title(self):
+        return self._title
+
+    def get_type(self):
+        return self.record_type
+
     def get_loan_time(self):
         return Book.loan_time
 
