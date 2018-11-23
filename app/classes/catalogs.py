@@ -1354,6 +1354,7 @@ class LoanCatalog(Catalog):
             return id
 
     def return_loaned_item(self, loan_id):
+        self._rwl.start_write()
         loan=self.get(int(loan_id))
         loan_copy_id = loan.get_copy_id()
         record_type = loan.get_table_name()
@@ -1371,6 +1372,7 @@ class LoanCatalog(Catalog):
             elif record_type == Movie.copy_table_name:
                 self.movie_catalog.set_available(loan_copy_id)
 
+        self._rwl.end_write()
         return failed_id
 
     def loan_item(self, cart_item, client_id):
