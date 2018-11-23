@@ -216,7 +216,7 @@ class ClientController(Controller):
 
     # returns the cart set from the specific client with 'client_id'
     def get_all_cart_items(self, client_id):
-      
+       
         # Extract the user
         client = self._client_catalog.get(client_id)
 
@@ -225,10 +225,25 @@ class ClientController(Controller):
 
         return cart_set
 
+    def add_to_cart(self, catalog_type, object_id, user_id):
+
+        print(catalog_type)
+
+        o = self._catalog_controller.get_catalog_entry_by_id(catalog_type, object_id)
+        print(o)
+        old, new = self._client_catalog.add_to_cart(user_id, o)
+        if old - new == 0:
+
+            return "Item already exist in cart "
+        else:
+
+            return "Item added successfully"
+
     # deletes the item specified by 'o_id' from cart and returns the updated cart
-    def delete_from_cart(self, o_id, user_id):
+    def delete_from_cart(self, o_id, user_id, record_type):
         usr = self._client_catalog.get(user_id)
-        usr.delete_from_cart(o_id)
+        # returns the message passed success/error
+        return usr.delete_from_cart(o_id, record_type)
 
     def get_loaned_items(self, client_id):
         usr = self._client_catalog.get(client_id)
