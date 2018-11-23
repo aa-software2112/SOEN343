@@ -106,6 +106,18 @@ class ClientController(Controller):
 
         return found_client
 
+    def get_client_by_id(self, id):
+        found_client = []
+
+        clients = self._client_catalog.get_all()
+
+        for id, clientObj in clients.items():
+
+            if clientObj._id == id:
+                found_client.append(clientObj)
+
+        return found_client
+
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
 
@@ -249,7 +261,12 @@ class ClientController(Controller):
         return loaned_items
 
     def return_loaned_items(self, loaned_items_ids, client_id):
+
+        for loan_id in loaned_items_ids:
+            self._loan_catalog.return_loaned_item(loan_id)
+
         usr = self._client_catalog.get(client_id)
+
         for loan_id in loaned_items_ids:
             self._loan_catalog.return_loaned_items(loan_id)
             usr.remove_loan(loan_id)

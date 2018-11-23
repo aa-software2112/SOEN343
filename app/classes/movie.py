@@ -56,6 +56,12 @@ class Movie:
     def get_loan_time(self):
         return Movie.loan_time
 
+    def get_title(self):
+        return self._title
+
+    def get_type(self):
+        return self.record_type
+
     def __str__(self):
 
         return "Movie | ID: " + str(self._id) + " TITLE: " + self._title +  " DIRECTOR: " + self._director + " PRODUCERS: " + self._producers + " ACTORS: " + self._actors + \
