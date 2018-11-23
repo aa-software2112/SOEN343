@@ -142,7 +142,7 @@ def search_transaction_by(criteria, list_of_loan_records):
     if key == "Username":
         print(key)
         for v in list_of_loan_records:
-            if v._user._username == value:
+            if v._user._username in value:
                 print(v._id)
                 lst.append(v)
             break
@@ -150,17 +150,7 @@ def search_transaction_by(criteria, list_of_loan_records):
     elif key == "Title":
         print(key)
         for v in list_of_loan_records:
-            if v._record._title == value: 
-                print("inserted loan object of id:")
-                print (v._id)
-                lst.append(v)
-            break
-    
-    elif key == "Loan time":
-        print(key)
-        for v in list_of_loan_records:
-            date = convert_epoch_to_date(v._loan_time)
-            if date == value:
+            if v._record._title in value: 
                 print("inserted loan object of id:")
                 print (v._id)
                 lst.append(v)
@@ -176,39 +166,12 @@ def search_transaction_by(criteria, list_of_loan_records):
                 lst.append(v)
             break
             
-    elif key == "Return Time":
-        print(key)
-        for v in list_of_loan_records:
-            date = convert_epoch_to_date(v._return_time)
-            if date == value:
-                print("inserted loan object of id:")
-                print (v._id)
-                lst.append(v)
-            break
-
-    
-    '''
-    #takes two parameter as input criteria as dictionary and loan_records as list and match the criteria value in
-    #catalog record to the search value if match is found add it inside the empty list and return it .
-    for v in list_of_loan_records:
-        for a, b in criteria.items():
-            print(v)
-
-            if a == ("username" or "title"):
-                b = new_value
-
-            if b.strip().lower() in v.__dict__[a].lower():
-                print("Match found! entering into the list")
-                lst.append(v)
-                break
-    '''
-
     print("returned the list")
     return lst
  
 
 
-
+'''
 class Catalog_type(object):
     id = 0
     title = ""
@@ -288,3 +251,4 @@ print("testing transaction_key_values_2")
 search_transaction_by(transaction_key_values_2, list_of_loan_records1)
 print("testing transaction_key_values_3")
 search_transaction_by(transaction_key_values_3, list_of_loan_records1)
+'''
