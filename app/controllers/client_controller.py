@@ -268,4 +268,14 @@ class ClientController(Controller):
         usr = self._client_catalog.get(client_id)
 
         for loan_id in loaned_items_ids:
+
             usr.remove_loan(loan_id)
+            self._loan_catalog.return_loaned_items(loan_id)
+            usr.remove_loan(loan_id)
+
+    def make_loan(self, client_id):
+        usr = self._client_catalog.get(client_id)
+        commits = usr.make_loan()
+
+        return commits
+

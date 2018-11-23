@@ -31,6 +31,7 @@ if not objects_in_memory:
     catalog_controller.load_database_into_memory()
     client_controller.load_database_into_memory()
     admin_controller.load_database_into_memory()
+    client_controller.load_loans_db_to_memory()
 
 # Helper function to be used in front end
 app.jinja_env.globals.update(convert_epoch_to_datetime=helper_functions.convert_epoch_to_datetime)
