@@ -3,6 +3,8 @@ from app.classes.album import Album
 from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
+from app.classes.loan import Loan
+from app.classes.catalogs import Catalog
 from app.classes.catalogs import LoanCatalog, AlbumCatalog, MovieCatalog, BookCatalog, MagazineCatalog
 from app.classes.database_container import DatabaseContainer
 
@@ -16,6 +18,7 @@ class CatalogController(Controller):
     MOVIE_TYPE = "2"
     MAGAZINE_TYPE = "3"
     ALBUM_TYPE = "4"
+    #LOAN_TYPE = "5"
 
     @staticmethod
     def get_instance():
@@ -34,10 +37,12 @@ class CatalogController(Controller):
                                CatalogController.MOVIE_TYPE: MovieCatalog.get_instance(),
                                CatalogController.MAGAZINE_TYPE: MagazineCatalog.get_instance(),
                                CatalogController.ALBUM_TYPE: AlbumCatalog.get_instance()}
+                               #CatalogController.LOAN_TYPE: LoanCatalog.get_instance()}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
                                   CatalogController.ALBUM_TYPE: Album}
+                                  #CatalogController.LOAN_TYPE: Loan}
             self._db_loaded = False
 
     def load_database_into_memory(self):
@@ -52,8 +57,8 @@ class CatalogController(Controller):
         queries = {CatalogController.BOOK_TYPE: """ SELECT * FROM book; """,
                    CatalogController.MOVIE_TYPE: """ SELECT * FROM movie; """,
                    CatalogController.MAGAZINE_TYPE: """ SELECT * FROM magazine; """,
-                   CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """
-                   }
+                   CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """}
+                   #CatalogController.LOAN_TYPE: """ SELECT * FROM loan; """
 
         # Iterate over all queries
         for catalog_type, query in queries.items():
@@ -77,7 +82,8 @@ class CatalogController(Controller):
         dict_of_catalogs = {"books": self._inventory[CatalogController.BOOK_TYPE].get_all(),
                             "movies": self._inventory[CatalogController.MOVIE_TYPE].get_all(),
                             "magazines": self._inventory[CatalogController.MAGAZINE_TYPE].get_all(),
-                            "albums": self._inventory[CatalogController.ALBUM_TYPE].get_all()
+                            "albums": self._inventory[CatalogController.ALBUM_TYPE].get_all(),
+                            #"loan": self._inventory[CatalogController.LOAN_TYPE].get_all()
                             }
         return dict_of_catalogs
 
@@ -146,3 +152,33 @@ class CatalogController(Controller):
 
     def search_from(self, catalog_type, search_value):
         return self.view_catalog_inventory()[catalog_type].search(search_value)
+
+    '''
+    def search_transaction_by(self, search_transaction_key_values):
+
+        # Remove the keys with no value
+        transformed_search_transaction_key_values = {}
+        
+        for k, v in search_transaction_key_values.items():
+
+            # Empty key, don't use this as a search_transaction
+            if not v.strip() == "":
+                transformed_search_transaction_key_values[k] = v
+
+        empty_list = []
+
+        if len(transformed_search_transaction_key_values) == 0:
+            return empty_list
+        
+        lst = self.view_catalog_inventory()["5"].search_transaction(transformed_search_transaction_key_values)
+        
+        return lst
+
+    def view_transaction_history(self):
+        loan_catalog = self.view_catalog_inventory()["5"]
+        lst = []
+        for k, v in loan_catalog.items():
+            lst.append(v)
+
+        return lst
+    '''

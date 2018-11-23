@@ -9,8 +9,13 @@ import datetime
 
 def convert_epoch_to_datetime(epoch_time):
     """Returns time in 'month/day/year hour:minute:second' format given the epoch time"""
+    if epoch_time < 0:
+        return "—"
     return time.strftime("%m/%d/%Y %H:%M:%S %Z", time.localtime(epoch_time))
 
+def convert_epoch_to_date(epoch_time):
+    """Returns time in 'month/day/year hour:minute:second' format given the epoch time"""
+    return time.strftime("%m/%d/%Y", time.localtime(epoch_time))
 
 def convert_date_time_to_epoch(date_time_string):
     """ Expects a string in the form mm/dd/yyyy, otherwise returns
@@ -124,4 +129,41 @@ def search_catalog(catalog, search_string):
             print("Match found! Title: " + title)
             lst.append(v)
 
+    return lst
+
+def search_transaction(criteria, list_of_loan_records):
+    lst = []
+    print(criteria)
+    
+    key = list(criteria.keys())[0]
+    value = list(criteria.values())[0]
+    new_key = ""
+    new_value ="" 
+    date = ""
+    
+    if key == "Username":
+        print(key)
+        for v in list_of_loan_records:
+            if value.lower() in v._user._username.lower():
+                print(v._id)
+                lst.append(v)
+
+    elif key == "Title":
+        print(key)
+        for v in list_of_loan_records:
+            if value.lower() in v._record._title.lower(): 
+                print("inserted loan object of id:")
+                print (v._id)
+                lst.append(v)
+
+    elif key == "Due Time":
+        print(key)
+        for v in list_of_loan_records:
+            date = convert_epoch_to_date(v._due_time)
+            if date == value:
+                print("inserted loan object of id:")
+                print (v._id)
+                lst.append(v)
+            
+    print("returned the list")
     return lst

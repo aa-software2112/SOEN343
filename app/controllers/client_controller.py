@@ -29,7 +29,7 @@ class ClientController(Controller):
             self._db_loaded = False
             self._client_catalog = app.classes.catalogs.UserCatalog()
             self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
-            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
+            self._loan_catalog = app.classes.catalogs.LoanCatalog.get_instance()
 
     def load_database_into_memory(self):
 
@@ -102,6 +102,18 @@ class ClientController(Controller):
         for id, clientObj in clients.items():
 
             if clientObj._username == username and clientObj._password == password:
+                found_client.append(clientObj)
+
+        return found_client
+
+    def get_client_by_id(self, id):
+        found_client = []
+
+        clients = self._client_catalog.get_all()
+
+        for id, clientObj in clients.items():
+
+            if clientObj._id == id:
                 found_client.append(clientObj)
 
         return found_client
@@ -249,7 +261,12 @@ class ClientController(Controller):
         return loaned_items
 
     def return_loaned_items(self, loaned_items_ids, client_id):
+
+        for loan_id in loaned_items_ids:
+            self._loan_catalog.return_loaned_item(loan_id)
+
         usr = self._client_catalog.get(client_id)
+
         for loan_id in loaned_items_ids:
             self._loan_catalog.return_loaned_items(loan_id)
             usr.remove_loan(loan_id)

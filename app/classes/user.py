@@ -130,7 +130,9 @@ class User:
 
         self._cart.set_user_owner_id(id)
 
-                
+    def get_username(self):
+        return self._username
+
 class Admin(User):
 
     def __init__(self, arguments):
