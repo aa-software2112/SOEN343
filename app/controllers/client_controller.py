@@ -29,7 +29,7 @@ class ClientController(Controller):
             self._db_loaded = False
             self._client_catalog = app.classes.catalogs.UserCatalog()
             self._catalog_controller = app.controllers.catalog_controller.CatalogController.get_instance()
-            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
+            self._loan_catalog = app.classes.catalogs.LoanCatalog.get_instance()
 
     def load_database_into_memory(self):
 

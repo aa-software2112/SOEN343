@@ -9,6 +9,7 @@ from app.classes.catalogs import LoanCatalog
 from app.classes.database_container import DatabaseContainer
 from app.controllers.catalog_controller import CatalogController
 import time
+import app.classes.catalogs
 
 
 class AdminController(Controller):
@@ -38,8 +39,7 @@ class AdminController(Controller):
             self._admin_catalog = UserCatalog()
 
             # Admin Controller contains a catalog of loans
-            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
-
+            self._loan_catalog = app.classes.catalogs.LoanCatalog.get_instance()
             self._db_loaded = False
 
     def get_all_logged_admins(self):
@@ -229,16 +229,16 @@ class AdminController(Controller):
         usr = self._admin_catalog.get(admin_id)
         index = usr.get_index_from_object(record_object)
         usr.set_index_last_searched(index)
-
+    '''
     def search_transaction_by(self, search_transaction_key_values):
         loan_items = self._loan_catalog.get_all()
         loan_list = []
         for k, v in loan_items.items():
             loan_list.append(v)
 
-        lst = self._catalog_controller.search_transaction_by(self, search_transaction_key_values, loan_list)
+        lst = self._loan_catalog.search_transaction_by(search_transaction_key_values, loan_list)
         return lst
-
+    '''
     def view_transaction_history(self):
         loan_items = self._loan_catalog.get_all()
 

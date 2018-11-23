@@ -131,11 +131,11 @@ class BookCatalog(Catalog):
         This class uses the Singleton pattern.
         """
     _instance = None
-
-                "Title":"_title",
-                "Publisher":"_publisher",
-                "Language":"_language"
-               }
+    Filters = {
+            "Title":"_title",
+            "Publisher":"_publisher",
+            "Language":"_language"
+            }
 
     Sorts = {"Ascending Author":"_author",
              "Descending Author": "_author",
@@ -1058,7 +1058,7 @@ class LoanCatalog(Catalog):
         """
 
         if LoanCatalog._instance is not None:
-
+            
             raise Exception("This class is a singleton!")
 
         else:
