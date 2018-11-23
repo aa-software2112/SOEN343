@@ -8,5 +8,7 @@
    {% if err %}
             <div class="alert alert-danger" role="alert"> {{ err }}</div>
    {% endif %}
-    <a href="/myLoans">Return to my loans</a>
+    <form action="/myLoans" method="GET">
+        <button type="submit" class="btn btn-primary btn-info btn-lg btn-block"> Back to My Loans </button>
+        </form>
 {% endblock %}

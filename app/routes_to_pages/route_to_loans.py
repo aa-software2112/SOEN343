@@ -6,7 +6,7 @@ from app.classes.loan import Loan
 
 from app.common_definitions.helper_functions import convert_epoch_to_datetime as to_datetime
 
-@app.route('/myLoans')
+@app.route('/myLoans', methods = ['GET', 'POST'])
 @login_required
 def my_loans():
 	"""Function that get the user's loans and display them on a page"""
