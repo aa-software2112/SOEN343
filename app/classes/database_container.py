@@ -1,27 +1,43 @@
 import sqlite3
 import sys
+from app.common_definitions.common_paths import PATH_TO_DATABASE
 
 
 class DatabaseContainer(object):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
+    commit_lock = False
 
-    def __init__(self, pathToDatabase):
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if DatabaseContainer._instance is None:
+            DatabaseContainer._instance = DatabaseContainer()
+        return DatabaseContainer._instance
 
-        # Connect to database immediately
-        self.connection = None
-        self.dbPath = pathToDatabase
+    def __init__(self):
+        if DatabaseContainer._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            DatabaseContainer._instance = self
+            # Connect to database immediately
+            self.connection = None
+            self.dbPath = PATH_TO_DATABASE
 
-        try:
-            # Make database useable in all threads
-            self.connection = sqlite3.connect(
-                pathToDatabase, check_same_thread=False)
+            try:
+                # Make database useable in all threads
+                self.connection = sqlite3.connect(
+                    PATH_TO_DATABASE, check_same_thread=False)
 
-            # Make database accessible through index and keys
-            self.connection.row_factory = sqlite3.Row
+                # Make database accessible through index and keys
+                self.connection.row_factory = sqlite3.Row
 
-            print("Made connection!")
-        except Error as e:
-            print(e)
-            sys.exit()
+                print("Made connection!")
+            except sqlite3.Error as e:
+                print(e)
+                sys.exit()
 
     def execute_query(self, sqlQuery, inputParameters=None):
         """
@@ -53,14 +69,20 @@ class DatabaseContainer(object):
         else:
             cursor.execute(sqlQuery, inputParameters)
 
-        self.connection.commit()
+        # To control the commits (namely for using batch writes during database initialization)
+        if not DatabaseContainer.commit_lock:
+            self.connection.commit()
 
         return cursor
+
+    def commit_db(self):
+
+        self.connection.commit()
 
     def close_connection(self):
         try:
             self.connection.close()
-        except Error as e:
+        except sqlite3.Error as e:
             print(e)
 
     def print_path(self):

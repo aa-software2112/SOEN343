@@ -1,6 +1,6 @@
 from flask import render_template, g, session, redirect, request, flash
 from app import app
-from app import clientController, adminController
+from app import client_controller, admin_controller
 from app.controllers.catalog_controller import CatalogController
 from app import databaseObject as db
 from app.classes.book import Book
@@ -29,7 +29,7 @@ def userCreator():
 @login_required
 @admin_required
 def adminViewUserRegistry():
-    list_of_clients = adminController.get_all_logged_admins() + clientController.get_all_logged_clients()
+    list_of_clients = admin_controller.get_all_logged_admins() + client_controller.get_all_logged_clients()
 
     return render_template('admin_view_user_registry.html', list_of_clients=list_of_clients)
 
@@ -48,22 +48,22 @@ def registerUser():
     typeofclient = request.form["isadmin"]
 
     # Cannot create a new user if it exists as either client or administrator
-    emaillist = clientController.get_client_by_email(email) + adminController.get_admin_by_email(email)
-    usernamelist = clientController.get_client_by_username(username) + adminController.get_admin_by_username(username)
+    emaillist = client_controller.get_client_by_email(email) + admin_controller.get_admin_by_email(email)
+    usernamelist = client_controller.get_client_by_username(username) + admin_controller.get_admin_by_username(username)
 
     if (len(usernamelist) == 0) & (len(emaillist) == 0):
 
         # Create an administrator
         if int(typeofclient) == 1:
 
-            adminController.create_admin(firstname, lastname, address, email, phonenumber, username, password, 0, 0)
+            admin_controller.create_admin(firstname, lastname, address, email, phonenumber, username, password, 0, 0)
 
             flash("User created successfully.", 'success')
 
         # Create a client
         else:
 
-            clientController.create_client(firstname, lastname, address, email, phonenumber, username, password, 0, 0)
+            client_controller.create_client(firstname, lastname, address, email, phonenumber, username, password, 0, 0)
 
             flash("User created successfully.", 'success')
 
@@ -86,7 +86,7 @@ def adminViewAddToCatalog():
 @admin_required
 def adminViewAddBook():
     if request.method == 'POST':
-        adminController.add_entry_to_catalog(CatalogController.BOOK_TYPE, request.form)
+        admin_controller.add_entry_to_catalog(CatalogController.BOOK_TYPE, request.form)
         flash("Book entry created successfully.", 'success')
         return redirect('viewCatalog')
     return render_template('add_book.html')
@@ -97,7 +97,7 @@ def adminViewAddBook():
 @admin_required
 def adminViewAddMovie():
     if request.method == 'POST':
-        adminController.add_entry_to_catalog(CatalogController.MOVIE_TYPE, request.form)
+        admin_controller.add_entry_to_catalog(CatalogController.MOVIE_TYPE, request.form)
         flash("Movie entry created successfully.", 'success')
         return redirect('viewCatalog')
     return render_template('add_movie.html')
@@ -108,7 +108,7 @@ def adminViewAddMovie():
 @admin_required
 def adminViewAddMagazine():
     if request.method == 'POST':
-        adminController.add_entry_to_catalog(CatalogController.MAGAZINE_TYPE, request.form)
+        admin_controller.add_entry_to_catalog(CatalogController.MAGAZINE_TYPE, request.form)
         flash("Magazine entry created successfully.", 'success')
         return redirect('viewCatalog')
     return render_template('add_magazine.html')
@@ -119,7 +119,7 @@ def adminViewAddMagazine():
 @admin_required
 def adminViewAddAlbum():
     if request.method == 'POST':
-        adminController.add_entry_to_catalog(CatalogController.ALBUM_TYPE, request.form)
+        admin_controller.add_entry_to_catalog(CatalogController.ALBUM_TYPE, request.form)
         flash("Album entry created successfully.", 'success')
         return redirect('viewCatalog')
     return render_template('add_album.html')
@@ -132,13 +132,13 @@ def modify_catalog_form():
     type = int(request.form["type"])
     id = request.form['modify_catalog']
     if (type == 1):
-        return render_template('modify_book.html', book=adminController.get_catalog_entry_by_id(CatalogController.BOOK_TYPE, int(id)))
+        return render_template('modify_book.html', book=admin_controller.get_catalog_entry_by_id(CatalogController.BOOK_TYPE, int(id)))
     if (type == 2):
-        return render_template('modify_movie.html', movie=adminController.get_catalog_entry_by_id(CatalogController.MOVIE_TYPE, int(id)))
+        return render_template('modify_movie.html', movie=admin_controller.get_catalog_entry_by_id(CatalogController.MOVIE_TYPE, int(id)))
     if (type == 3):
-        return render_template('modify_magazine.html', magazine=adminController.get_catalog_entry_by_id(CatalogController.MAGAZINE_TYPE, int(id)))
+        return render_template('modify_magazine.html', magazine=admin_controller.get_catalog_entry_by_id(CatalogController.MAGAZINE_TYPE, int(id)))
     if (type == 4):
-        return render_template('modify_album.html', album=adminController.get_catalog_entry_by_id(CatalogController.ALBUM_TYPE, int(id)))
+        return render_template('modify_album.html', album=admin_controller.get_catalog_entry_by_id(CatalogController.ALBUM_TYPE, int(id)))
 
 
 @app.route('/modifyCatalog', methods=['POST'])
@@ -146,7 +146,7 @@ def modify_catalog_form():
 @admin_required
 def modify_catalog():
     type = request.form["type"]
-    adminController.modify_catalog(type, request.form)
+    admin_controller.modify_catalog(type, request.form)
     flash("Entry modified succesfully.", 'success')
     return redirect('viewCatalog')
 
@@ -165,8 +165,8 @@ def delete_view_catalog():
     elif (type == 4):
         catalog_type = CatalogController.ALBUM_TYPE
         
-    catalog_record = adminController.get_catalog_entry_by_id(catalog_type, int(id))
-    catalog_record_copy = adminController.get_catalog_copies_by_id(catalog_type, int(id))
+    catalog_record = admin_controller.get_catalog_entry_by_id(catalog_type, int(id))
+    catalog_record_copy = admin_controller.get_catalog_copies_by_id(catalog_type, int(id))
 
     return render_template('delete_record_modal.html', catalog_type = int(catalog_type), catalog_record = catalog_record, catalog_record_copy = catalog_record_copy)
 
@@ -178,7 +178,7 @@ def delete_catalog():
     id = request.form["id"]
     catalog_type = request.form["type"]
     print("Backend ID: " + id)
-    adminController.delete_catalog_copy_entry(catalog_type, int(id))
+    admin_controller.delete_catalog_copy_entry(catalog_type, int(id))
 
     flash("Entry deleted succesfully.", 'success')
     return redirect('viewCatalog')

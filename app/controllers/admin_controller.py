@@ -1,64 +1,52 @@
 from app.controllers.controller import Controller
-from app.controllers.user_controller import ClientController
 from app.classes.user import Admin
 from app.classes.album import Album
 from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
 from app.classes.catalogs import UserCatalog
-import app.common_definitions.helper_functions as helper_functions
+from app.classes.catalogs import LoanCatalog
+from app.classes.database_container import DatabaseContainer
+from app.controllers.catalog_controller import CatalogController
+import time
+import app.classes.catalogs
 
 
 class AdminController(Controller):
+    """
+    This class uses the Singleton pattern.
+    """
+    _instance = None
 
-    def __init__(self, database, catalog_controller):
-        Controller.__init__(self, database)
+    @staticmethod
+    def get_instance():
+        """ Static access method. """
+        if AdminController._instance is None:
+            AdminController._instance = AdminController()
+        return AdminController._instance
 
-        # Admin Controller should have an instance of catalog controller
-        self._catalog_controller = catalog_controller
+    def __init__(self):
+        if AdminController._instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            AdminController._instance = self
+            Controller.__init__(self, DatabaseContainer.get_instance())
 
-        # Admin Controller contains a catalog of admin users
-        self._admin_catalog = UserCatalog(database)
+            # Admin Controller should have an instance of catalog controller
+            self._catalog_controller = CatalogController.get_instance()
 
-        self._db_loaded = False
+            # Admin Controller contains a catalog of admin users
+            self._admin_catalog = UserCatalog()
 
-    def example_admin_controller_function(self):
-        print("Admin Controller")
-
-    def example_admin_sql_call(self):
-
-        # Create your query
-        yourQuery = ''' SELECT * from client WHERE isLogged=1'''
-
-        """ There is a DatabaseContainer object (see Database/DatabaseContainer.py) stored in every Controller (see Controllers/Controller.py)
-		through this class' constructor __init__(...). It is sent all the way up the object hierarchy until it reaches the Controller object
-		
-		This database object abstracts stores the sqlite connection (see __init__.py in /application/). We need this
-		encapsulation to control read/write requests later.
-		
-		This next line executes the query; it has an optional input parameter for write-based SQL queries; this example is a read-based one
-		
-		The function .executeQuery(...) returns the cursor created out of the execution of your query --> again, see Database/DatabaseContainer.py
-		"""
-        yourCursor = self.db.execute_query(yourQuery, inputParameters=None)
-
-        # See
-        # https://docs.python.org/2/library/sqlite3.html#sqlite3.Cursor.execute
-        # for cursor functions
-        yourResults = yourCursor.fetchall()
-
-        # At this point, iterate over results and store them in some object (User, Book, Music, etc...) before returning
-        # print("Results from exampleAdminSQLCall: ")
-        # for result in yourResults:
-        #	print(result)
-
-        # Here you would return a list of objects
-        return
-
+            # Admin Controller contains a catalog of loans
+            self._loan_catalog = app.classes.catalogs.LoanCatalog.get_instance()
+            self._db_loaded = False
 
     def get_all_logged_admins(self):
+        all_admins = list(self._admin_catalog.get_all().values())
+        logged_admins = [admin for admin in all_admins if admin._is_logged == 1]
+        return logged_admins
 
-        return list(self._admin_catalog.get_all().values())
 
     def load_database_into_memory(self):
 
@@ -69,7 +57,6 @@ class AdminController(Controller):
         # Add all objects form database into catalogs
         sql_query = """ SELECT * FROM client WHERE isAdmin = 1 """
 
-
         all_rows = self.db.execute_query(sql_query).fetchall()
 
         # Create an object for each row
@@ -77,8 +64,17 @@ class AdminController(Controller):
             self._admin_catalog.add(Admin(row), False)
 
         # Uncomment these two lines to see all objects in all catalogs
-        #for k, v in self._admin_catalog.get_all().items():
+        # for k, v in self._admin_catalog.get_all().items():
         #    print(v)
+
+    def login_admin(self, username):
+        admin = self.get_admin_by_username(username)
+
+        if len(admin) == 1:
+            admin = admin[0]
+            admin._is_logged = 1
+            admin._last_logged = time.time()
+            self._admin_catalog.modify(admin)
 
     def logout_admin(self, username):
         admin = self.get_admin_by_username(username)
@@ -92,14 +88,14 @@ class AdminController(Controller):
         print("Admin has been logged out.")
 
     # Creates admin using create_client method in UserController.
-    def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isLogged, lastLogged):
+    def create_admin(self, firstName, lastName, physicalAddress, email, phoneNumber, username, password, isLogged,
+                     lastLogged):
 
-        attributesDict = {"firstName": firstName, "lastName": lastName, "physicalAddress":physicalAddress,
+        attributesDict = {"firstName": firstName, "lastName": lastName, "physicalAddress": physicalAddress,
                           "email": email, "phoneNumber": phoneNumber, "username": username, "password": password,
-                          "isAdmin":1, "isLogged":isLogged, "lastLogged": lastLogged}
+                          "isAdmin": 1, "isLogged": isLogged, "lastLogged": lastLogged}
 
         self._admin_catalog.add(Admin(attributesDict), True)
-
 
     def get_admin_by_username(self, username):
 
@@ -117,6 +113,7 @@ class AdminController(Controller):
         # function takes self and a string "email" to get the user from the client table.
         # returns list with client information or emptylist if client doesn't
         # exist in database
+
     def get_admin_by_email(self, email):
         found_admin = []
 
@@ -150,25 +147,15 @@ class AdminController(Controller):
     def view_inventory(self):
         return self._catalog_controller.get_all_catalogs()
 
-    def get_catalog_entry_by_id(self,catalog_type, id):
+    def get_catalog_entry_by_id(self, catalog_type, id):
         return self._catalog_controller.get_catalog_entry_by_id(catalog_type, id)
 
     def get_catalog_copies_by_id(self, catalog_type, id):
         return self._catalog_controller.get_catalog_entry_copies_by_id(catalog_type, id)
 
-    def add_entry_to_catalog(self, type, request_form):
-    
-        if (type == self._catalog_controller.BOOK_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Book(request_form))
+    def add_entry_to_catalog(self, catalog_type, request_form):
 
-        elif (type == self._catalog_controller.MOVIE_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Movie(request_form))
-
-        elif (type == self._catalog_controller.MAGAZINE_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Magazine(request_form))
-
-        elif (type == self._catalog_controller.ALBUM_TYPE):
-            return self._catalog_controller.add_entry_to_catalog(type, Album(request_form))
+        return self._catalog_controller.add_entry_to_catalog(catalog_type, request_form)
 
     def modify_catalog(self, type, request_form):
 
@@ -189,7 +176,7 @@ class AdminController(Controller):
 
     def delete_catalog_copy_entry(self, catalog_type, id):
         return self._catalog_controller.delete_catalog_entry_copy(catalog_type, id)
-      
+
     def get_next_item(self, admin_id):
 
         admin_performing_search = self._admin_catalog.get(admin_id)
@@ -210,7 +197,6 @@ class AdminController(Controller):
 
         return
 
-
     def filter_by(self, catalog_type, filter_key_values, admin_id):
 
         usr = self._admin_catalog.get(admin_id)
@@ -220,7 +206,7 @@ class AdminController(Controller):
         return lst
 
     def sort_by(self, catalog_type, sort_key_values, admin_id):
-      
+
         usr = self._admin_catalog.get(admin_id)
         last_searched_list = usr.get_last_searched_list()
         lst = self._catalog_controller.sort_by(catalog_type, sort_key_values, last_searched_list)
@@ -233,7 +219,7 @@ class AdminController(Controller):
 
         if search_value.strip() == "":
             return usr.get_last_searched_list()
-      
+
         lst = self._catalog_controller.search_from(catalog_type, search_value)
         usr.set_last_searched_list(lst)
 
@@ -243,3 +229,21 @@ class AdminController(Controller):
         usr = self._admin_catalog.get(admin_id)
         index = usr.get_index_from_object(record_object)
         usr.set_index_last_searched(index)
+    
+    def search_transaction_by(self, search_transaction_key_values):
+        loan_items = self._loan_catalog.get_all()
+        loan_list = []
+        for k, v in loan_items.items():
+            loan_list.append(v)
+
+        lst = self._loan_catalog.search_transaction(search_transaction_key_values, loan_list)
+        return lst
+    
+    def view_transaction_history(self):
+        loan_items = self._loan_catalog.get_all()
+
+        loan_list = []
+        for k, v in loan_items.items():
+            loan_list.append(v)
+
+        return loan_list

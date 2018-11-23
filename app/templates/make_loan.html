@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+<!-- Replace Title -->
+{% block pageTitle %}
+<p class="text-center pb-4">Loan Results</p>
+{% endblock %}
+{% block content %}
+<div class="card p-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8" style="font-size: 24px"> <span class="text-monospace">Success Loan(s)</span> </div>
+        </div>
+        <hr>
+
+        <!-- Change records to user_cart when add_to_cart is implemented -->
+        	{% for record in successful_commits %}
+
+        <div class="row" id="cart-list">
+            <div class="col-8">
+                {% if (record.record_type == "Book") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._author }}</small></p>
+                <p class="font-weight-light small"> {{ record._format }} </p>
+
+                {% elif (record.record_type == "Movie") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._director }}</small></p>
+                <p class="font-weight-light small"> {{ record._release_date }} </p>
+
+                {% elif (record.record_type == "Album") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._artist }}</small></p>
+                <p class="font-weight-light small"> {{ record._release_date }} </p>
+
+                {% endif %}
+        	</div>
+        	<div class="col-4" style="color: green" title="Success"><span><i class="fas fa-check-circle"></i></span></div>
+        </div>
+        	{% endfor %}
+
+
+        <div class="row">
+            <div class="col-8" style="font-size: 24px"> <span class="text-monospace">Fail Loan(s)</span> </div>
+        </div>
+        <hr>
+
+        <!-- Change records to user_cart when add_to_cart is implemented -->
+        	{% for record in failed_commits %}
+        <div class="row" id="cart-list">
+
+            <div class="col-8">
+                {% if (record.record_type == "Book") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._author }}</small></p>
+                <p class="font-weight-light small"> {{ record._format }} </p>
+
+                {% elif (record.record_type == "Movie") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._director }}</small></p>
+                <p class="font-weight-light small"> {{ record._release_date }} </p>
+
+                {% elif (record.record_type == "Album") %}
+                <p><span class="text-monospace text-info title">{{ record._title }}</span><small class="font-weight-light">
+                        by {{ record._artist }}</small></p>
+                <p class="font-weight-light small"> {{ record._release_date }} </p>
+
+                {% endif %}
+
+        	</div>
+        	<div class="col-4" style="color: red" title="Fail"><span><i class="fas fa-exclamation-triangle"></i></span></div>
+
+    	</div>
+    	<hr>
+    	{% endfor %}
+
+    	<form action="/viewCart" method="POST">
+        <button type="submit" class="btn btn-primary btn-info btn-lg btn-block"> Back to Cart </button>
+        </form>
+	</div>
+</div>
+
+{% endblock %}

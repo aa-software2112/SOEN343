@@ -21,11 +21,36 @@ Catalog Viewer
         <br>
 
         {% include '/includes/view_catalog_nav.html' %}
-       
+
         {% block catalog_page %}
-            
+
         {% endblock %}
     </div>
 </div>
+
+<script type="text/javascript">
+    function add_to_cart(id) {
+        var req = new XMLHttpRequest();
+        var result = document.querySelectorAll(".result");
+
+        req.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                loanedMessage = this.responseText;
+                $(result[id - 1]).popover({
+                    trigger: 'focus',
+                    placement: 'right',
+                    content: function() {
+                        var message = loanedMessage;
+                        return message
+                    }
+                }).popover('show')
+            } 
+        }
+
+        req.open('POST', '/addToCart', true);
+        req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        req.send("catalog_id=" + document.getElementById(id).value + "&catalog_type=" + document.getElementById("type").value);
+    }
+</script>
 
 {% endblock %}

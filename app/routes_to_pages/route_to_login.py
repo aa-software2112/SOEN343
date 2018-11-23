@@ -1,10 +1,9 @@
 from flask import Flask, render_template, redirect, session, flash, make_response, g, request, url_for
 from app import app
-from app import clientController, adminController
+from app import client_controller, admin_controller
 from app.classes.forms import LoginForm
 from app.common_definitions.helper_functions import is_logged
-
-import json
+import time
 
 app.config['SECRET_KEY'] = 'SOEN_343'
 
@@ -14,6 +13,9 @@ app.config['SECRET_KEY'] = 'SOEN_343'
 @is_logged
 def login():
 
+    print(request.form)
+    print(session)
+
     # import from Classes/forms
     form = LoginForm()
 
@@ -22,23 +24,34 @@ def login():
         get_username = form.username.data
         get_password = form.password.data
         # Return query result
-        user_response = clientController.get_client_by_password(
-            username=get_username, password=get_password) + adminController.get_admin_by_password(username=get_username,
-                                                                                                  password=get_password)
+        user_response = client_controller.get_client_by_password(
+            username = get_username, password=get_password) + admin_controller.get_admin_by_password(username=get_username,
+                                                                                                     password=get_password)
 
-        if user_response == []:
+        if not user_response:
             error = "Invalid login. Please check your username or password"
             return render_template('login.html', form=form, error=error)
 
         else:
-            client = user_response[0]
+            user = user_response[0]
 
-            # Set session
-            session.clear() 	# The user will not have access to the login page while logged, but the session will be reset just in case
+            if user._is_admin == 1:
+                admin_controller.login_admin(get_username)
+            else:
+                client_controller.login_client(get_username)
+
+
+            # Set session.
+            # The user will not have access to the login page while logged, but the session will be reset just in case.
+            session.clear()
             session['logged_in'] = True
-            session['user'] = client.__dict__
 
-            # Display message after being redirected to home page
+            # Do not send cart object to front end, i.e. pop it from the dict stored in user session.
+            session['user'] = vars(user).copy()
+            session['user'] = user.get_session_dict()
+
+            # Display message after being redirected to home page.
+            print(session)
             flash('You are now logged in!', 'success')
 
             return redirect(url_for('viewCatalog'))
