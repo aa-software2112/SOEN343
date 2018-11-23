@@ -229,7 +229,7 @@ class AdminController(Controller):
         usr = self._admin_catalog.get(admin_id)
         index = usr.get_index_from_object(record_object)
         usr.set_index_last_searched(index)
-    '''
+    
     def search_transaction_by(self, search_transaction_key_values):
         loan_items = self._loan_catalog.get_all()
         loan_list = []
@@ -238,7 +238,7 @@ class AdminController(Controller):
 
         lst = self._loan_catalog.search_transaction_by(search_transaction_key_values, loan_list)
         return lst
-    '''
+    
     def view_transaction_history(self):
         loan_items = self._loan_catalog.get_all()
 

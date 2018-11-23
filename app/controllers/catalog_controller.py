@@ -18,7 +18,7 @@ class CatalogController(Controller):
     MOVIE_TYPE = "2"
     MAGAZINE_TYPE = "3"
     ALBUM_TYPE = "4"
-    LOAN_TYPE = "5"
+    #LOAN_TYPE = "5"
 
     @staticmethod
     def get_instance():
@@ -37,12 +37,12 @@ class CatalogController(Controller):
                                CatalogController.MOVIE_TYPE: MovieCatalog.get_instance(),
                                CatalogController.MAGAZINE_TYPE: MagazineCatalog.get_instance(),
                                CatalogController.ALBUM_TYPE: AlbumCatalog.get_instance(),
-                               CatalogController.LOAN_TYPE: LoanCatalog.get_instance()}
+                               #CatalogController.LOAN_TYPE: LoanCatalog.get_instance()}
             self._constructors = {CatalogController.BOOK_TYPE: Book,
                                   CatalogController.MOVIE_TYPE: Movie,
                                   CatalogController.MAGAZINE_TYPE: Magazine,
                                   CatalogController.ALBUM_TYPE: Album,
-                                  CatalogController.LOAN_TYPE: Loan}
+                                  #CatalogController.LOAN_TYPE: Loan}
             self._db_loaded = False
 
     def load_database_into_memory(self):
@@ -58,7 +58,7 @@ class CatalogController(Controller):
                    CatalogController.MOVIE_TYPE: """ SELECT * FROM movie; """,
                    CatalogController.MAGAZINE_TYPE: """ SELECT * FROM magazine; """,
                    CatalogController.ALBUM_TYPE: """ SELECT * FROM album; """,
-                   CatalogController.LOAN_TYPE: """ SELECT * FROM loan; """
+                   #CatalogController.LOAN_TYPE: """ SELECT * FROM loan; """
                    }
 
         # Iterate over all queries
@@ -154,7 +154,7 @@ class CatalogController(Controller):
     def search_from(self, catalog_type, search_value):
         return self.view_catalog_inventory()[catalog_type].search(search_value)
 
-    
+    '''
     def search_transaction_by(self, search_transaction_key_values):
 
         # Remove the keys with no value
@@ -182,3 +182,4 @@ class CatalogController(Controller):
             lst.append(v)
 
         return lst
+    '''
