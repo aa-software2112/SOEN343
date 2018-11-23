@@ -1,0 +1,90 @@
+{% extends "index.html" %}
+
+<!-- Replace Title -->
+{% block pageTitle %}
+   Transaction History
+{% endblock %}
+
+<!-- Replace Content -->
+{% block content %}
+   {% if err %}
+   <div class="alert alert-danger" role="alert"> {{ err }}</div>
+   {% endif %}
+   <div class="row">
+      <div class="col-md-12">
+
+         <form action="/searchTransaction" method="post">
+            <div class="form-group">
+              <label for="sel1">Select Search Criteria:</label>
+              <select name="search-option" class="form-control" id="sel1">
+                <option value="Username">By Client Username</option>
+                <option value="Title">By Record Title</option>
+                <option value="Due Time">By Due Date</option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label for="search-transaction">Search keyword</label>
+                <input type="text" class="form-control" id="search-transaction" name="search-keyword">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+         </form>
+         <table class="table table-hover">
+            <thead>
+            <tr>
+               <th></th>
+               <th scope="col"> ID</th>
+               <th scope="col"> Type</th>
+               <th scope="col"> Record Name</th>
+               <th scope="col"> User</th>
+               <th scope="col"> Loan start date</th>
+               <th scope="col"> Loan due date</th>
+               <th scope="col"> Loan return date</th>
+               <th scope="col"> Returned</th>
+               <th></th>
+               <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {%  if all_loans %}
+               {% for loan in all_loans %}
+                  <tr>
+                        <td></td>
+                        <td>{{ loan.get_id() }}</td>
+                        <td>{{ loan.get_record_type() }}</td>
+                        <td>{{ loan.get_record_title() }}</td>
+                        <td>{{ loan.get_owner_name() }}</td>
+                        <td>{{ epoch_converter(loan._loan_time) }}</td>
+                        <td>{{ epoch_converter(loan._due_time) }}</td>
+                        <td>{{ epoch_converter(loan._return_time) }}</td>
+                        {% if loan._is_returned == 1 %}
+                           <td>YES</td>
+                        {% else %}
+                           <td>NO</td>
+                        {% endif %}
+                  </tr>
+               {% endfor %}
+            {%  else %}
+               {%  for loan in search_loan_list %}
+                  <tr>
+                        <td></td>
+                        <td>{{ loan.get_id() }}</td>
+                        <td>{{ loan.get_record_type() }}</td>
+                        <td>{{ loan.get_record_title() }}</td>
+                        <td>{{ loan.get_owner_name() }}</td>
+                        <td>{{ epoch_converter(loan._loan_time) }}</td>
+                        <td>{{ epoch_converter(loan._due_time) }}</td>
+                        <td>{{ epoch_converter(loan._return_time) }}</td>
+                        {% if loan._is_returned == 1 %}
+                           <td>YES</td>
+                        {% else %}
+                           <td>NO</td>
+                        {% endif %}
+                  </tr>
+               {% endfor %}
+            {%  endif %}
+            </tbody>
+         </table>
+      </div>
+   </div>
+
+{% endblock %}

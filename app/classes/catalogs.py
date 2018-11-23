@@ -10,6 +10,7 @@ from app.classes.magazine import Magazine
 from app.classes.album import Album
 from app.classes.database_container import DatabaseContainer
 from app.classes.lock import ReadWriteLock
+from app.classes.loan import Loan
 
 class Catalog(abc.ABC):
     """Abstract class Catalog"""
@@ -66,6 +67,8 @@ class UserCatalog(Catalog):
         return temp
         
     def get(self, id):
+        print("User Id -- > " + str(id))
+
         self._rwl.start_read()
         temp = self._users[id]
         self._rwl.end_read()
@@ -102,7 +105,7 @@ class UserCatalog(Catalog):
                 new_book_id = self.db.execute_query_write(insert_new_user_query, tuple_for_insert_query).lastrowid
                 # since the object created has by default id = 0, we have to set
                 # its id to the id obtained above
-                user._id = new_book_id
+                user.set_id(new_book_id)
                 self._users[new_book_id] = user
 
         else:
@@ -125,6 +128,17 @@ class UserCatalog(Catalog):
         temp = search_catalog(self._users, search_string)
         self._rwl.end_read()
         return temp
+
+     # takes a user id and gets his cart set
+    def get_cart_set(self, user_id):
+        user = self.get(user_id)
+        return user.get_cart_set()
+
+    def add_to_cart(self, user_id, record_object):
+        user = self.get(user_id)
+        print(user)
+        old, new = user.add_to_user_cart(record_object)
+        return old, new
 
 class BookCatalog(Catalog):
     """
@@ -347,13 +361,51 @@ class BookCatalog(Catalog):
 
     def set_available(self, book_copy_id):
         self._rwl.start_write()
-        update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id ?'
+        update_copy_query = 'UPDATE book_copy SET isLoaned = 0 WHERE id = ?'
         self.db.execute_query_write(update_copy_query, (book_copy_id,))
-
-        update_book_available = 'UPATE book SET quantity_available = quantity_available +1 INNER JOIN book ON book.id = book_copy.book_id WHERE book_copy.id = ?'
-        self.db.execute_query_write(update_book_available,(book_copy_id,))
         self._rwl.end_write()
 
+        self._rwl.start_read()
+        get_book_id_from_copy = 'SELECT book_id FROM book_copy WHERE book_copy.id = ?'
+        cursor = self.db.execute_query(get_book_id_from_copy, (book_copy_id,))
+        book_id_of_copy = cursor.fetchone()[0]
+        print(book_id_of_copy)
+        self._rwl.end_read()
+
+        self._rwl.start_write()
+        update_book_available = 'UPDATE book SET quantity_available = quantity_available + 1 WHERE book.id = ?'
+        self.db.execute_query_write(update_book_available, (book_id_of_copy,))
+        self._rwl.end_write()
+
+    def get_available_copy(self, book_id):
+        self._rwl.start_read()
+
+        get_available_book_query = """ SELECT book_copy.id
+                                        FROM book, book_copy 
+                                        WHERE book.id = ? AND book.id = book_copy.book_id AND book_copy.isLoaned = 0
+                                    """
+        cursor = self.db.execute_query(get_available_book_query, (book_id,))
+
+        copy = cursor.fetchone()
+        self._rwl.end_read()
+        if copy is not None:
+            return copy["id"]
+        else:
+            return None
+
+    def set_loaned(self, book_copy_id, book_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE book_copy SET isLoaned = 1 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (book_copy_id,))
+
+        # sqlite UPDATE does not support joins
+        update_book_available = """
+                                    UPDATE book
+                                    SET quantity_available = quantity_available - 1
+                                    WHERE id = ?
+                                """
+        self.db.execute_query_write(update_book_available, (book_id,))
+        self._rwl.end_write()
 
 class MovieCatalog(Catalog):
     """
@@ -577,12 +629,53 @@ class MovieCatalog(Catalog):
         return temp
 
     def set_available(self, movie_copy_id):
+
         self._rwl.start_write()
-        update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id ?'
+        update_copy_query = 'UPDATE movie_copy SET isLoaned = 0 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (movie_copy_id,))
+        self._rwl.end_write()
+
+        self._rwl.start_read()
+        get_movie_id_from_copy = 'SELECT movie_id FROM movie_copy WHERE movie_copy.id = ?'
+        cursor = self.db.execute_query(get_movie_id_from_copy, (movie_copy_id,))
+        movie_id_of_copy = cursor.fetchone()[0]
+        print(movie_id_of_copy)
+        self._rwl.end_read()
+
+        self._rwl.start_write()
+        update_movie_available = 'UPDATE movie SET quantity_available = quantity_available + 1 WHERE movie.id = ?'
+        self.db.execute_query_write(update_movie_available, (movie_id_of_copy,))
+        self._rwl.end_write()
+
+    def get_available_copy(self, movie_id):
+        self._rwl.start_read()
+
+        get_available_movie_query = """ 
+                                        SELECT movie_copy.id
+                                        FROM movie, movie_copy 
+                                        WHERE movie.id = ? AND movie.id = movie_copy.movie_id AND movie_copy.isLoaned = 0
+                                    """
+        cursor = self.db.execute_query(get_available_movie_query, (movie_id,))
+
+        copy = cursor.fetchone()
+        self._rwl.end_read()
+        if copy is not None:
+            return copy["id"]
+        else:
+            return None
+
+    def set_loaned(self, movie_copy_id, movie_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE movie_copy SET isLoaned = 1 WHERE id = ?'
         self.db.execute_query_write(update_copy_query, (movie_copy_id,))
 
-        update_book_available = 'UPATE movie SET quantity_available = quantity_available +1 INNER JOIN movie ON movie.id = movie_copy.movie_id WHERE movie_copy.id = ?'
-        self.db.execute_query_write(update_book_available, (movie_copy_id,))
+        # sqlite UPDATE does not support joins
+        update_movie_available = """
+                                    UPDATE movie
+                                    SET quantity_available = quantity_available - 1
+                                    WHERE id = ?
+                                """
+        self.db.execute_query_write(update_movie_available, (movie_id,))
         self._rwl.end_write()
 
 class MagazineCatalog(Catalog):
@@ -1019,11 +1112,50 @@ class AlbumCatalog(Catalog):
 
     def set_available(self, album_copy_id):
         self._rwl.start_write()
-        update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id ?'
+        update_copy_query = 'UPDATE album_copy SET isLoaned = 0 WHERE id = ?'
+        self.db.execute_query_write(update_copy_query, (album_copy_id,))
+        self._rwl.end_write()
+
+        self._rwl.start_read()
+        get_album_id_from_copy = 'SELECT album_id FROM album_copy WHERE album_copy.id = ?'
+        cursor = self.db.execute_query(get_album_id_from_copy, (album_copy_id,))
+        album_id_of_copy = cursor.fetchone()[0]
+        print(album_id_of_copy)
+        self._rwl.end_read()
+
+        self._rwl.start_write()
+        update_album_available = 'UPDATE album SET quantity_available = quantity_available + 1 WHERE album.id = ?'
+        self.db.execute_query_write(update_album_available, (album_id_of_copy,))
+        self._rwl.end_write()
+
+    def get_available_copy(self, album_id):
+        self._rwl.start_read()
+
+        get_available_album_query = """ SELECT album_copy.id
+                                        FROM album, album_copy 
+                                        WHERE album.id = ? AND album.id = album_copy.album_id AND album_copy.isLoaned = 0
+                                    """
+        cursor = self.db.execute_query(get_available_album_query, (album_id,))
+
+        copy = cursor.fetchone()
+        self._rwl.end_read()
+        if copy is not None:
+            return copy["id"]
+        else:
+            return None
+
+    def set_loaned(self, album_copy_id, album_id):
+        self._rwl.start_write()
+        update_copy_query = 'UPDATE album_copy SET isLoaned = 1 WHERE id = ?'
         self.db.execute_query_write(update_copy_query, (album_copy_id,))
 
-        update_book_available = 'UPATE album SET quantity_available = quantity_available +1 INNER JOIN album ON album.id = album_copy.album_id WHERE album_copy.id = ?'
-        self.db.execute_query_write(update_book_available, (album_copy_id,))
+        # sqlite UPDATE does not support joins
+        update_album_available = """
+                                    UPDATE album
+                                    SET quantity_available = quantity_available - 1
+                                    WHERE id = ?
+                                """
+        self.db.execute_query_write(update_album_available, (album_id,))
         self._rwl.end_write()
 
 class LoanCatalog(Catalog):
@@ -1111,7 +1243,7 @@ class LoanCatalog(Catalog):
             'VALUES(?,?,?,?,?,?,?)'
 
 
-            tuple_for_insert_query = (loan_obj._user_id, loan_obj._record_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
+            tuple_for_insert_query = (loan_obj._user_id, loan_obj._copy_id, loan_obj._table_name, loan_obj._loan_time, loan_obj._due_time, \
                                       loan_obj._return_time, loan_obj._is_returned)
 
             # getting the id of the last inserted loan
@@ -1190,18 +1322,54 @@ class LoanCatalog(Catalog):
 
         return search_list
 
-    def return_loaned_items(self, loan_id):
+    def return_loaned_item(self, loan_id):
         loan = self.get(loan_id)
         loan.set_loan_as_returned()
         record_type = loan.get_table_name()
+        # tested
+        # record_type = Movie.copy_table_name
+        # loan.get_record_id = 1
 
-        if record_type == "book_copy":
+        if record_type == Book.copy_table_name:
             self.book_catalog.set_available(loan.get_record_id)
-
-        elif record_type == "album_copy":
+        elif record_type == Album.copy_table_name:
             self.album_catalog.set_available(loan.get_record_id)
 
-        elif record_type == "movie_copy":
+        elif record_type == Movie.copy_table_name:
             self.movie_catalog.set_available(loan.get_record_id)
+
+    def loan_item(self, cart_item, client_id):
+        record_type = cart_item.get_copy_table_name()
+        item_id = cart_item.get_id()
+        print("Loan_item client_id --> " + str(client_id))
+        client = self.client_controller._client_catalog.get(client_id)
+        loan = None
+
+        if record_type == Book.copy_table_name:
+            copy_id = self.book_catalog.get_available_copy(item_id)
+            if copy_id is not None:
+                book = self.book_catalog.get(item_id)
+                self.book_catalog.set_loaned(copy_id, item_id)
+                loan = Loan(client, book, copy_id)
+                self.add(loan, True)
+
+        if record_type == Movie.copy_table_name:
+            copy_id = self.movie_catalog.get_available_copy(item_id)
+            if copy_id is not None:
+                movie = self.movie_catalog.get(item_id)
+                self.movie_catalog.set_loaned(copy_id, item_id)
+                loan = Loan(client, movie, copy_id)
+                self.add(loan, True)
+
+        if record_type == Album.copy_table_name:
+            copy_id = self.album_catalog.get_available_copy(item_id)
+            if copy_id is not None:
+                album = self.album_catalog.get(item_id)
+                self.album_catalog.set_loaned(copy_id, item_id)
+                loan = Loan(client, album, copy_id)
+                self.add(loan, True)
+
+        return loan
+
 
 

@@ -15,7 +15,7 @@
                         <tr>
                             <td class="text-center"><input class="form-check-input" type="checkbox" name='id' value="{{ loan._id }}" id="checkbox-{{ loan._id }}"></td>
                             <td class="text-center"> <label class="form-check-label" for="checkbox-{{ loan._id }}">
-                                {{ loan._name }}
+                                {{ loan.get_record_title() }}
                             </label>
                         </td>
                     </tr>

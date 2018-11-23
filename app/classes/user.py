@@ -24,7 +24,7 @@ class User:
         
         self._last_searched_list = []
         self._index_of_last_searched_list = 0
-        self._cart = Cart()
+        self._cart = Cart(self._id)
         self._loan_list = []
 
     def get_session_dict(self):
@@ -49,6 +49,14 @@ class User:
     def get_id(self):
         """Returns the id of the object"""
         return self._id
+
+    def add_to_user_cart(self, record_object):
+        print(record_object)
+        oldsize = (self._cart.length_of_cart())
+        self._cart.add_to_cart(record_object)
+        newsize = (self._cart.length_of_cart())
+        return oldsize, newsize
+
 
     def __str__(self):
 
@@ -81,8 +89,8 @@ class User:
                 return i
             i = i+1
 
-    def delete_from_cart(self, o_id):
-        return self._cart.delete_by_id(o_id)
+    def delete_from_cart(self, o_id, record_type):
+        return self._cart.delete_by_id(o_id, record_type)
 
     def set_loan_list(self, loan_list):
         self._loan_list = loan_list
@@ -95,7 +103,36 @@ class User:
         for loan_obj in self._loan_list:
             if loan_obj.get_id() == loan_id:
                 self._loan_list.remove(loan_obj)
-        
+
+    def make_loan(self):
+
+        if len(self._loan_list) + len(self._cart.get_set()) > User.LOAN_LIMIT:
+            return [ [], list(self._cart.get_set()) ]
+
+        commit_results = self._cart.commit_cart()
+        loans_to_add = commit_results[0]
+
+        self._loan_list = self._loan_list + loans_to_add
+
+        # return successful/unsuccessful commits (list of records) for displaying on front end
+        return commit_results[1:]
+
+    def set_id(self, id):
+        """
+        Sets the current id of the user in this object, and the cart itself
+
+        :param id:
+        :return:
+        """
+
+
+        self._id = id
+
+        self._cart.set_user_owner_id(id)
+
+    def get_username(self):
+        return self._username
+
 class Admin(User):
 
     def __init__(self, arguments):
