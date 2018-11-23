@@ -5,6 +5,7 @@ from app.classes.book import Book
 from app.classes.magazine import Magazine
 from app.classes.movie import Movie
 from app.classes.catalogs import UserCatalog
+from app.classes.catalogs import LoanCatalog
 from app.classes.database_container import DatabaseContainer
 from app.controllers.catalog_controller import CatalogController
 import time
@@ -35,6 +36,9 @@ class AdminController(Controller):
 
             # Admin Controller contains a catalog of admin users
             self._admin_catalog = UserCatalog()
+
+            # Admin Controller contains a catalog of loans
+            self._loan_catalog = app.classes.catalogs.LoanCatalog().get_instance()
 
             self._db_loaded = False
 
@@ -227,11 +231,19 @@ class AdminController(Controller):
         usr.set_index_last_searched(index)
 
     def search_transaction_by(self, search_transaction_key_values):
-        
-        lst = self._catalog_controller.search_transaction_by(self, catalog_type,search_transaction_key_values)
+        loan_items = self._loan_catalog.get_all()
+        loan_list = []
+        for k, v in loan_items.items():
+            loan_list.append(v)
+
+        lst = self._catalog_controller.search_transaction_by(self, search_transaction_key_values, loan_list)
         return lst
 
     def view_transaction_history(self):
+        loan_items = self._loan_catalog.get_all()
 
-        lst = self._catalog_controller.view_transaction_history()
-        return lst
+        loan_list = []
+        for k, v in loan_items.items():
+            loan_list.append(v)
+
+        return loan_list

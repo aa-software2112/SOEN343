@@ -1092,6 +1092,7 @@ class LoanCatalog(Catalog):
         self._rwl.start_read()
         temp = self._loans
         self._rwl.end_read()
+        return temp
 
     def get(self, id):
         self._rwl.start_read()
