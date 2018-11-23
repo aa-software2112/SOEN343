@@ -9,6 +9,8 @@ import datetime
 
 def convert_epoch_to_datetime(epoch_time):
     """Returns time in 'month/day/year hour:minute:second' format given the epoch time"""
+    if epoch_time < 0:
+        return "—"
     return time.strftime("%m/%d/%Y %H:%M:%S %Z", time.localtime(epoch_time))
 
 def convert_epoch_to_date(epoch_time):
