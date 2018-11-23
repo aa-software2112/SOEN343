@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+<!-- Replace Title -->
+{% block pageTitle %}
+   Return Loans
+{% endblock %}
+<!-- Replace Content -->
+{% block content %}
+   {% if err %}
+            <div class="alert alert-danger" role="alert"> {{ err }}</div>
+   {% endif %}
+    <a href="/myLoans">Return to my loans</a>
+{% endblock %}
